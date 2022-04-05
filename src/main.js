@@ -1,4 +1,11 @@
-import { createApp } from 'vue'
+import { createApp, getCurrentInstance } from 'vue'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+const app = createApp(App);
+
+app.config.globalProperties
+   .hostname = ((import.meta.env.MODE == 'development') 
+      ? 'http://192.168.1.160/'
+      : '');
+
+app.mount('#app');
