@@ -1,19 +1,20 @@
-
 // commands to bot
-const fcStopCmd          = 's';
-const fcSpeedCmd         = 'v';
-const fcYawCmd           = 'y';
-const fcPowerOff         = 'p';
+const fcStopCmd     = 'S';
+const fcSpeedCmd    = 'V';
+const fcYawCmd      = 'Y';
+const fcPowerOff    = 'P';
 
-// status returned from bot
-const fcRssi             = 'W';
-const fcBatV             = 'B';
-const fcSpeed            = 'S';
-const fcSpeedErrInt      = 'I';
-const fcYawErrInt        = 'J';
-const fcLeftMotorPwm     = 'L';
-const fcRightMotorPwm    = 'R';
-const fcError            = 'E';
+// status from bot
+const fcRssi        = 'w';
+const fcBatV        = 'b';
+const fcAccelX      = 'a';
+const fcYawRate     = 'y';
+const fcSpeed       = 's';
+const fcSpeedErrInt = 'i';
+const fcYawErrInt   = 'j';
+const fcLeftPwm     = 'l';
+const fcRightPwm    = 'r';
+const fcError       = 'e';
 
 let hostname = '';
 let images   = '';
