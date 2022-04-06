@@ -15,37 +15,36 @@ const fcLeftMotorPwm     = 'L';
 const fcRightMotorPwm    = 'R';
 const fcError            = 'E';
 
+let hostname = '';
+
 let webSocket = null;
 
+let lastRecvStr = "";
+let espBatV = 0;
+
 const wsRecv = (event) => {
-  // // if(event.data != lastRecvStr) {
-  //   console.log(`--> msg recvd ${event.data}`);
-  //   lastRecvStr = event.data;
-  // // }
+  if(event.data != lastRecvStr) {
+    console.log(`--> msg recvd ${event.data}`);
+    lastRecvStr = event.data;
+  }
   if(event.data[0] != "{") {
     console.log('event.data[0] != "{"', event.data);
     return;
   }
   const res = JSON.parse(event.data);
-  if(res.batV)
-    console.log(`--> msg recvd ${event.data}`);
 
-  if(res.hdlAck  == hdlCmd)     sendHdlCmd  = false;
-  if(res.pwrAckL == pwrCmdL)    sendPwrCmdL = false;
-  if(res.pwrAckR == pwrCmdR)    sendPwrCmdR = false;
-  if(res.pwrAckL == BRAKE_CODE) sendBrakeL  = false;
-  if(res.pwrAckR == BRAKE_CODE) sendBrakeR  = false;
+  console.log('Msg:',res);
 
-  if(res.batV && Math.abs(res.batV - espBatV) > .03) {
-    const batV = +res.batV;
+  if(res[fcBatV] && Math.abs(res[fcBatV] - espBatV) > .03) {
+    const batV = res[fcBatV];
     let id;
-    // total range 2.7 to 4.2
-    if(     batV < 3.00) id =   0;
-    else if(batV < 3.45) id =  20;
-    else if(batV < 3.60) id =  40;
-    else if(batV < 3.70) id =  60;
-    else if(batV < 3.85) id =  80;
-    else                 id = 100; 
+    // total range 330 to 420
+    if(     batV < 340) id =   0;
+    else if(batV < 350) id =  20;
+    else if(batV < 360) id =  40;
+    else if(batV < 370) id =  60;
+    else if(batV < 380) id =  80;
+    else                id = 100; 
     batImgEle.setAttribute('src', `${imgDir}bat-${id}.png`);
     hdrEle.style.backgroundColor = (id == '0' ? 'red': 'white');
     espBatV = batV;
@@ -64,10 +63,11 @@ const wsRecv = (event) => {
   }
 }
 
-const connectToWs = async (ip) => {
+const connectToWs = async (hostnameIn) => {
+  hostname = hostnameIn;
   waitingToRetry = false;
   console.log("trying to open websocket");
-  webSocket = new WebSocket(`ws://${ip}:81`);
+  webSocket = new WebSocket(`ws://${hostname}:81`);
 
   webSocket.addEventListener('open', (event) => {
     console.log('webSocket connected:', event);

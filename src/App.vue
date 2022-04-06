@@ -1,7 +1,6 @@
 
 <template lang='pug'>
 div(style="text-align:center")
-  img(alt="Vue logo" src="./assets/logo.png")
   HelloWorld(msg="Hello World Vue 3 + Vite")
 </template>
 
