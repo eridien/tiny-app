@@ -16,6 +16,7 @@ const fcRightMotorPwm    = 'R';
 const fcError            = 'E';
 
 let hostname = '';
+let images   = '';
 
 let webSocket = null;
 
@@ -45,7 +46,7 @@ const wsRecv = (event) => {
     else if(batV < 370) id =  60;
     else if(batV < 380) id =  80;
     else                id = 100; 
-    batImgEle.setAttribute('src', `${imgDir}bat-${id}.png`);
+    batImgEle.setAttribute('src', `${images}/bat-${id}.png`);
     hdrEle.style.backgroundColor = (id == '0' ? 'red': 'white');
     espBatV = batV;
   }
@@ -63,8 +64,7 @@ const wsRecv = (event) => {
   }
 }
 
-const connectToWs = async (hostnameIn) => {
-  hostname = hostnameIn;
+const connectToWs = async () => {
   waitingToRetry = false;
   console.log("trying to open websocket");
   webSocket = new WebSocket(`ws://${hostname}:81`);
@@ -103,8 +103,10 @@ const connectToWs = async (hostnameIn) => {
   });
 }
 
-export const initWebsocket = async (ip) => {
-  connectToWs(ip);
+export const initWebsocket = async (hostnameIn, imagesIn) => {
+  hostname = hostnameIn;
+  images   = imagesIn;
+  connectToWs();
 }
 
 // export sendStop = async () => {

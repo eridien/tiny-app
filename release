@@ -1,4 +1,3 @@
-rm /mnt/c/Users/mark/apps/tiny/data
-# rm /mnt/c/Users/mark/apps/tiny/data/assets/vendor*
+rm -rf /mnt/c/Users/mark/apps/tiny/data/*
 rsync -av --exclude=*-big.png images/ /mnt/c/Users/mark/apps/tiny/data
 powershell.exe -File release.ps1

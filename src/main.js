@@ -3,9 +3,13 @@ import App from './App.vue'
 
 const app = createApp(App);
 
-app.config.globalProperties
-   .hostname = ((import.meta.env.MODE == 'development') 
-      ? '192.168.1.160'
-      : '');
+if(import.meta.env.MODE == 'development') {
+  app.config.globalProperties.hostname = '192.168.1.160';
+  app.config.globalProperties.images   = 'images';
+}
+else {
+  app.config.globalProperties.hostname = '';
+  app.config.globalProperties.images   = '';
+}
 
 app.mount('#app');

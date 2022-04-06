@@ -9,11 +9,11 @@ import { onMounted, getCurrentInstance  } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 
 const app = getCurrentInstance();
-const hostname = 
-      app.appContext.config.globalProperties.hostname;
+const {hostname, images} = 
+      app.appContext.config.globalProperties;
 
 onMounted(async() => { 
-  console.log(`\n---- mounted: ${hostname} ----\n`);
+  console.log(`\n---- mounted: ${hostname} ${images} ----\n`);
 });
 
 onMounted(async() => {
