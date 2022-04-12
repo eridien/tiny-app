@@ -1,6 +1,6 @@
 <template lang='pug'>
 div(style="text-align:center")
-  Header(:images="images" :rssi="rssi" :batv="batv")
+  Header(:rssi="rssi" :batv="batv")
 </template>
 
 <script setup>
@@ -9,7 +9,7 @@ div(style="text-align:center")
   import {initWebsocket} from "./websocket.js";
 
   const app = getCurrentInstance();
-  const {hostname, images} = 
+  const {hostname} = 
         app.appContext.config.globalProperties;
 
   const rssi = ref(0);
@@ -21,8 +21,8 @@ div(style="text-align:center")
 
   onMounted(async() => { 
     console.log(`\n---- mounted, ` +
-                `hostname: ${hostname}, images: ${images} ----\n`);
-    initWebsocket(hostname, images, websocketCB);
+                `hostname: ${hostname} ---\n`);
+    initWebsocket(hostname, websocketCB);
   });
 </script>
 

@@ -23,7 +23,6 @@ const fcRightPwm    = 'r';
 const fcError       = 'e';
 
 let hostname = '';
-let images   = '';
 
 // app callback appCB(status)
 let appCB = null;
@@ -116,9 +115,8 @@ const sendWSObj = async(obj) => {
 }
 
 export const initWebsocket = 
-       async (hostnameIn, imagesIn, appCBIn) => {
+       async (hostnameIn, appCBIn) => {
   hostname = hostnameIn;
-  images   = imagesIn;
   appCB    = appCBIn;
   
   connectToWs();

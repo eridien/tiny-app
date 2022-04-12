@@ -4,20 +4,20 @@
               alignItems:'stretch', padding:'5px',             \
               fontWeight:'bold', backgroundColor:              \
                 (batvId < 20 || rssiId < 2 ? 'pink': 'white')}") 
-  img(:src="`${images}/icon.png`" 
+  img(:src="`images/icon.png`" 
       :style="{width:'64px',height:'36px',marginTop:'10px'}")
-  img(:src="`${images}/wifi-${rssiId}.png`"  
+  img(:src="`images/wifi-${rssiId}.png`"  
       :style="{width:'40px', height:'55px', marginBottom:'30px'}")
-  img(:src="`${images}/bat-${batvId}.png`" 
+  img(:src="`images/bat-${batvId}.png`" 
       :style="{width:'15px', height:'35px', margin:'10px 20px 40px 0'}")
-  img(:src="`${images}/hamburger.png`" 
+  img(:src="`images/hamburger.png`" 
       :style="{width:'25px', height:'25px', margin:'15px 20px 40px 0'}")
 </template>
 
 <script setup>
 import {onMounted, watch, ref} from 'vue'
 
-const props = defineProps(['images','rssi', 'batv'])
+const props = defineProps(['rssi', 'batv'])
 
 const rssiId = ref(2);
 watch(()=> props.rssi, (rssi, oldRssi) => {
