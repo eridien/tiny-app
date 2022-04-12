@@ -1,12 +1,11 @@
-
 <template lang='pug'>
 div(style="text-align:center")
-  HelloWorld(msg="Hello Tiny-bot")
+  Header
 </template>
 
 <script setup>
-import { onMounted, getCurrentInstance  } from 'vue'
-import HelloWorld      from './components/HelloWorld.vue'
+import {onMounted, getCurrentInstance } from 'vue'
+import  Header         from './components/header.vue'
 import {initWebsocket} from "./websocket.js";
 
 const app = getCurrentInstance();

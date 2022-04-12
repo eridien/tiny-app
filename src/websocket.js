@@ -48,8 +48,6 @@ const wsRecv = (event) => {
     console.log(`Error parsing JSON from bot:', "${event.data}"`);
     return;
   }
-  console.log('Parsed msg from bot:',res);
-
   if(res[fcBatV] && Math.abs(res[fcBatV] - espBatV) > .03) {
     const batV = res[fcBatV];
     let id;
@@ -142,7 +140,6 @@ export const initWebsocket =
 
   const reportCmd = new Object();
   reportCmd[fcReport] = 0;
-
   setInterval( async() => {
     if(webSocketOpen) sendWSObj(reportCmd);
   },1000);
