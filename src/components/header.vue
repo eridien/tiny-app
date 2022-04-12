@@ -4,9 +4,9 @@
               alignItems:'stretch', padding:'5px',             \
               fontWeight:'bold', backgroundColor:              \
                 (batvId < 20 || rssiId < 2 ? 'pink': 'white')}") 
-  div(:style="{fontSize:'32px', fontWeight:'normal', paddingTop:'8px'}") 
-    | T-bot
-  img(:src="`${images}/wifi-${rssiId}.png`" 
+  img(:src="`${images}/icon.png`" 
+      :style="{width:'64px',height:'36px',marginTop:'10px'}")
+  img(:src="`${images}/wifi-${rssiId}.png`"  
       :style="{width:'40px', height:'55px', marginBottom:'30px'}")
   img(:src="`${images}/bat-${batvId}.png`" 
       :style="{width:'15px', height:'35px', margin:'10px 20px 40px 0'}")
