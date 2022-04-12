@@ -8,7 +8,8 @@ if(import.meta.env.MODE == 'development') {
   app.config.globalProperties.images   = 'images';
 }
 else {
-  app.config.globalProperties.hostname = '';
+  const hostname = window.location.hostname;
+  app.config.globalProperties.hostname = hostname;
   app.config.globalProperties.images   = '';
 }
 
