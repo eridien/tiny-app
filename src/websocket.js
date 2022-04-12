@@ -1,16 +1,22 @@
 // commands to bot
+const fcReport      = 'R';
 const fcStopCmd     = 'S';
-const fcSpeedCmd    = 'V';
+const fcAccelCmd    = 'V';
 const fcYawCmd      = 'Y';
+const fcAccelPk     = 'K';
+const fcAccelIk     = 'L';
+const fcYawPk       = 'M';
+const fcYawIk       = 'N';
 const fcPowerOff    = 'P';
 
 // status from bot
-const fcRssi        = 'w';
 const fcBatV        = 'b';
+const fcTime        = 't';
+const fcElapsedMs   = 'm';
+const fcRssi        = 'w';
 const fcAccelX      = 'a';
 const fcYawRate     = 'y';
-const fcSpeed       = 's';
-const fcSpeedErrInt = 'i';
+const fcAccelErrInt = 'i';
 const fcYawErrInt   = 'j';
 const fcLeftPwm     = 'l';
 const fcRightPwm    = 'r';
@@ -22,20 +28,27 @@ let images   = '';
 let webSocket = null;
 
 let lastRecvStr = "";
-let espBatV = 0;
+let espBatV     = 0;
+let espRssi     = 0;
 
 const wsRecv = (event) => {
   if(event.data != lastRecvStr) {
-    console.log(`--> msg recvd ${event.data}`);
+    console.log(`--> msg recvd: ${event.data}`);
     lastRecvStr = event.data;
   }
   if(event.data[0] != "{") {
-    console.log('event.data[0] != "{"', event.data);
+    // Non-json msg received, it was logged above
     return;
   }
-  const res = JSON.parse(event.data);
-
-  console.log('Msg:',res);
+  let res;
+  try {
+    res = JSON.parse(event.data);
+  }
+  catch(e) {
+    console.log(`Error parsing JSON from bot:', "${event.data}"`);
+    return;
+  }
+  console.log('Parsed msg from bot:',res);
 
   if(res[fcBatV] && Math.abs(res[fcBatV] - espBatV) > .03) {
     const batV = res[fcBatV];
@@ -54,7 +67,7 @@ const wsRecv = (event) => {
   if(res.rssi && Math.abs(res.rssi - espRssi) > 3) {
     const rssi = +res.rssi;
     let id;
-    if(     rssi < -80) id = 1; // -99 to -81, 0 bars       -- worked at -90 by garage
+    if(     rssi < -80) id = 1; // -99 to -81, 0 bars -- worked at -90 by garage
     else if(rssi < -70) id = 2; // -80 to -71, 1 bar  (dot)
     else if(rssi < -60) id = 3; // -70 to -61, 2 bars (dot & 2 bars)
     else if(rssi < -50) id = 4; // -60 to -51, 3 bars (dot & 3 bars)
@@ -64,6 +77,9 @@ const wsRecv = (event) => {
     espRssi = rssi;
   }
 }
+
+let waitingToRetry = false;
+let webSocketOpen = false;
 
 const connectToWs = async () => {
   waitingToRetry = false;
@@ -95,7 +111,6 @@ const connectToWs = async () => {
 
   webSocket.addEventListener('close', (event) => {
     console.log('webSocket closed:', event);
-    clrSendFlags();
     webSocketOpen = false;
     if(!waitingToRetry && !keepWebsockClosed) {
       waitingToRetry = true;
@@ -103,11 +118,34 @@ const connectToWs = async () => {
     }
   });
 }
+ 
+const sendWSObj = async(obj) => {
+  let str;
+  try{ str = JSON.stringify(obj); }
+  catch(e) {
+    console.log(`Error stringifying obj ${obj} in sendWSObj: ${e.message}`);
+    return;
+  }
+  try{ await webSocket.send(str); }
+  catch(e) {
+    console.log(`Error sending string "${str}" in sendWSObj: ${e.message}`);
+  }
+  console.log(`<-- msg sent: ${str}`);
+}
 
-export const initWebsocket = async (hostnameIn, imagesIn) => {
+export const initWebsocket = 
+       async (hostnameIn, imagesIn) => {
   hostname = hostnameIn;
   images   = imagesIn;
+  
   connectToWs();
+
+  const reportCmd = new Object();
+  reportCmd[fcReport] = 0;
+
+  setInterval( async() => {
+    if(webSocketOpen) sendWSObj(reportCmd);
+  },1000);
 }
 
 // export sendStop = async () => {

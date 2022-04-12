@@ -1,23 +1,26 @@
 
 <template lang='pug'>
 div(style="text-align:center")
-  HelloWorld(msg="Hello World Vue 3 + Vite")
+  HelloWorld(msg="Hello Tiny-bot")
 </template>
 
 <script setup>
 import { onMounted, getCurrentInstance  } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld      from './components/HelloWorld.vue'
+import {initWebsocket} from "./websocket.js";
 
 const app = getCurrentInstance();
 const {hostname, images} = 
       app.appContext.config.globalProperties;
 
 onMounted(async() => { 
-  console.log(`\n---- mounted: ${hostname} ${images} ----\n`);
+  console.log(`\n---- mounted, ` +
+              `hostname: ${hostname}, images: ${images} ----\n`);
+  initWebsocket(hostname, images, );
 });
 
 onMounted(async() => {
-  const res = await fetch(`${hostname}index.html`, { 
+  const res = await fetch(`http://${hostname}/index.html`, { 
     method: 'get',
     headers: {'content-type': 'text/plain'}
   });
