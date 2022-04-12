@@ -25,6 +25,9 @@ const fcError       = 'e';
 let hostname = '';
 let images   = '';
 
+// app callback appCB(status)
+let appCB = null;
+
 let webSocket = null;
 
 let lastRecvStr = "";
@@ -48,36 +51,12 @@ const wsRecv = (event) => {
     console.log(`Error parsing JSON from bot:', "${event.data}"`);
     return;
   }
-  if(res[fcBatV] && Math.abs(res[fcBatV] - espBatV) > .03) {
-    const batV = res[fcBatV];
-    let id;
-    // total range 330 to 420
-    if(     batV < 340) id =   0;
-    else if(batV < 350) id =  20;
-    else if(batV < 360) id =  40;
-    else if(batV < 370) id =  60;
-    else if(batV < 380) id =  80;
-    else                id = 100; 
-    batImgEle.setAttribute('src', `${images}/bat-${id}.png`);
-    hdrEle.style.backgroundColor = (id == '0' ? 'red': 'white');
-    espBatV = batV;
-  }
-  if(res.rssi && Math.abs(res.rssi - espRssi) > 3) {
-    const rssi = +res.rssi;
-    let id;
-    if(     rssi < -80) id = 1; // -99 to -81, 0 bars -- worked at -90 by garage
-    else if(rssi < -70) id = 2; // -80 to -71, 1 bar  (dot)
-    else if(rssi < -60) id = 3; // -70 to -61, 2 bars (dot & 2 bars)
-    else if(rssi < -50) id = 4; // -60 to -51, 3 bars (dot & 3 bars)
-    else                id = 5; // -50 and up, 4 bars (max) -- measured -20 at router
-    wifiImgEle.setAttribute('src', `${imgDir}wifi-${id-1}.png`);
-    hdrEle.style.backgroundColor = (id < 2 ? 'red': 'white');
-    espRssi = rssi;
-  }
+  if(appCB) appCB(res);
 }
 
-let waitingToRetry = false;
-let webSocketOpen = false;
+let waitingToRetry    = false;
+let webSocketOpen     = false;
+let keepWebsockClosed = false;
 
 const connectToWs = async () => {
   waitingToRetry = false;
@@ -117,6 +96,8 @@ const connectToWs = async () => {
   });
 }
  
+ let lastSendStr = null;
+
 const sendWSObj = async(obj) => {
   let str;
   try{ str = JSON.stringify(obj); }
@@ -128,13 +109,17 @@ const sendWSObj = async(obj) => {
   catch(e) {
     console.log(`Error sending string "${str}" in sendWSObj: ${e.message}`);
   }
-  console.log(`<-- msg sent: ${str}`);
+  if(str != lastSendStr) {
+    console.log(`<-- msg sent: ${str}`);
+    lastSendStr = str;
+  }
 }
 
 export const initWebsocket = 
-       async (hostnameIn, imagesIn) => {
+       async (hostnameIn, imagesIn, appCBIn) => {
   hostname = hostnameIn;
   images   = imagesIn;
+  appCB    = appCBIn;
   
   connectToWs();
 
@@ -142,7 +127,7 @@ export const initWebsocket =
   reportCmd[fcReport] = 0;
   setInterval( async() => {
     if(webSocketOpen) sendWSObj(reportCmd);
-  },1000);
+  },5000);
 }
 
 // export sendStop = async () => {

@@ -1,34 +1,29 @@
 <template lang='pug'>
 div(style="text-align:center")
-  Header
+  Header(:images="images" :rssi="rssi" :batv="batv")
 </template>
 
 <script setup>
-import {onMounted, getCurrentInstance } from 'vue'
-import  Header         from './components/header.vue'
-import {initWebsocket} from "./websocket.js";
+  import {onMounted, getCurrentInstance, ref } from 'vue'
+  import  Header         from './components/header.vue'
+  import {initWebsocket} from "./websocket.js";
 
-const app = getCurrentInstance();
-const {hostname, images} = 
-      app.appContext.config.globalProperties;
+  const app = getCurrentInstance();
+  const {hostname, images} = 
+        app.appContext.config.globalProperties;
 
-onMounted(async() => { 
-  console.log(`\n---- mounted, ` +
-              `hostname: ${hostname}, images: ${images} ----\n`);
-  initWebsocket(hostname, images, );
-});
+  const rssi = ref(0);
+  const batv = ref(0);
+  const websocketCB = (status) => {
+    if(status.w) rssi.value = status.w;
+    if(status.b) batv.value = status.b;
+  }
 
-onMounted(async() => {
-  const res = await fetch(`http://${hostname}/index.html`, { 
-    method: 'get',
-    headers: {'content-type': 'text/plain'}
+  onMounted(async() => { 
+    console.log(`\n---- mounted, ` +
+                `hostname: ${hostname}, images: ${images} ----\n`);
+    initWebsocket(hostname, images, websocketCB);
   });
-  if (!res.ok)
-    console.log('Error loading index.html:', res.statusText);
-  else
-    console.log(await res.text());
-});
-
 </script>
 
 <style>
