@@ -25,13 +25,13 @@ const fcError       = 'e';
 let hostname = '';
 
 // app callback appCB(status)
-let appCB = null;
+let appCB       = null;
+let webSocket   = null;
+let sentPwrOff  = false;
 
-let webSocket = null;
+//////////////  RECEIVE  /////////////////
 
 let lastRecvStr = "";
-let espBatV     = 0;
-let espRssi     = 0;
 
 const wsRecv = (event) => {
   if(event.data != lastRecvStr) {
@@ -53,6 +53,8 @@ const wsRecv = (event) => {
   if(appCB) appCB(res);
 }
 
+//////////////  MANAGE WEBSOCKET  /////////////////
+
 let waitingToRetry    = false;
 let webSocketOpen     = false;
 let keepWebsockClosed = false;
@@ -72,11 +74,12 @@ const connectToWs = async () => {
   webSocket.addEventListener('error', (event) => {
     console.log('webSocket error:', event);
     webSocketOpen = false;
-    if(sendPwrOff > 0) {
+    if(sentPwrOff) {
       // sending power off always causes error
       keepWebsockClosed = true;
       websocket.close();
       console.log("Powered off -- websocket closed");
+      sendPwrOff = false;
       return;
     }
     if(!waitingToRetry) {
@@ -94,40 +97,49 @@ const connectToWs = async () => {
     }
   });
 }
- 
- let lastSendStr = null;
 
-const sendWSObj = async(obj) => {
-  let str;
-  try{ str = JSON.stringify(obj); }
-  catch(e) {
-    console.log(`Error stringifying obj ${obj} in sendWSObj: ${e.message}`);
-    return;
-  }
-  try{ await webSocket.send(str); }
-  catch(e) {
-    console.log(`Error sending string "${str}" in sendWSObj: ${e.message}`);
-  }
-  if(str != lastSendStr) {
-    console.log(`<-- msg sent: ${str}`);
-    lastSendStr = str;
-  }
+//////////////  SEND  /////////////////
+
+let pendingCmds = null;
+
+const addCommand  = (code, val) => {
+  if(val === undefined) val = 0; 
+  if(pendingCmds === null) 
+    pendingCmds = {[code]: val};
+  else
+    pendingCmds[code] = val;
 }
+
+let lastSendStr = null;
+setInterval(() => {
+  if(!webSocketOpen || pendingCmds === null) return;
+  const str = JSON.stringify(pendingCmds);
+  try{
+    await webSocket.send(str);
+    sentPwrOff = (pendingCmds[fcPowerOff] !== undefined);
+    pendingCmds = null;
+    if(str != lastSendStr) {
+      console.log(`<-- msg sent: ${str}`);
+      lastSendStr = str;
+    }
+  }
+  catch(e) {
+    console.log(`Error sending string ` +
+                `"${str}" in sendWSObj: ${e.message}`);
+  }
+},500);
+
+export const setAccel = (accel) => 
+                      addCommand(fcAccelCmd, accel);
+export const pwrOff = addCommand(fcPowerOff);
+
+
+//////////////  INIT  /////////////////
 
 export const initWebsocket = 
        async (hostnameIn, appCBIn) => {
   hostname = hostnameIn;
   appCB    = appCBIn;
-  
   connectToWs();
-
-  const reportCmd = new Object();
-  reportCmd[fcReport] = 0;
-  setInterval( async() => {
-    if(webSocketOpen) sendWSObj(reportCmd);
-  },5000);
+  setInterval(addCommand, [5000, reportCmd]);
 }
-
-// export sendStop = async () => {
-
-// }
