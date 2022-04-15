@@ -1,6 +1,5 @@
 import { createApp, getCurrentInstance } from 'vue'
 import App from './App.vue'
-
 const app = createApp(App);
 
 if(import.meta.env.MODE == 'development') {

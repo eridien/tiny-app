@@ -1,8 +1,10 @@
 <template lang='pug'>
-#ctrls(style="border:2px solid black")
-  #accelerator
-    | hello
-  #wheel
+#ctrls(style="min-height: calc(100vh - 100px);  \
+              display:flex;")
+  #accelerator(style="border:1px solid blue; width:25%; \
+                      min-height: calc(100vh - 100px);")
+  #wheel(style="border:1px solid red; width:75%; \
+                      min-height: calc(100vh - 100px);")
 </template>
 
 <script setup>

@@ -53,26 +53,4 @@ div
 </script>
 
 <style>
-* { padding: 0; margin: 0; }
-
-html, body {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-   box-sizing: border-box;
-}
-
-body > * {
-  flex-shrink: 0;
-}
-
-#head { background-color: yellow; }
-
-#control {
-  background-color: orange;
-  flex-grow: 1;
-}
 </style>

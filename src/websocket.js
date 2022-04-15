@@ -15,6 +15,7 @@ let hostname = '';
 let appCB       = null;
 let webSocket   = null;
 
+
 //////////////  RECEIVE  /////////////////
 
 let lastRecvStr = "";
@@ -104,7 +105,7 @@ const connectToWs = async () => {
   webSocket.addEventListener('open', (event) => {
     console.log('webSocket connected:', event);
     webSocketOpen = true;
-    pendingCmds = null;
+    pendingCmds   = null;
   });
 
   webSocket.addEventListener('error', (event) => {
@@ -142,5 +143,5 @@ export const initWebsocket =
     hostname = hostnameIn;
     appCB    = appCBIn;
     connectToWs();
-    setInterval(addCommand, [5000, fcReport]);
-  }
+    setInterval(addCommand, 100, fcReport);
+  };
