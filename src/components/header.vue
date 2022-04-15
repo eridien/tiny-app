@@ -1,9 +1,9 @@
 <template lang='pug'>
-#hdr(:style="{position:'fixed', width:'100vw', height:'50px',  \
-              display:'flex', justifyContent:'space-around',   \
-              alignItems:'stretch', padding:'5px',             \
-              fontWeight:'bold', backgroundColor:              \
-                (batvId < 20 || rssiId < 2 ? 'pink': 'white')}") 
+div(:style="{width:'100vw', height:'50px', display:'flex', \
+      justifyContent:'space-around', alignItems:'stretch', \
+      padding:'5px', fontWeight:'bold',                    \
+      backgroundColor:                                     \
+        (batvId < 20 || rssiId < 2 ? 'pink': 'white')}") 
   img(:src="`images/icon.png`" 
       :style="{width:'64px',height:'36px',marginTop:'10px'}")
   img(:src="`images/wifi-${rssiId}.png`"  
@@ -21,6 +21,7 @@ const props = defineProps(['rssi', 'batv'])
 
 const rssiId = ref(2);
 watch(()=> props.rssi, (rssi, oldRssi) => {
+  if(rssi === undefined) return;
   let id;
   if(     rssi < -80) id = 1; 
   else if(rssi < -70) id = 2; 
@@ -32,6 +33,7 @@ watch(()=> props.rssi, (rssi, oldRssi) => {
 
 const batvId = ref(100);
 watch(()=> props.batv, (batv, oldbatv) => {
+  if(batv === undefined) return;
   let id;
   if(     batv < 340) id =   0;
   else if(batv < 350) id =  20;
