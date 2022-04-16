@@ -15,9 +15,9 @@ div(:style="{width:'90vw', height:'50px', display:'flex',  \
 </template>
 
 <script setup>
-import {onMounted, watch, ref} from 'vue'
+import {onMounted, watch, ref} from 'vue';
 
-const props = defineProps(['rssi', 'batv'])
+const props = defineProps(['rssi', 'batv']);
 
 const rssiId = ref(2);
 watch(()=> props.rssi, (rssi, oldRssi) => {
