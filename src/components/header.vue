@@ -47,7 +47,7 @@ watch(()=> props.batv, (batv, oldbatv) => {
 });
 
 onMounted(async () => { 
-  console.log(`\n---- header mounted ----\n`);
+  console.log(`---- header mounted ----`);
 });
 
 </script>

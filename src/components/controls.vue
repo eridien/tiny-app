@@ -1,13 +1,14 @@
 <template lang='pug'>
-div(style="min-height: calc(100vh - 100px);          \
-              display:flex; width:100vw")
-  #accelerator(style="border:1px solid blue; width:25%; \
-                      min-height: calc(100vh - 100px);")
+div(style="min-height: calc(100vh - 100px); \
+           display:flex; width:100vw;       \
+           border:1px solid red;")
+  accel-pane
   wheel-pane
 </template>
 
 <script setup>
-  // import {onMounted} from 'vue'
+  import {onMounted} from 'vue'
+  import  accelPane from './accelPane.vue';
   import  wheelPane from './wheelPane.vue';
 
   // commands to bot
@@ -23,6 +24,10 @@ div(style="min-height: calc(100vh - 100px);          \
       clickTO = null;
     }
   }
+  onMounted(async () => { 
+    console.log(`---- controls mounted ----`);
+});
+
 </script>
 
 <style>

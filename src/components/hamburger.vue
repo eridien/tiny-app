@@ -13,7 +13,7 @@ const hamburgerClick = () => {
 }
 
 onMounted(async () => { 
-  console.log(`\n---- hamburger mounted ----\n`);
+  console.log(`---- hamburger mounted ----`);
 });
 
 </script>

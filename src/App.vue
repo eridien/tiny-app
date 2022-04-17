@@ -45,8 +45,8 @@ div
         app.appContext.config.globalProperties;
 
   onMounted(async() => { 
-    console.log(`\n---- App Mounted, ` +
-                `hostname: ${hostname} ---\n`);
+    console.log(`---- App Mounted, ` +
+                `hostname: ${hostname} ---`);
     initWebsocket(hostname, websocketCB);
   });
 </script>
