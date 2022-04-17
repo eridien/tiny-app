@@ -13,7 +13,6 @@ div(:style="{width:'90vw', height:'50px', display:'flex',  \
       :style="{width:'15px', height:'35px', \
                margin:'4px 20px 40px 0'}")
   hamburger
-
 </template>
 
 <script setup>
