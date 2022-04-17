@@ -4,11 +4,13 @@ div(style="width:75%; display:flex;         \
            justify-content:center;          \
            align-items:center;")
   img( id="wheel" src="images/steering-wheel.png"
-               :style="{transform:`rotate(${angle}deg)`}" )
+      :style="{transform:`rotate(${angle}deg)`}" )
 </template>
 
 <script setup>
-  import {onMounted} from 'vue';
+  import {onMounted, ref} from 'vue';
+
+  const angle = ref(45);
 
   onMounted(async () => { 
     console.log(`---- wheelPane mounted ----`);
