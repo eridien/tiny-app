@@ -1,13 +1,13 @@
 <template lang='pug'>
-#ctrls(style="min-height: calc(100vmin - 100px);  \
+#ctrls(style="min-height: calc(100vh - 100px);                   \
               display:flex;")
-  #accelerator(style="border:1px solid blue; width:25%; \
-                      min-height: calc(100vmin - 100px);")
-  #wheel(style="border:1px solid red; width:75%; display:'flex',\
-                      min-height: calc(100vmin - 100px);")
+  #accelerator(style="border:1px solid blue; width:25%;          \
+                      min-height: calc(100vh - 100px);")
+  #wheel(style="border:1px solid red; width:75%; display:flex; \
+                      min-height: calc(100vh - 100px); \
+                      justify-content:center; align-items:center;")
     img(:src="`images/steering-wheel.png`" 
-        :style="{width:'64vmin',height:'60vmin', \
-                 marginTop:'20vmin', marginLeft:'3vmin'}")
+        :style="{width:'60vmin',height:'60vmin'}")
 </template>
 
 <script setup>
