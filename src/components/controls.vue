@@ -1,7 +1,6 @@
 <template lang='pug'>
 div(style="min-height: calc(100vh - 100px); \
-           display:flex; width:100vw;       \
-           border:1px solid red;")
+           display:flex; width:100vw;")
   accel-pane
   wheel-pane
 </template>

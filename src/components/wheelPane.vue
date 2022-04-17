@@ -1,9 +1,8 @@
 <template lang='pug'>
-div(style="border:1px solid red; width:75%; \
-                    display:flex;                    \
-                    min-height: calc(100vh - 100px); \
-                    justify-content:center;          \
-                    align-items:center;")
+div(style="width:75%; display:flex;         \
+           min-height: calc(100vh - 100px); \
+           justify-content:center;          \
+           align-items:center;")
   img( id="wheel" src="images/steering-wheel.png"
                :style="{transform:`rotate(${angle}deg)`}" )
 </template>
