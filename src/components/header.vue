@@ -1,25 +1,26 @@
 <template lang='pug'>
-div(:style="{width:'90vw', height:'50px', display:'flex',  \
-      justifyContent:'space-between', alignItems:'stretch', \
-      padding:'5px', fontWeight:'bold',                     \
-      margin:'0 5vw 0 5vw', backgroundColor:                  \
-        (batvId < 20 || rssiId < 2 ? 'pink': 'white')}") 
-  img(:src="`images/icon.png`" 
-      :style="{width:'64px',height:'36px',marginTop:'5px'}")
+div(style="width:90vw; height:50px; display:flex;       \
+      justifyContent:space-between; alignItems:stretch; \
+      padding:5px; fontWeight:bold;                     \
+      margin:0 5vw 0 5vw;   backgroundColor:            \
+        (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
+  img(src="images/icon.png" 
+      style="width:64px;height:36px;marginTop:5px;")
   img(:src="`images/wifi-${rssiId}.png`"  
-      :style="{width:'40px', height:'55px', \
-               marginTop:'-6px'}")
+      style="width:40px; height:55px; \
+             marginTop:-6px")
   img(:src="`images/bat-${batvId}.png`" 
-      :style="{width:'15px', height:'35px', \
-               margin:'4px 20px 40px 0'}")
-  hamburger
+      style="width:15px; height:35px; \
+               margin:4px 20px 40px 0;")
+  hamburger(style="width:25px; height:25px; \
+                   margin:10px 20px 40px 0;")
 </template>
 
 <script setup>
 import {onMounted, watch, ref} from 'vue';
 import  hamburger from './hamburger.vue';
 
-const props = defineProps(['rssi', 'batv'])
+const props = defineProps(['rssi', 'batv']);
 
 const rssiId = ref(2);
 watch(()=> props.rssi, (rssi, oldRssi) => {
@@ -47,7 +48,7 @@ watch(()=> props.batv, (batv, oldbatv) => {
 });
 
 onMounted(async () => { 
-  console.log(`---- header mounted ----`);
+  // console.log(`---- header mounted ----`);
 });
 
 </script>

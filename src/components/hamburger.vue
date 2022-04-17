@@ -1,7 +1,6 @@
 <template lang='pug'>
 img(id="hamburger" :src="`images/hamburger.png`" 
-    :style="{width:'25px', height:'25px', \
-              margin:'10px 20px 40px 0'}"
+    style="{}"
     @click="hamburgerClick")
 </template>
 
@@ -13,7 +12,7 @@ const hamburgerClick = () => {
 }
 
 onMounted(async () => { 
-  console.log(`---- hamburger mounted ----`);
+  // console.log(`---- hamburger mounted ----`);
 });
 
 </script>

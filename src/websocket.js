@@ -76,7 +76,10 @@ export const setAccel = (accel) =>
                       addCommand(fcAccelCmd, accel);
 export const setYaw   = (yaw) => 
                       addCommand(fcYawCmd,   yaw);
-export const stop     = () => addCommand(fcStopCmd);
+export const stop     = () => {
+                        console.log('STOP');
+                        addCommand(fcStopCmd);
+                      };
 export const pwrOff   = () => addCommand(fcPowerOff);
 
 // debug PID (PI) tuning

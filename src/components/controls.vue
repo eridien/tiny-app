@@ -1,20 +1,19 @@
 <template lang='pug'>
-div(style="min-height: calc(100vh - 100px); \
-           display:flex; width:100vw;")
-  accel-pane
-  wheel-pane
+div(style="min-height:calc(100vh-100px);    \
+           display:flex; width:100%;       \
+           border:1px solid black; ")
+  accel-pane(style="border:1px solid black; \
+                    width:25%;              \
+                    min-height: calc(100vh - 100px);")
+  wheel-pane(style="border:1px solid black; \
+                    width:75%;              \
+                    min-height: calc(100vh - 100px);")
 </template>
 
 <script setup>
   import {onMounted} from 'vue'
   import  accelPane from './accelPane.vue';
   import  wheelPane from './wheelPane.vue';
-
-  // commands to bot
-  const setAccel = (accel) => this.$emit('setAccel', accel);
-  const setYaw   = (yaw)   => this.$emit('setYaw',   yaw);
-  const stop     = ()      => this.$emit('stop');
-  const pwrOff   = ()      => this.$emit('pwrOff');
 
   let clickTO = null;
   const clrClickTO = () => {
@@ -24,9 +23,8 @@ div(style="min-height: calc(100vh - 100px); \
     }
   }
   onMounted(async () => { 
-    console.log(`---- controls mounted ----`);
-});
-
+    // console.log(`---- controls mounted ----`);
+  });
 </script>
 
 <style>
