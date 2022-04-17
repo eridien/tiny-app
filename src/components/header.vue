@@ -7,15 +7,18 @@ div(:style="{width:'90vw', height:'50px', display:'flex',  \
   img(:src="`images/icon.png`" 
       :style="{width:'64px',height:'36px',marginTop:'5px'}")
   img(:src="`images/wifi-${rssiId}.png`"  
-      :style="{width:'40px', height:'55px', marginTop:'-6px'}")
+      :style="{width:'40px', height:'55px', \
+               marginTop:'-6px'}")
   img(:src="`images/bat-${batvId}.png`" 
-      :style="{width:'15px', height:'35px', margin:'4px 20px 40px 0'}")
-  img(:src="`images/hamburger.png`" @click="hamburgerClick"
-      :style="{width:'25px', height:'25px', margin:'10px 20px 40px 0'}")
+      :style="{width:'15px', height:'35px', \
+               margin:'4px 20px 40px 0'}")
+  hamburger
+
 </template>
 
 <script setup>
-import {onMounted, watch, ref} from 'vue'
+import {onMounted, watch, ref} from 'vue';
+import  hamburger from './hamburger.vue';
 
 const props = defineProps(['rssi', 'batv'])
 
@@ -43,10 +46,6 @@ watch(()=> props.batv, (batv, oldbatv) => {
   else                id = 100; 
   batvId.value = id;
 });
-
-const hamburgerClick = () => {
-  console.log('hamburgerClick');
-}
 
 onMounted(async () => { 
   console.log(`\n---- header mounted ----\n`);

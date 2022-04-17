@@ -1,9 +1,9 @@
 <template lang='pug'>
 div
   Header(id="head" :rssi="rssi" :batv="batv")
-  Controls(id="control" 
+  Controls(id="control"
           @setAccel="setAccelEvent" @setYaw="setYawEvent"
-          @stop="stopEvent"         @pwrOff="pwrOffEvent")
+          @stop="stopEvent"         @pwrOff="pwrOffEvent" )
 </template>
 
 <script setup>
