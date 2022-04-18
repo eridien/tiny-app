@@ -1,9 +1,9 @@
 <template lang='pug'>
-div
+div(style="position:fixed;")
   Header(id="head" :rssi="rssi" :batv="batv" 
-        :style="{width:'90vw', height:`${HEADER_HEIGHT}px`,  \
+        :style="{width:'90vw', height:`${HDR_HGT}px`,  \
                  padding:'5px', margin:'0 5vw 0 5vw'}")
-  Controls(:HEADER_HEIGHT="HEADER_HEIGHT"
+  Controls(:HDR_HGT="HDR_HGT"
             @setAccel="setAccelEvent" @setYaw="setYawEvent"
             @stop="stopEvent"         @pwrOff="pwrOffEvent" )
 </template>
@@ -15,7 +15,7 @@ div
   import {initWebsocket, setAccel, setYaw, stop, pwrOff} 
                           from "./websocket.js";
 
-  const HEADER_HEIGHT = 50;
+  const HDR_HGT = 50;
 
   const setAccelEvent = (accel) => setAccel(accel);
   const setYawEvent   = (yaw)   => setYaw(accel);
