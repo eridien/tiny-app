@@ -21,11 +21,13 @@ div(id="wheelPane"
     const getAngle = (x, y) => {
       const centerX = window.outerWidth  * (0.25 + 0.75/2);
       const centerY = 
-        (window.outerHeight - props.HEADER_HEIGHT / 2);
-      const relX = Math.round(x-centerX);
-      const relY = Math.round(y-centerY);
+        (window.outerHeight - props.HEADER_HEIGHT) / 2;
+      const relX =   x-centerX;
+      const relY = -(y-centerY);
+      if(relX >= 0 && relX <  1e-3) relX += 2e-3;
+      if(relX <= 0 && relX > -1e-3) relX -= 2e-3;
       const radians = Math.atan(relY/relX);
-      const degrees = radians * 90 / Math.PI;
+      const degrees = Math.round(radians * 90 / (Math.PI/2));
       console.log("getAngle:", {radians,degrees,relX, relY});
 
       let angle = 45;
