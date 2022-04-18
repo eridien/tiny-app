@@ -10,86 +10,48 @@ div(id="wheelPane"
 <script setup>
   import {onMounted} from 'vue'
 
+  const props = defineProps(['HEADER_HEIGHT']);
+
   const angle = 90;
 
   onMounted(() => { 
     let wheelPaneEle = document.getElementById("wheelPane"); 
 
-    const MAX_CLICK_DIST = 7;
-    const MAX_CLICK_TIME = 250;
+    let startAngle;
+    const getAngle = (x, y) => {
+      const centerX = window.outerWidth  * (0.25 + 0.75/2);
+      const centerY = 
+        (window.outerHeight - props.HEADER_HEIGHT / 2);
+      const relX = Math.round(x-centerX);
+      const relY = Math.round(y-centerY);
+      const radians = Math.atan(relY/relX);
+      const degrees = radians * 90 / Math.PI;
+      console.log("getAngle:", {radians,degrees,relX, relY});
 
-    // let startX;
-    // let startY;
+      let angle = 45;
 
-    let touching  = false;
-    // let isClick   = true;
-    // let clickTO   = null;
+      return angle;
+    };
 
-    // const clrClickTO = () => {
-    //   if(clickTO) clearTimeout(clickTO);
-    //   clickTO = null;
-    // }
+    wheelPaneEle.addEventListener('touchstart', (event) => {
+      let touch = event.touches[0];
+      const startX = touch.pageX;
+      const startY = touch.pageY;
+      console.log("touchstart:", 
+                   Math.round(startX), Math.round(startY));
+      startAngle = getAngle(startX, startY);
+    });
 
-    // let touchX  = 0;
-    // let touchY  = 0;
-    // const setTouchPos = (event) => {
-    //   if(event) {
-    //     const touch = event.changedTouches[0];
-    //     touchX = Math.round(touch.pageX);
-    //     touchY = Math.round(touch.pageY);
-    //   }
-    // }
-
-    const chkMove = (event) => {
-      if(!touching) return;
-
+    wheelPaneEle.addEventListener("touchmove", () => {
       const touch = event.changedTouches[0];
       const touchX = Math.round(touch.pageX);
       const touchY = Math.round(touch.pageY);
-
-      // setTouchPos(event);
-      console.log("moving", touchX, touchY);
-      // if(!isClick) setTouchPos(event);
-      // if(isClick && (Math.abs(touchX - startX) > MAX_CLICK_DIST ||
-      //                Math.abs(touchY - startY) > MAX_CLICK_DIST)) {
-      //   clrClickTO();
-      //   isClick = false;
-      // }
-      // if(!isClick) {
-        // setTouchPos(event);
-        // calcPwrCmds(touchX, touchY);
-      // }
-    }
-    wheelPaneEle.addEventListener("touchmove", chkMove);
-
-    wheelPaneEle.addEventListener('touchstart', (event) => {
-      touching = true;
-      let touch = event.touches[0];
-      // touchX    = touch.pageX;
-      // touchY    = touch.pageY;
-      const startX = touch.pageX;
-      const startY = touch.pageY;
-      // assume click, not press, for now
-      // isClick   = true;  
-      console.log("touchstart:", {
-                      startX: Math.round(startX), 
-                      startY: Math.round(startY)});
-      // clickTO = setTimeout(() => {
-      //   clrClickTO();
-      //   isClick = false;
-      //   chkMove();
-      // }, MAX_CLICK_TIME);
+      // console.log("moving", touchX, touchY);
+      getAngle(touchX, touchY);
     });
 
-    wheelPaneEle.addEventListener('touchend', function (event) {
-      chkMove(event);
-      // clrClickTO();
-      // this is now @click="..." in parent
-      // if(isClick) {
-      //   console.log("fast click -- STOP");
-      //   emit('stopEvent');
-      // }
-      touching = false;
+    wheelPaneEle.addEventListener('touchend', (event) => {
+      console.log("touchend");
     });  
   });
 </script>

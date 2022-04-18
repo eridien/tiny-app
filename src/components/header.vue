@@ -1,9 +1,9 @@
 <template lang='pug'>
-div(style="width:90vw; height:50px; display:flex;       \
-      justifyContent:space-between; alignItems:stretch; \
-      padding:5px; fontWeight:bold;                     \
-      margin:0 5vw 0 5vw;   backgroundColor:            \
-        (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
+div(style="display:flex;                       \
+           justifyContent:space-between;       \
+           alignItems:stretch;                 \
+           fontWeight:bold; backgroundColor:   \
+            (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
   img(src="images/icon.png" 
       style="width:64px;height:36px;marginTop:5px;")
   img(:src="`images/wifi-${rssiId}.png`"  
