@@ -8,11 +8,11 @@ div(id="wheelPane"
 </template>
 
 <script setup>
-  import {onMounted} from 'vue'
+  import {ref, onMounted} from 'vue'
 
   const props = defineProps(['HEADER_HEIGHT']);
 
-  const angle = 90;
+  const angle = ref(0);
 
   onMounted(() => { 
     let wheelPaneEle = document.getElementById("wheelPane"); 
@@ -20,19 +20,18 @@ div(id="wheelPane"
     let startAngle;
     const getAngle = (x, y) => {
       const centerX = window.outerWidth  * (0.25 + 0.75/2);
-      const centerY = 
+      const centerY = props.HEADER_HEIGHT +
         (window.outerHeight - props.HEADER_HEIGHT) / 2;
       const relX =   x-centerX;
       const relY = -(y-centerY);
       if(relX >= 0 && relX <  1e-3) relX += 2e-3;
-      if(relX <= 0 && relX > -1e-3) relX -= 2e-3;
+      if(relX <  0 && relX > -1e-3) relX -= 2e-3;
       const radians = Math.atan(relY/relX);
-      const degrees = Math.round(radians * 90 / (Math.PI/2));
-      console.log("getAngle:", {radians,degrees,relX, relY});
-
-      let angle = 45;
-
-      return angle;
+      let   degrees = Math.round(radians*90/(Math.PI/2));
+      if(relX >= 0) angle.value =  90 - degrees;
+      else          angle.value = -90 - degrees;
+      console.log('getAngle:', angle.value);
+      return angle.value;
     };
 
     wheelPaneEle.addEventListener('touchstart', (event) => {

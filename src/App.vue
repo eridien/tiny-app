@@ -15,7 +15,7 @@ div
   import {initWebsocket, setAccel, setYaw, stop, pwrOff} 
                           from "./websocket.js";
 
-  const HEADER_HEIGHT = '50';
+  const HEADER_HEIGHT = 50;
 
   const setAccelEvent = (accel) => setAccel(accel);
   const setYawEvent   = (yaw)   => setYaw(accel);

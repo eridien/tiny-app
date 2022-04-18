@@ -17,13 +17,9 @@ div(style="min-height:calc(100vh-100px);    \
   import  accelPane  from './accelPane.vue';
   import  wheelPane  from './wheelPane.vue';
 
-  const props = defineProps(['HEADER_HEIGHT']);
-
-  const emit = defineEmits(['stop']);
-
-  const ctrlClick = () => {
-    emit('stop');
-  }
+  const props     = defineProps(['HEADER_HEIGHT']);
+  const emit      = defineEmits(['stop']);
+  const ctrlClick = () => { emit('stop'); }
 
   // let clickTO = null;
   // const clrClickTO = () => {
