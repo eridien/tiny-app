@@ -77,7 +77,7 @@ export const setAccel = (accel) =>
 export const setYaw   = (yaw) => 
                       addCommand(fcYawCmd,   yaw);
 export const stop     = () => {
-                        console.log('STOP');
+                        console.log('sending STOP to bot');
                         addCommand(fcStopCmd);
                       };
 export const pwrOff   = () => addCommand(fcPowerOff);

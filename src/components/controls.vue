@@ -1,7 +1,8 @@
 <template lang='pug'>
 div(style="min-height:calc(100vh-100px);    \
            display:flex; width:100%;       \
-           border:1px solid black; ")
+           border:1px solid black; "
+    @click="ctrlClick")
   accel-pane(style="border:1px solid black; \
                     width:25%;              \
                     min-height: calc(100vh - 100px);")
@@ -12,19 +13,25 @@ div(style="min-height:calc(100vh-100px);    \
 
 <script setup>
   import {onMounted} from 'vue'
-  import  accelPane from './accelPane.vue';
-  import  wheelPane from './wheelPane.vue';
+  import  accelPane  from './accelPane.vue';
+  import  wheelPane  from './wheelPane.vue';
 
-  let clickTO = null;
-  const clrClickTO = () => {
-    if(clickTO) {
-      clearTimeout(clickTO);
-      clickTO = null;
-    }
+  const emit = defineEmits(['stop']);
+
+  const ctrlClick = () => {
+    emit('stop');
   }
-  onMounted(async () => { 
-    // console.log(`---- controls mounted ----`);
-  });
+
+  // let clickTO = null;
+  // const clrClickTO = () => {
+  //   if(clickTO) {
+  //     clearTimeout(clickTO);
+  //     clickTO = null;
+  //   }
+  // }
+
+  // onMounted(async () => { 
+  // });
 </script>
 
 <style>
