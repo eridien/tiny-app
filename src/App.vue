@@ -4,8 +4,8 @@ div(style="position:fixed;")
         :style="{width:'90vw', height:`${HDR_HGT}px`,  \
                  padding:'5px', margin:'0 5vw 0 5vw'}")
   Controls(:HDR_HGT="HDR_HGT"
-            @setAccel="setAccelEvent" @setYaw="setYawEvent"
-            @stop="stopEvent"         @pwrOff="pwrOffEvent" )
+           @accel="accel"  @angle="angle"
+           @stop="stopEvt" @pwrOff="pwrOffEvt")
 </template>
 
 <script setup>
@@ -14,13 +14,12 @@ div(style="position:fixed;")
   import  Controls        from './components/controls.vue'
   import {initWebsocket, setAccel, setYaw, stop, pwrOff} 
                           from "./websocket.js";
-
   const HDR_HGT = 50;
 
-  const setAccelEvent = (accel) => setAccel(accel);
-  const setYawEvent   = (yaw)   => setYaw(accel);
-  const stopEvent     = ()      => stop();
-  const pwrOffEvent   = ()      => pwrOff();
+  const accel     = accel => setAccel(accel);
+  const angle     = angle => setYaw(angle);
+  const stopEvt   = ()    => stop();
+  const pwrOffEvt = ()    => pwrOff();
 
   const rssi = ref(0);
   const batv = ref(0);

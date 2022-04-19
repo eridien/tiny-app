@@ -46,11 +46,6 @@ watch(()=> props.batv, (batv, oldbatv) => {
   else                id = 100; 
   batvId.value = id;
 });
-
-onMounted(async () => { 
-  // console.log(`---- header mounted ----`);
-});
-
 </script>
 
 <style>

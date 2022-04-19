@@ -1,13 +1,13 @@
 // commands to bot
 const fcReport      = 'R';
-const fcStopCmd     = 'S';
 const fcAccelCmd    = 'V';
 const fcYawCmd      = 'Y';
+const fcStopCmd     = 'S';
+const fcPowerOff    = 'P';
 const fcAccelPk     = 'K';
 const fcAccelIk     = 'L';
 const fcYawPk       = 'M';
 const fcYawIk       = 'N';
-const fcPowerOff    = 'P';
 
 let hostname = '';
 
@@ -51,7 +51,7 @@ setInterval(async () => {
   if(!webSocketOpen || pendingCmds === null) return;
   const str = JSON.stringify(pendingCmds);
   try{
-    await webSocket.send(str);
+    // await webSocket.send(str);
     sentPwrOff = (pendingCmds[fcPowerOff] !== undefined);
     pendingCmds = null;
     if(str != lastSendStr) {
@@ -72,25 +72,32 @@ const addCommand = (code, val = 0) => {
     pendingCmds[code] = val;
 }
 
-export const setAccel = (accel) => 
-                      addCommand(fcAccelCmd, accel);
-export const setYaw   = (yaw) => 
-                      addCommand(fcYawCmd,   yaw);
-export const stop     = () => {
-                        console.log('sending STOP to bot');
-                        addCommand(fcStopCmd);
-                      };
-export const pwrOff   = () => addCommand(fcPowerOff);
+export const setAccel = accel => {
+               console.log('sending accel to bot', accel);
+               addCommand(fcAccelCmd, accel);
+             }
+export const setYaw = yaw => {
+               console.log('sending yaw to bot', yaw);
+               addCommand(fcYawCmd, yaw);
+             }
+export const stop = () => {
+               console.log('sending stop to bot');
+               addCommand(fcStopCmd);
+             };
+export const pwrOff = () => {
+               console.log('sending pwroff to bot');
+               addCommand(fcPowerOff);
+             };
 
 // debug PID (PI) tuning
-export const setAccelPk = (accelPk) => 
-                      addCommand(fcAccelPk, accelPk);
-export const setAccelIk = (accelIk) => 
-                      addCommand(fcAccelIk, accelIk);
-export const setYawPk = (yawPk) => 
-                      addCommand(fcYawPk, yawPk);
-export const setYawIk = (yawIk) => 
-                      addCommand(fcYawIk, yawIk);
+export const setAccelPk = accelPk => 
+                           addCommand(fcAccelPk, accelPk);
+export const setAccelIk = accelIk => 
+                           addCommand(fcAccelIk, accelIk);
+export const setYawPk   = yawPk => 
+                           addCommand(fcYawPk,   yawPk);
+export const setYawIk   = yawIk => 
+                           addCommand(fcYawIk,   yawIk);
 
 
 //////////////  MANAGE WEBSOCKET  /////////////////

@@ -11,14 +11,16 @@ div(id="wheelPane"
   import {ref, watch, onMounted} from 'vue'
 
   const props = defineProps(['HDR_HGT', 'stop']);
+  const emit  = defineEmits(['angle']);
 
   const angle = ref(0);
 
-  watch(() => props.stop, () => angle.value = 0);
-
   onMounted(() => { 
-
-    const setAngle = (x, y) => {
+    document.getElementById("wheelPane")
+            .addEventListener("touchmove", (event) => {
+      const touch = event.changedTouches[0];
+      const x = touch.pageX;
+      const y = touch.pageY;
       const centerX = window.outerWidth  * (0.25 + 0.75/2);
       const centerY = props.HDR_HGT +
         (window.outerHeight - props.HDR_HGT) / 2;
@@ -30,13 +32,13 @@ div(id="wheelPane"
       let   degrees = Math.round(radians*90/(Math.PI/2));
       if(relX >= 0) angle.value =  90 - degrees;
       else          angle.value = -90 - degrees;
-    };
-
-    document.getElementById("wheelPane")
-            .addEventListener("touchmove", (event) => {
-      const touch = event.changedTouches[0];
-      setAngle(touch.pageX, touch.pageY);
+      emit('angle', angle.value);
     });
+  });
+
+  watch(() => props.stop, () => {
+    angle.value = 0;
+    emit('angle', angle.value);
   });
 </script>
 
