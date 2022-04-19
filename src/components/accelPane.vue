@@ -1,17 +1,17 @@
 <template lang='pug'>
-div(id="accelPane" style="position:relative;")
-  #slider(
-     :style="{position:'absolute',                    \
-              top:`${barTop}px`, height:`${barHgt}px`, \
-              marginLeft:'11%', width:'75%',          \
-              backgroundColor:'#c44'}")
+#accelPane(style="position:relative;")
+  #bar(:style="{position:'absolute',                    \
+               top:`${barTop}px`, height:`${barHgt}px`, \
+               marginLeft:'11%', width:'75%',           \
+               backgroundColor:'#c44'}")
 
-  #wheel(
-      :style="{border:`${THUMB_BRDR}px solid black`,            \
-               borderRadius:'12%/50%',                          \
-               position:'absolute',                             \
-               top:`${thumbTop}px`, height:`${THUMB_INNER}px`,  \
-               marginLeft:'5%', width:'80%',                    \
+  #thumb(
+      :style="{border:`${THUMB_BRDR}px solid  black`,  \
+               borderRadius:'12%/50%',                 \
+               position:'absolute',                    \
+               top:   `${thumbTop}px`,                 \
+               height:`${THUMB_INNER}px`,              \
+               marginLeft:'5%', width:'80%',           \
                backgroundColor:'gray'}")
 </template>
 
@@ -31,11 +31,20 @@ div(id="accelPane" style="position:relative;")
   // 0 to 100%
   const accel  = ref(0); 
 
-  onMounted(async () => { 
-    const paneEle = document.getElementById('accelPane');
-    const paneHgt = paneEle.offsetHeight;
-    const travel  = paneHgt - THUMB_HGT;
+  const stopAllPropogation= (event) => {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.preventDefault();
+  }
 
+  onMounted(async () => { 
+    const paneEle  = document.getElementById('accelPane');
+    const barEle   = document.getElementById('bar');
+    const thumbEle = document.getElementById('thumb');
+
+    let paneHgt = paneEle.offsetHeight;
+    let travel  = paneHgt - THUMB_HGT;
+    
     const drawSlider = () => {
       barTop.value   = paneHgt
                          - travel*accel.value
@@ -44,23 +53,40 @@ div(id="accelPane" style="position:relative;")
       thumbTop.value = barTop.value - (THUMB_HGT/2);
     };
 
-    document.getElementById("accelPane")
-            .addEventListener("touchmove", (event) => {
-      const touch = event.changedTouches[0];
-      accel.value = (paneHgt 
-                       - (touch.pageY - THUMB_HGT)) 
-                       / paneHgt;
-      accel.value = Math.max(0, 
-                       Math.min(accel.value, 1));
+    window.addEventListener('resize', () => {
+      paneHgt = paneEle.offsetHeight;
+      travel  = paneHgt - THUMB_HGT;
       drawSlider();
-      emit('accel',Math.round(accel.value * 100));
     });
+
+    paneEle.addEventListener("touchmove", 
+      (event) => {
+        stopAllPropogation(event);
+        let touch = null;
+        for(let chgdTouch of event.changedTouches) {
+          if(chgdTouch.target == paneEle  ||
+             chgdTouch.target == barEle ||
+             chgdTouch.target == thumbEle) 
+            touch = chgdTouch;
+        }
+        if(touch == null) return;
+        
+        accel.value = (paneHgt 
+                        - (touch.pageY - THUMB_HGT)) 
+                        / paneHgt;
+        accel.value = Math.max(0, 
+                        Math.min(accel.value, 1));
+        drawSlider();
+        emit('accel',Math.round(accel.value * 100));
+      }
+    );
 
     watch(() => props.stop, () => {
       accel.value = 0;
       drawSlider();
+      emit('accel',0);
     });
-    
+
     drawSlider(0);
   });
 </script>

@@ -1,9 +1,10 @@
 <template lang='pug'>
-div(style="position:fixed;")
+#app(style="position:fixed;")
   Header(id="head" :rssi="rssi" :batv="batv" 
-        :style="{width:'90vw', height:`${HDR_HGT}px`,  \
+        :style="{width:'90vw', height:`${HDR_HGT-15}px`,  \
                  padding:'5px', margin:'0 5vw 0 5vw'}")
-  Controls(:HDR_HGT="HDR_HGT"
+  Controls(id="controls" :HDR_HGT="HDR_HGT" 
+           style="width=100%;"
            @accel="accel"  @angle="angle"
            @stop="stopEvt" @pwrOff="pwrOffEvt")
 </template>
@@ -14,7 +15,7 @@ div(style="position:fixed;")
   import  Controls        from './components/controls.vue'
   import {initWebsocket, setAccel, setYaw, stop, pwrOff} 
                           from "./websocket.js";
-  const HDR_HGT = 50;
+  const HDR_HGT = 65;
 
   const accel     = accel => setAccel(accel);
   const angle     = angle => setYaw(angle);

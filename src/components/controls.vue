@@ -1,18 +1,18 @@
 <template lang='pug'>
-div(style="min-height:calc(100vh-100px);     \
-           display:flex; width:100%;         \
-           border:1px solid black; "
+#controls(:style="{display:'flex', width:'100%', \
+                   minHeight:`calc(100vh - ${HDR_HGT}px)`}"
     @click="ctrlClick")
     
   accel-pane(:stop="stop"
-              style="border:1px solid black; \
-                     width:25%;              \
-                     min-height: calc(100vh - 100px);"
+            :style="{border:'1px solid black', \
+                     width:'25%',              \
+                     minHeight:`calc(100vh - ${HDR_HGT}px)`}"
               @accel="accel")
-  wheel-pane(:HDR_HGT="HDR_HGT" :stop="stop"
-              style="border:1px solid black; \
-                     width:75%;              \
-                     min-height: calc(100vh - 100px);"
+
+  wheel-pane(:stop="stop"
+            :style="{border:'1px solid black', \
+                     width:'75%',              \
+                     minHeight:`calc(100vh - ${HDR_HGT}px)`}"
               @angle="angle")
 </template>
 

@@ -10,4 +10,4 @@ else {
   app.config.globalProperties.hostname = hostname;
 }
 
-app.mount('#app');
+app.mount('body');
