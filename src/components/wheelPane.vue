@@ -3,7 +3,8 @@
                   justify-content:center; \
                   align-items:center;")
   img(id="wheel" src="images/steering-wheel.png"
-        :style="{transform:`rotate(${angle}deg)`}" )
+        :style="{transform:`rotate(${angle}deg)`,  \
+                 width:'65vmin', height:'65vmin'}" )
 </template>
 
 <script setup>
@@ -23,7 +24,32 @@
   onMounted(() => { 
     const paneEle  = document.getElementById('wheelPane');
     const wheelEle = document.getElementById('wheel');
-    const paneHgt  = paneEle.offsetHeight;
+    
+    const drawWheel = (x,y) => {
+      const paneHgt  = paneEle.offsetHeight;
+      const hdrHgt  = window.outerHeight - paneHgt;
+      const centerX = window.outerWidth  
+                        * (0.25 + 0.75/2);
+      const centerY = 
+            hdrHgt + (window.outerHeight - hdrHgt) / 2;
+      const relX =   x-centerX;
+      const relY = -(y-centerY);
+      if(relX >= 0 && relX <  1e-3) relX += 2e-3;
+      if(relX <  0 && relX > -1e-3) relX -= 2e-3;
+      const radians = Math.atan(relY/relX);
+      let   degrees = Math.round(radians*90/(Math.PI/2));
+      if(relX >= 0) angle.value =  90 - degrees;
+      else          angle.value = -90 - degrees;
+      emit('angle', angle.value);
+    }
+
+    window.addEventListener('resize', () => {
+        centerX = window.outerWidth  
+                   * (0.25 + 0.75/2);
+        const hdrHgt  = window.outerHeight - paneHgt;
+        centerY = 
+              hdrHgt + (window.outerHeight - hdrHgt) / 2;
+    });
 
     paneEle.addEventListener("touchmove", 
       (event) => {
@@ -35,25 +61,8 @@
              chgdTouch.target == wheelEle) 
             touch = chgdTouch;
         }
-
-        if(touch == null) return;
-
-        const x = touch.pageX;
-        const y = touch.pageY;
-        const centerX = window.outerWidth  
-                          * (0.25 + 0.75/2);
-        const hdrHgt  = window.outerHeight - paneHgt;
-        const centerY = 
-                hdrHgt + (window.outerHeight - hdrHgt) / 2;
-        const relX =   x-centerX;
-        const relY = -(y-centerY);
-        if(relX >= 0 && relX <  1e-3) relX += 2e-3;
-        if(relX <  0 && relX > -1e-3) relX -= 2e-3;
-        const radians = Math.atan(relY/relX);
-        let   degrees = Math.round(radians*90/(Math.PI/2));
-        if(relX >= 0) angle.value =  90 - degrees;
-        else          angle.value = -90 - degrees;
-        emit('angle', angle.value);
+        if(touch != null) 
+            drawWheel(touch.pageX, touch.pageY);
       }
     );
   });

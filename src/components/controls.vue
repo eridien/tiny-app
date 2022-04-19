@@ -1,5 +1,5 @@
 <template lang='pug'>
-#controls(:style="{display:'flex', width:'100%', \
+#controls(:style="{display:'flex', width:'100vw', \
                    minHeight:`calc(100vh - ${HDR_HGT}px)`}"
     @click="ctrlClick")
     
