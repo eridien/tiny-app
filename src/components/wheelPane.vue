@@ -32,8 +32,8 @@
                         * (0.25 + 0.75/2);
       const centerY = 
             hdrHgt + (window.outerHeight - hdrHgt) / 2;
-      const relX =   x-centerX;
-      const relY = -(y-centerY);
+      let   relX =   x-centerX;
+      let   relY = -(y-centerY);
       if(relX >= 0 && relX <  1e-3) relX += 2e-3;
       if(relX <  0 && relX > -1e-3) relX -= 2e-3;
       const radians = Math.atan(relY/relX);
