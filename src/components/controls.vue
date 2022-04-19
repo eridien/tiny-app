@@ -23,8 +23,8 @@ div(style="min-height:calc(100vh-100px);    \
 
   let stop = ref(false);
   const ctrlClick = () => { 
-    stop.value = !stop.value;  // pass to child
-    emit('stop');              // pass to parent
+    stop.value = !stop.value;  // pass stop to child
+    emit('stop');              // pass stop to parent
   }
 </script>
 
