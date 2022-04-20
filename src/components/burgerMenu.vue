@@ -1,5 +1,5 @@
 <template lang='pug'>
-Slide(id="slide" right="true" 
+Slide(id="burgerMenu" right="true" 
       width="200" noOverlay="true"
       closeOnNavigation="true"
      isOpen="menuOpen" 
@@ -58,7 +58,7 @@ Slide(id="slide" right="true"
     width: 24px;
   }
   .bm-menu {
-    height: 250px; 
+    height: 180px; 
     position: fixed;
     z-index: 1000;
     top: 65px;
