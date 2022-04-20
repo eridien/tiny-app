@@ -1,7 +1,7 @@
 <template lang='pug'>
 #app(style="position:fixed;")
   Header(:rssi="rssi" :batv="batv" 
-         :style="{width:'65vw', height:`${HDR_HGT-15}px`, \
+         :style="{width:'80vw', height:`${HDR_HGT-15}px`, \
                  padding:'5px', margin:'0 5vw 0 5vw'}")
   Controls(:HDR_HGT="HDR_HGT" 
             style="width=100%;"
