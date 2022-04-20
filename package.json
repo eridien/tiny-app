@@ -8,7 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "vue-float-menu": "^1.9.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.0",
