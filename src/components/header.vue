@@ -12,11 +12,19 @@
   img(:src="`images/bat-${batvId}.png`" 
       style="width:15px; height:35px; \
                margin:4px 20px 40px 0;")
-  float-menu(:position="'top right'"
-             :dimension="1"
+  float-menu(:position="'top right'" 
+             :fixed="true"
+             :dimension="30"
+             :menu-dimension="{height:90, width: 100}"
+             :menu-style="accordion"
              :menu-data="menuItems"
-             :on-selected="menuAction")
-    img(id="menu" src="images/hamburger.png")
+             :on-selected="menuAction"
+             style="font-size:80px;")
+    img(id="menu" src="images/hamburger.png"
+        style="position:relative;           \
+               width:45px; height:40px;     \
+               left:-8px; top:0;            \
+               margin:10px;")
 
 </template>
 
@@ -55,10 +63,8 @@ watch(()=> props.batv, (batv, oldbatv) => {
 // https://github.com/prabhuignoto/vue-float-menu
 
 const menuItems = [
-  { name: "New" },
-  { name: "Edit", }, 
-  { name: "Open Recent" }, 
-  { name: "Save", },
+  { name: "Stop" }, 
+  { name: "Power Off", },
 ];
 
 const menuAction = (item) => {
