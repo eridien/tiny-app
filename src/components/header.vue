@@ -12,11 +12,11 @@
   img(:src="`images/bat-${batvId}.png`" 
       style="width:15px; height:35px; \
                margin:4px 20px 40px 0;")
-  float-menu(:position="'top left'"
-            :dimension="50"
-            :menu-data="items"
-            :on-selected="handleSelection")
-    | Drag
+  float-menu(:position="'top right'"
+             :dimension="1"
+             :menu-data="menuItems"
+             :on-selected="menuAction")
+    img(id="menu" src="images/hamburger.png")
 
 </template>
 
@@ -51,15 +51,18 @@ watch(()=> props.batv, (batv, oldbatv) => {
   else                id = 100; 
   batvId.value = id;
 });
-const items = [
+
+// https://github.com/prabhuignoto/vue-float-menu
+
+const menuItems = [
   { name: "New" },
   { name: "Edit", }, 
   { name: "Open Recent" }, 
   { name: "Save", },
 ];
-        
-const handleSelection = (selectedItem) => {
-  console.log(selectedItem);
+
+const menuAction = (item) => {
+  console.log(item);
 };
 
 </script>
