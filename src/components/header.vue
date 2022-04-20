@@ -12,12 +12,12 @@
   img(:src="`images/bat-${batvId}.png`" 
       style="width:15px; height:35px; \
                margin:4px 20px 40px 0;")
-  //- BurgerMenu(@pwrOff="pwrOff")
+  BurgerMenu
 </template>
 
 <script setup>
 import {onMounted, watch, ref} from 'vue';
-// import  BurgerMenu from './burgerMenu.vue'
+import  BurgerMenu from './burgerMenu.vue'
 
 const props = defineProps(['rssi', 'batv']);
 
@@ -45,17 +45,6 @@ watch(()=> props.batv, (batv, oldbatv) => {
   else                id = 100; 
   batvId.value = id;
 });
-
-// https://github.com/prabhuignoto/vue-float-menu
-
-const menuItems = [
-  { name: "Stop" }, 
-  { name: "Power Off", },
-];
-
-const menuAction = (item) => {
-  console.log(item);
-};
 
 </script>
 

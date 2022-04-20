@@ -7,14 +7,12 @@
             style="width=100%;"
             @accel="setAccel" @angle="setYaw"
             @stop="stop"      @pwrOff="pwrOff")
-  BurgerMenu(@pwrOff="pwrOff")
 </template>
 
 <script setup>
   import {onMounted, getCurrentInstance, ref } from 'vue'
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
-  import  BurgerMenu from './components/burgerMenu.vue'
   import {initWebsocket, setAccel, setYaw, stop, pwrOff} 
                           from "./websocket.js";
 
