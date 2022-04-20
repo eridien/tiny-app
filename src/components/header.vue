@@ -12,10 +12,12 @@
   img(:src="`images/bat-${batvId}.png`" 
       style="width:15px; height:35px; \
                margin:4px 20px 40px 0;")
+  //- BurgerMenu(@pwrOff="pwrOff")
 </template>
 
 <script setup>
 import {onMounted, watch, ref} from 'vue';
+// import  BurgerMenu from './burgerMenu.vue'
 
 const props = defineProps(['rssi', 'batv']);
 
