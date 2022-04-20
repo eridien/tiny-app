@@ -19,7 +19,7 @@
   import {ref, watch, onMounted} from 'vue'
 
   const props = defineProps(['stop']);
-  const emit  = defineEmits(['accel']);
+  const emit  = defineEmits(['stop','accel']);
 
   const THUMB_BRDR  = 5;
   const THUMB_INNER = 40;
@@ -56,8 +56,10 @@
     window.addEventListener('resize', () => {
       paneHgt = paneEle.offsetHeight;
       travel  = paneHgt - THUMB_HGT;
+      accel.value = 0;
       drawSlider();
-    });
+      emit('stop');
+    });      
 
     paneEle.addEventListener("touchmove", 
       (event) => {
@@ -70,7 +72,7 @@
             touch = chgdTouch;
         }
         if(touch == null) return;
-        
+
         accel.value = (paneHgt 
                         - (touch.pageY - THUMB_HGT)) 
                         / paneHgt;

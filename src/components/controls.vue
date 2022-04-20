@@ -7,13 +7,13 @@
             :style="{border:'1px solid black', \
                      width:'25%',              \
                      minHeight:`calc(100vh - ${HDR_HGT}px)`}"
-              @accel="accel")
+              @accel="accel" @stop="stopEvt")
 
   wheel-pane(:stop="stop"
             :style="{border:'1px solid black', \
                      width:'75%',              \
                      minHeight:`calc(100vh - ${HDR_HGT}px)`}"
-              @angle="angle")
+              @angle="angle" @stop="stopEvt")
 </template>
 
 <script setup>
@@ -24,8 +24,9 @@
   const props = defineProps(['HDR_HGT']);
   const emit  = defineEmits(['stop']);
 
-  const accel = (accel) => emit('accel', accel);
-  const angle = (angle) => emit('angle', angle);
+  const accel   = (accel) => emit('accel', accel);
+  const angle   = (angle) => emit('angle', angle);
+  const stopEvt = ()      => emit('stop');
 
   let stop = ref(false);
   const ctrlClick = () => { 

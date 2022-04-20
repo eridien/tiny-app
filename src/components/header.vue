@@ -1,8 +1,8 @@
 <template lang='pug'>
-div(style="display:flex;                       \
+#header(style="display:flex;                   \
            justifyContent:space-between;       \
            alignItems:stretch;                 \
-           fontWeight:bold; backgroundColor:   \
+          fontWeight:bold; backgroundColor:   \
             (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
   img(src="images/icon.png" 
       style="width:64px;height:36px;marginTop:5px;")

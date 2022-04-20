@@ -1,9 +1,9 @@
 <template lang='pug'>
 #app(style="position:fixed;")
-  Header(id="head" :rssi="rssi" :batv="batv" 
+  Header(:rssi="rssi" :batv="batv" 
         :style="{width:'90vw', height:`${HDR_HGT-15}px`,  \
                  padding:'5px', margin:'0 5vw 0 5vw'}")
-  Controls(id="controls" :HDR_HGT="HDR_HGT" 
+  Controls(:HDR_HGT="HDR_HGT" 
            style="width=100%;"
            @accel="accel"  @angle="angle"
            @stop="stopEvt" @pwrOff="pwrOffEvt")
