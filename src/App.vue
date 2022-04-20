@@ -7,7 +7,7 @@
             style="width=100%;"
             @accel="setAccel" @angle="setYaw"
             @stop="stop"      @pwrOff="pwrOff")
-  BurgerMenu
+  BurgerMenu(@pwrOff="pwrOff")
 </template>
 
 <script setup>
@@ -45,7 +45,7 @@
 
   const app = getCurrentInstance();
   const {hostname} = 
-        app.appContext.config.globalProperties;
+         app.appContext.config.globalProperties;
 
   onMounted(async() => { 
     console.log(`---- App Mounted, ` +
