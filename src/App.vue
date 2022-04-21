@@ -8,7 +8,8 @@
             style="width=100%;"
            @accel="setAccel" @angle="setYaw"
            @stop="stopEvt"
-           :resetCtrls="resetCtrls")
+           :resetCtrls="resetCtrls"
+           :ctrlDisabled="ctrlDisabled")
 </template>
 
 <script setup>
@@ -43,20 +44,19 @@
     if(err) console.log(`BOT ERROR: ${err}`);
   }
   
-  const resetCtrls = ref(0);
+  const ctrlDisabled = ref(false);
+  const resetCtrls   = ref(0);
 
+  const menuOpened = () => ctrlDisabled.value = true;
   const stopEvt = () => {    
-    console.log(`app stopEvt`);
-
     resetCtrls.value++; 
     stop();
   }
   const pwrOffEvt = () => {
-    console.log(`app pwrOffEvt`);
-
     resetCtrls.value++; 
     pwrOff();
   }
+  const menuClosed = () => ctrlDisabled.value = false;
 
   const app = getCurrentInstance();
   const {hostname} = 

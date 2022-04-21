@@ -12,18 +12,21 @@ Slide(id="burgerMenu" right="true"
 <script setup>
   import { Slide } from 'vue3-burger-menu'  
 
-  const emit = defineEmits(['stop', 'pwrOff']);
+  const emit = defineEmits([
+    'menuOpened', 'stop', 'pwrOff', 'menuClosed',
+  ]);
 
   let menuOpen = false;           
 
   const handleOpenMenu = () => {
-    console.log("burgerMenu handleOpenMenu");
-    
+    emit('menuOpened');
+    emit('stop');
+  }
+  const handleCloseMenu = () => {
+    emit('menuClosed');
     emit('stop');
   }
   const pwrOffEvt = () => {
-    console.log("burgerMenu pwrOffEvt");
-
     emit('pwrOff');
     menuOpen = false;
   }

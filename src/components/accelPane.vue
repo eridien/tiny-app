@@ -18,7 +18,7 @@
 <script setup>
   import {ref, watch, onMounted} from 'vue'
 
-  const props = defineProps(['reset']);
+  const props = defineProps(['ctrlDisabled', 'reset']);
   const emit  = defineEmits(['stop','accel']);
 
   const THUMB_BRDR  = 5;
@@ -64,6 +64,8 @@
     paneEle.addEventListener("touchmove", 
       (event) => {
         stopAllPropogation(event);
+        // if(ctrlDisabled) return;
+
         let touch = null;
         for(let chgdTouch of event.changedTouches) {
           if(chgdTouch.target == paneEle  ||
@@ -84,8 +86,6 @@
     );
 
     watch(() => props.reset, () => {
-      console.log(`accel watch reset`);
-
       accel.value = 0;
       drawSlider();
       emit('accel',0);

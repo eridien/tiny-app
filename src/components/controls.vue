@@ -5,14 +5,14 @@
     @click="stopClick")
     
   accel-pane(
-      :reset="reset" 
+      :reset="reset" :ctrlDisabled="ctrlDisabled" 
       :style="{border:'1px solid black', \
                width:'25%',              \
                minHeight:`calc(100vh - ${HDR_HGT}px)`}"
       @accel="accel" @stop="stopEvt")
 
   wheel-pane(
-      :reset="reset"
+      :reset="reset" :ctrlDisabled="ctrlDisabled" 
       :style="{border:'1px solid black', \
               width:'75%',              \
               minHeight:`calc(100vh - ${HDR_HGT}px)`}"
@@ -24,7 +24,9 @@
   import  accelPane  from './accelPane.vue';
   import  wheelPane  from './wheelPane.vue';
 
-  const props = defineProps(['HDR_HGT','resetCtrls']);
+  const props = defineProps([
+    'HDR_HGT','ctrlDisabled', 'resetCtrls'
+  ]);
   const emit  = defineEmits(['stop']);
 
   const accel   = (accel) => emit('accel', accel);
@@ -34,13 +36,10 @@
   const reset = ref(0);
 
   watch(() => props.resetCtrls, () => {
-    console.log(`ctrls watch resetCtrls`);
-
     reset.value++; 
   });
-  const stopClick = () => { 
-    console.log(`ctrls stopClick`);
 
+  const stopClick = () => { 
     reset.value++; 
     emit('stop'); 
   }
