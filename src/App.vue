@@ -65,7 +65,7 @@
   onMounted(async() => { 
     console.log(`---- App Mounted, ` +
                 `hostname: ${hostname} ---`);
-    // initWebsocket(hostname, websocketCB);
+    initWebsocket(hostname, websocketCB);
   });
 </script>
 

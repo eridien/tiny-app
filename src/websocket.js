@@ -1,11 +1,13 @@
+
+const YAW_IK = 1;
+const YAW_PK = 1;
+
 // commands to bot
 const fcReport      = 'R';
 const fcAccelCmd    = 'V';
 const fcYawCmd      = 'Y';
 const fcStopCmd     = 'S';
 const fcPowerOff    = 'P';
-const fcAccelPk     = 'K';
-const fcAccelIk     = 'L';
 const fcYawPk       = 'M';
 const fcYawIk       = 'N';
 
@@ -26,9 +28,10 @@ const wsRecv = (event) => {
     lastRecvStr = event.data;
   }
   if(event.data[0] != "{") {
-    // Non-json msg received, it was logged above
+    // non-json msg received, it was logged above
     return;
   }
+  sendNow = true;
   let res;
   try {
     res = JSON.parse(event.data);
@@ -46,58 +49,64 @@ const wsRecv = (event) => {
 let pendingCmds = null;
 let sentPwrOff  = false;
 
-let lastSendStr = null;
-setInterval(async () => {
+const sendAllCmds = () => {
   if(!webSocketOpen || pendingCmds === null) return;
   const str = JSON.stringify(pendingCmds);
   try{
-    // await webSocket.send(str);
+    await webSocket.send(str);
     sentPwrOff = (pendingCmds[fcPowerOff] !== undefined);
     pendingCmds = null;
-    if(str != lastSendStr) {
-      console.log(`<-- msg sent: ${str}`);
-      lastSendStr = str;
-    }
   }
   catch(e) {
     console.log(`Error sending string ` +
                 `"${str}" in sendWSObj: ${e.message}`);
   }
-},500);
+  sendNow = false;
+}
+const SEND_TIMEOUT = 1000;
 
-const addCommand = (code, val = 0) => {
+let lastSendTime = 0;
+setInterval(async () => {
+  const now = Date.now();
+  if(sendNow || (now-lastSendTime) > SEND_TIMEOUT) {
+    sendAllCmds();
+    lastSendTime = now;
+  }
+}, 100);
+
+const lastFcVal = {};
+
+const send = (code, val = null) => {
+  if(val === lastFcVal[code]) return;
+  const sendVal = (val === null ? 0 : val);
   if(pendingCmds === null) 
-    pendingCmds = {[code]: val};
+    pendingCmds = {[code]: sendVal};
   else
-    pendingCmds[code] = val;
+    pendingCmds[code] = sendVal;
+  if(val !== null) lastFcVal[code] = val;
+  if(code == fcReport) sendAllCmds();
 }
 
 export const setAccel = accel => {
                console.log('sending accel to bot', accel);
-               addCommand(fcAccelCmd, accel);
+               send(fcAccelCmd, accel);
              }
 export const setYaw = yaw => {
                console.log('sending yaw to bot', yaw);
-               addCommand(fcYawCmd, yaw);
+               send(fcYawCmd, yaw);
              }
 export const stop = () => {
                console.log('sending stop to bot');
-               addCommand(fcStopCmd);
+               send(fcStopCmd);
              };
 export const pwrOff = () => {
                console.log('sending pwroff to bot');
-               addCommand(fcPowerOff);
+               send(fcPowerOff);
              };
 
 // debug PID (PI) tuning
-export const setAccelPk = accelPk => 
-                           addCommand(fcAccelPk, accelPk);
-export const setAccelIk = accelIk => 
-                           addCommand(fcAccelIk, accelIk);
-export const setYawPk   = yawPk => 
-                           addCommand(fcYawPk,   yawPk);
-export const setYawIk   = yawIk => 
-                           addCommand(fcYawIk,   yawIk);
+export const setYawPk = yawPk => send(fcYawPk, YAW_PK);
+export const setYawIk = yawIk => send(fcYawIk, YAW_IK);
 
 
 //////////////  MANAGE WEBSOCKET  /////////////////
@@ -146,6 +155,8 @@ const connectToWs = async () => {
   });
 }
 
+const REPORT_INTERVAL = 250;
+
 //////////////  INIT  /////////////////
 
 export const initWebsocket = 
@@ -153,5 +164,7 @@ export const initWebsocket =
     hostname = hostnameIn;
     appCB    = appCBIn;
     connectToWs();
-    setInterval(addCommand, 100, fcReport);
+    send(fcYawPk, YAW_PK);
+    send(fcYawIk, YAW_IK);
+    setInterval(send, REPORT_INTERVAL, fcReport);
   };
