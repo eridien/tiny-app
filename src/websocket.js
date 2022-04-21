@@ -21,7 +21,7 @@ let webSocket   = null;
 //////////////  RECEIVE  /////////////////
 
 let lastRecvStr = "";
-
+let sendNow     = false;
 const wsRecv = (event) => {
   if(event.data != lastRecvStr) {
     console.log(`--> msg recvd: ${event.data}`);
@@ -46,16 +46,19 @@ const wsRecv = (event) => {
 
 //////////////  SEND  /////////////////
 
-let pendingCmds = null;
-let sentPwrOff  = false;
+let pendingCmds   = null;
+let sentPwrOff    = false;
+let webSocketOpen = false;
 
-const sendAllCmds = () => {
+const sendAllCmds = async () => {
   if(!webSocketOpen || pendingCmds === null) return;
   const str = JSON.stringify(pendingCmds);
   try{
     await webSocket.send(str);
     sentPwrOff = (pendingCmds[fcPowerOff] !== undefined);
     pendingCmds = null;
+    if(str != '{"R":0}')
+     console.log(`<-- msg sent: ${str}`);
   }
   catch(e) {
     console.log(`Error sending string ` +
@@ -77,6 +80,7 @@ setInterval(async () => {
 const lastFcVal = {};
 
 const send = (code, val = null) => {
+  // console.log(`send:`, {code, val});
   if(val === lastFcVal[code]) return;
   const sendVal = (val === null ? 0 : val);
   if(pendingCmds === null) 
@@ -88,11 +92,11 @@ const send = (code, val = null) => {
 }
 
 export const setAccel = accel => {
-               console.log('sending accel to bot', accel);
+              //  console.log('sending accel to bot', accel);
                send(fcAccelCmd, accel);
              }
 export const setYaw = yaw => {
-               console.log('sending yaw to bot', yaw);
+              //  console.log('sending yaw to bot', yaw);
                send(fcYawCmd, yaw);
              }
 export const stop = () => {
@@ -111,7 +115,6 @@ export const setYawIk = yawIk => send(fcYawIk, YAW_IK);
 
 //////////////  MANAGE WEBSOCKET  /////////////////
 
-let webSocketOpen  = false;
 let waitingToRetry = false;
 
 const connectToWs = async () => {
