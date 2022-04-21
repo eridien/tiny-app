@@ -18,7 +18,7 @@
 <script setup>
   import {ref, watch, onMounted} from 'vue'
 
-  const props = defineProps(['stop']);
+  const props = defineProps(['reset']);
   const emit  = defineEmits(['stop','accel']);
 
   const THUMB_BRDR  = 5;
@@ -83,7 +83,9 @@
       }
     );
 
-    watch(() => props.stop, () => {
+    watch(() => props.reset, () => {
+      console.log(`accel watch reset`);
+
       accel.value = 0;
       drawSlider();
       emit('accel',0);

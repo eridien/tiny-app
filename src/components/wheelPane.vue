@@ -10,7 +10,7 @@
 <script setup>
   import {ref, watch, onMounted} from 'vue'
 
-  const props = defineProps(['stop']);
+  const props = defineProps(['reset']);
   const emit  = defineEmits(['stop','angle']);
 
   const angle = ref(0);
@@ -71,7 +71,11 @@
     );
   });
 
-  watch(() => props.stop, () => angle.value = 0);
+  watch(() => props.reset, () => {
+    console.log(`wheel watch reset`);
+
+    angle.value = 0;
+  });
 </script>
 
 <style>

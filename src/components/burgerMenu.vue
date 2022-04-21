@@ -2,6 +2,7 @@
 Slide(id="burgerMenu" right="true" 
       width="200" noOverlay="true"
       closeOnNavigation="true"
+     @openMenu="handleOpenMenu" 
      isOpen="menuOpen" 
      @closeMenu="menuOpen = false")
   #pwrOff(@click="pwrOffEvt") Power Off
@@ -11,12 +12,18 @@ Slide(id="burgerMenu" right="true"
 <script setup>
   import { Slide } from 'vue3-burger-menu'  
 
-  const emit = defineEmits(['pwrOff']);
+  const emit = defineEmits(['stop', 'pwrOff']);
 
-  let   menuOpen = false;           
+  let menuOpen = false;           
 
+  const handleOpenMenu = () => {
+    console.log("burgerMenu handleOpenMenu");
+    
+    emit('stop');
+  }
   const pwrOffEvt = () => {
-    console.log('pwrOffEvt');
+    console.log("burgerMenu pwrOffEvt");
+
     emit('pwrOff');
     menuOpen = false;
   }

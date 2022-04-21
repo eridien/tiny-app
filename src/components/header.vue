@@ -12,7 +12,7 @@
   img(:src="`images/bat-${batvId}.png`" 
       style="width:15px; height:35px; \
                margin:4px 20px 40px 0;")
-  BurgerMenu
+  BurgerMenu(@stop="stopEvt", @pwrOff="pwrOffEvt")
 </template>
 
 <script setup>
@@ -20,6 +20,7 @@ import {onMounted, watch, ref} from 'vue';
 import  BurgerMenu from './burgerMenu.vue'
 
 const props = defineProps(['rssi', 'batv']);
+const emit  = defineEmits(['stop','pwrOff']);
 
 const rssiId = ref(2);
 watch(()=> props.rssi, (rssi, oldRssi) => {
@@ -46,6 +47,16 @@ watch(()=> props.batv, (batv, oldbatv) => {
   batvId.value = id;
 });
 
+const stopEvt =   () => {
+  console.log(`header stopEvt`);
+
+  emit('stop');
+}
+const pwrOffEvt = () => {
+  console.log(`header pwrOffEvt`);
+
+  emit('pwrOff');
+}
 </script>
 
 <style>
