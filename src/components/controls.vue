@@ -4,12 +4,12 @@
              minHeight:`calc(100vh - ${HDR_HGT}px)`}"
     @click="stopClick")
     
-  accel-pane(
+  vel-pane(
       :reset="reset" :ctrlDisabled="ctrlDisabled" 
       :style="{border:'1px solid black', \
                width:'25%',              \
                minHeight:`calc(100vh - ${HDR_HGT}px)`}"
-      @accel="accel" @stop="stopEvt")
+      @vel="vel" @stop="stopEvt")
 
   wheel-pane(
       :reset="reset" :ctrlDisabled="ctrlDisabled" 
@@ -21,15 +21,15 @@
 
 <script setup>
   import {ref, watch} from 'vue'
-  import  accelPane  from './accelPane.vue';
-  import  wheelPane  from './wheelPane.vue';
+  import  velPane     from './velPane.vue';
+  import  wheelPane   from './wheelPane.vue';
 
   const props = defineProps([
     'HDR_HGT','ctrlDisabled', 'resetCtrls'
   ]);
   const emit  = defineEmits(['stop']);
 
-  const accel   = (accel) => emit('accel', accel);
+  const vel     = (vel) => emit('vel', vel);
   const angle   = (angle) => emit('angle', angle);
   const stopEvt = ()      => emit('stop');
 

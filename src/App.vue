@@ -6,7 +6,7 @@
          @stop="stopEvt" @pwrOff="pwrOffEvt" )
   Controls(:HDR_HGT="HDR_HGT" 
             style="width=100%;"
-           @accel="setAccel" @angle="setYaw"
+           @vel="setVel" @angle="setYaw"
            @stop="stopEvt"
            :resetCtrls="resetCtrls"
            :ctrlDisabled="ctrlDisabled")
@@ -16,7 +16,7 @@
   import {onMounted, getCurrentInstance, ref } from 'vue'
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
-  import {initWebsocket, setAccel, setYaw, stop, pwrOff} 
+  import {initWebsocket, setVel, setYaw, stop, pwrOff} 
                           from "./websocket.js";
 
   const HDR_HGT = 65;
@@ -25,13 +25,11 @@
   const batv = ref(0);
 
 // status constants from bot
-  const fcRssi        = 'w';
-  const fcBatV        = 'b';
   const fcTime        = 't';
   const fcElapsedMs   = 'm';
-  const fcAccelX      = 'a';
+  const fcBatV        = 'b';
+  const fcRssi        = 'w';
   const fcYawRate     = 'y';
-  const fcAccelErrInt = 'i';
   const fcYawErrInt   = 'j';
   const fcLeftPwm     = 'l';
   const fcRightPwm    = 'r';

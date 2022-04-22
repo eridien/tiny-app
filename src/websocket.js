@@ -1,15 +1,18 @@
 
-const YAW_IK = 1;
-const YAW_PK = 1;
+// debug, set PID (PI) constants
+const YAW_IK    = 0.01;
+const YAW_PK    = 0.01;
+const YAW_MAX_I = 512;
 
 // commands to bot
-const fcReport      = 'R';
-const fcAccelCmd    = 'V';
-const fcYawCmd      = 'Y';
-const fcStopCmd     = 'S';
-const fcPowerOff    = 'P';
-const fcYawPk       = 'M';
-const fcYawIk       = 'N';
+const fcReport   = 'R';
+const fcVelCmd   = 'V';
+const fcYawCmd   = 'Y';
+const fcStopCmd  = 'S';
+const fcPowerOff = 'P';
+const fcYawPk    = 'M';
+const fcYawIk    = 'N';
+const fcMaxYawI  = 'O';
 
 let hostname = '';
 
@@ -91,9 +94,9 @@ const send = (code, val = null) => {
   if(code == fcReport) sendAllCmds();
 }
 
-export const setAccel = accel => {
-              //  console.log('sending accel to bot', accel);
-               send(fcAccelCmd, accel);
+export const setVel = vel => {
+              //  console.log('sending vel to bot', vel);
+               send(fcVelCmd, vel);
              }
 export const setYaw = yaw => {
               //  console.log('sending yaw to bot', yaw);
@@ -109,8 +112,9 @@ export const pwrOff = () => {
              };
 
 // debug PID (PI) tuning
-export const setYawPk = yawPk => send(fcYawPk, YAW_PK);
-export const setYawIk = yawIk => send(fcYawIk, YAW_IK);
+export const setYawPk   = yawPk => send(fcYawPk,   YAW_PK);
+export const setYawIk   = yawIk => send(fcYawIk,   YAW_IK);
+export const setMaxYawI = yawIk => send(fcMaxYawI, YAW_MAX_I);
 
 
 //////////////  MANAGE WEBSOCKET  /////////////////
@@ -167,7 +171,10 @@ export const initWebsocket =
     hostname = hostnameIn;
     appCB    = appCBIn;
     connectToWs();
-    send(fcYawPk, YAW_PK);
-    send(fcYawIk, YAW_IK);
+
+    send(fcYawPk,   YAW_PK * 65536);
+    send(fcYawIk,   YAW_IK * 65536);
+    send(fcMaxYawI, YAW_MAX_I);
+
     setInterval(send, REPORT_INTERVAL, fcReport);
   };
