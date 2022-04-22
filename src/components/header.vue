@@ -4,12 +4,12 @@
            alignItems:stretch;                 \
            fontWeight:bold; backgroundColor:   \
             (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
-  img(src="images/icon.png" 
+  img(src="/images/icon.png" 
       style="width:64px;height:36px;marginTop:5px;")
-  img(:src="`images/wifi-${rssiId}.png`"  
+  img(:src="`/images/wifi-${rssiId}.png`"  
       style="width:40px; height:55px; \
              marginTop:-6px")
-  img(:src="`images/bat-${batvId}.png`" 
+  img(:src="`/images/bat-${batvId}.png`" 
       style="width:15px; height:35px; \
                margin:4px 20px 40px 0;")
   BurgerMenu(

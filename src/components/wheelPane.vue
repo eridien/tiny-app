@@ -2,7 +2,7 @@
 #wheelPane(style="display:flex;           \
                   justify-content:center; \
                   align-items:center;")
-  img(id="wheel" src="images/steering-wheel.png"
+  img(id="wheel" src="/images/steering-wheel.png"
         :style="{transform:`rotate(${angle}deg)`,  \
                  width:'65vmin', height:'65vmin'}" )
 </template>
