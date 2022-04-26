@@ -29,6 +29,7 @@
   const fcElapsedMs   = 'm';
   const fcBatV        = 'b';
   const fcRssi        = 'w';
+  const fcVelPwm      = 'v';
   const fcYawRate     = 'y';
   const fcYawErrInt   = 'j';
   const fcLeftPwm     = 'l';

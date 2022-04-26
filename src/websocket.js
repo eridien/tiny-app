@@ -1,7 +1,7 @@
 
 // debug, set PID (PI) constants
-const YAW_IK    = 0.01;
-const YAW_PK    = 0.01;
+const YAW_IK    = 0.00;
+const YAW_PK    = 2.00;
 const YAW_MAX_I = 512;
 
 // commands to bot
@@ -26,12 +26,14 @@ let webSocket   = null;
 let lastRecvStr = "";
 let sendNow     = false;
 const wsRecv = (event) => {
-  if(event.data != lastRecvStr) {
-    console.log(`--> msg recvd: ${event.data}`);
-    lastRecvStr = event.data;
-  }
+  // if(event.data != lastRecvStr &&
+  //    event.data[0] == "{") {
+  //   console.log(`--> msg recvd: ${event.data}`);
+  //   lastRecvStr = event.data;
+  // }
   if(event.data[0] != "{") {
-    // non-json msg received, it was logged above
+    if(event.data[1] != "}") 
+      console.log(`--> MSG: ${event.data}`);
     return;
   }
   sendNow = true;
@@ -60,8 +62,8 @@ const sendAllCmds = async () => {
     await webSocket.send(str);
     sentPwrOff = (pendingCmds[fcPowerOff] !== undefined);
     pendingCmds = null;
-    if(str != '{"R":0}')
-     console.log(`<-- msg sent: ${str}`);
+    // if(str != '{"R":0}')
+    //  console.log(`<-- msg sent: ${str}`);
   }
   catch(e) {
     console.log(`Error sending string ` +
@@ -95,11 +97,11 @@ const send = (code, val = null) => {
 }
 
 export const setVel = vel => {
-              //  console.log('sending vel to bot', vel);
+               console.log('sending vel to bot', vel);
                send(fcVelCmd, vel);
              }
 export const setYaw = yaw => {
-              //  console.log('sending yaw to bot', yaw);
+               console.log('sending yaw to bot', yaw);
                send(fcYawCmd, yaw);
              }
 export const stop = () => {
