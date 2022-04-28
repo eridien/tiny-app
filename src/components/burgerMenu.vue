@@ -1,6 +1,8 @@
 <template lang='pug'>
 #burgerMenu(style="border-radius:12px; font-size:28px; \
                    background-color:#c8c8c8;")
+  .button(@click="stopEvt"     ) Stop
+  .button(@click="pwrOffEvt"   ) Power Off
   .button(@click="pwrOffEvt"   ) Power Off
   .button(@click="closeMenuEvt") Close 
 </template>
@@ -15,8 +17,15 @@
 </style>
 
 <script setup>
-  const emit = defineEmits(['pwrOff', 'close']);
+  const emit = defineEmits(['stop', 'pwrOff', 'close']);
 
-  const pwrOffEvt    = () => emit('pwrOff');
+  const stopEvt = () => {
+    emit('stop');
+    emit('close' );
+  }
+  const pwrOffEvt = () => {
+    emit('pwrOff');
+    emit('close' );
+  }
   const closeMenuEvt = () => emit('close' );
 </script>

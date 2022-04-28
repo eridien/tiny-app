@@ -18,7 +18,7 @@
 <script setup>
   import {ref, watch, onMounted} from 'vue'
 
-  const props = defineProps(['ctrlDisabled', 'reset']);
+  const props = defineProps(['reset']);
   const emit  = defineEmits(['stop','vel']);
 
   const THUMB_BRDR  = 5;
@@ -64,8 +64,7 @@
     paneEle.addEventListener("touchmove", 
       (event) => {
         stopAllPropogation(event);
-        // if(ctrlDisabled) return;
-
+        
         let touch = null;
         for(let chgdTouch of event.changedTouches) {
           if(chgdTouch.target == paneEle  ||

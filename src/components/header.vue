@@ -16,10 +16,10 @@
       style="width:35px; height:35px;         \
              margin-top:8px; margin-right:48px;")
   BurgerMenu(v-show="menuOpen"
-             style="position:fixed;           \
+             style="position:fixed; z-index:1000;  \
                     top:70px; right:60px;"
-             @pwrOff="pwrOffEvt" @close="closeEvt" 
-             @stop="stopEvt")
+             @stop="stopEvt" @pwrOff="pwrOffEvt" 
+             @close="closeEvt")
 </template>
 
 <script setup>

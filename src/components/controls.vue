@@ -6,14 +6,13 @@
     @click="stopClick")
     
   vel-pane(
-      :reset="reset" :ctrlDisabled="ctrlDisabled" 
+      :reset="reset"
       :style="{border:'1px solid black',               \
                width:'24%',                            \
                minHeight:`calc(100vh - ${HDR_HGT}px)`}"
       @vel="vel" @stop="stopEvt")
 
   wheel-pane(
-      :reset="reset" :ctrlDisabled="ctrlDisabled" 
       :style="{border:'1px solid black', width:'75%',  \
               minHeight:`calc(100vh - ${HDR_HGT}px)`}"
       @angle="angle" @stop="stopEvt")
@@ -25,7 +24,7 @@
   import  wheelPane   from './wheelPane.vue';
 
   const props = defineProps([
-    'HDR_HGT','ctrlDisabled', 'resetCtrls'
+    'HDR_HGT', 'resetCtrls'
   ]);
   const emit  = defineEmits(['stop','vel','angle']);
 

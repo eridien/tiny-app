@@ -8,7 +8,6 @@
   Controls(:HDR_HGT="HDR_HGT" 
             style="width:calc(100vw-20px);"
            :resetCtrls="resetCtrls"
-           :ctrlDisabled="ctrlDisabled"
            @vel="setVel" @angle="setYaw"
            @stop="stopEvt")
 </template>
