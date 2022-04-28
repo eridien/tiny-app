@@ -80,14 +80,14 @@
         vel.value = Math.max(0, 
                         Math.min(vel.value, 1));
         drawSlider();
-        emit('vel',Math.round(vel.value * 100));
+        emit('vel', Math.round(vel.value * 100));
       }
     );
 
     watch(() => props.reset, () => {
       vel.value = 0;
       drawSlider();
-      emit('vel',0);
+      emit('vel', 0);
     });
 
     drawSlider(0);

@@ -26,9 +26,8 @@
 import {onMounted, watch, ref} from 'vue';
 import  BurgerMenu from './burgerMenu.vue'
 
-const props = defineProps(['rssi', 'batv', 'HDR_HGT',]);
-
-const emit = defineEmits(['stop', 'pwrOff']);
+const props = defineProps(['rssi', 'batv']);
+const emit  = defineEmits(['stop', 'pwrOff']);
 
 const rssiId = ref(2);
 watch(()=> props.rssi, (rssi, oldRssi) => {

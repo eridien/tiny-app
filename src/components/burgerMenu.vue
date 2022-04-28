@@ -3,7 +3,6 @@
                    background-color:#c8c8c8;")
   .button(@click="stopEvt"     ) Stop
   .button(@click="pwrOffEvt"   ) Power Off
-  .button(@click="pwrOffEvt"   ) Power Off
   .button(@click="closeMenuEvt") Close 
 </template>
 

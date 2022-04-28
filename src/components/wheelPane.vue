@@ -11,7 +11,7 @@
   import {ref, watch, onMounted} from 'vue'
 
   const props = defineProps(['reset']);
-  const emit  = defineEmits(['stop','angle']);
+  const emit  = defineEmits(['stop', 'angle']);
 
   const angle = ref(0);
 
