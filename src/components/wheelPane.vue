@@ -1,6 +1,6 @@
 <template lang='pug'>
-#wheelPane(style="display:flex;           \
-                  justify-content:center; \
+#wheelPane(style="display:flex;             \
+                  justify-content:center;   \
                   align-items:center;")
   img(id="wheel" src="/images/steering-wheel.png"
         :style="{transform:`rotate(${angle}deg)`,  \

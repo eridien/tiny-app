@@ -24,29 +24,47 @@ let webSocket   = null;
 //////////////  RECEIVE  /////////////////
 
 let lastRecvStr = "";
+let lastRecvVal = {};
+
 let sendNow     = false;
 const wsRecv = (event) => {
-  // if(event.data != lastRecvStr &&
-  //    event.data[0] == "{") {
-  //   console.log(`--> msg recvd: ${event.data}`);
-  //   lastRecvStr = event.data;
+  const recvdStr = event.data;
+  // if(recvdStr != lastRecvStr &&
+  //    recvdStr[0] == "{"      &&
+  //    recvdStr[1] != "}") {
+  //   console.log(`--> msg recvd: ${recvdStr}`);
+  //   lastRecvStr = recvdStr;
   // }
-  if(event.data[0] != "{") {
-    if(event.data[1] != "}") 
-      console.log(`--> MSG: ${event.data}`);
+  if(recvdStr[0] != "{") {
+    if(recvdStr[1] != "}") 
+      console.log(`--> MSG: ${recvdStr}`);
     return;
   }
   sendNow = true;
   let res;
   try {
-    res = JSON.parse(event.data);
+    res = JSON.parse(recvdStr);
   }
   catch(e) {
     console.log(`Error parsing JSON ` +
-                `from bot:', "${event.data}"`);
+                `from bot:', "${recvdStr}"`);
     return;
   }
-  if(appCB) appCB(res);
+  if(appCB) {
+    const chgdVals    = {};
+    let   haveChgdVal = false;
+    for(const fcCode in res) {
+      if(res[fcCode] != lastRecvVal[fcCode]) {
+        chgdVals[fcCode]    = res[fcCode];
+        lastRecvVal[fcCode] = res[fcCode];
+        haveChgdVal = true;
+      }
+    }
+    if(haveChgdVal) {
+      console.log("---> recvd", chgdVals);
+      appCB(chgdVals);
+    }
+  }
 }
 
 //////////////  SEND  /////////////////
@@ -67,7 +85,7 @@ const sendAllCmds = async () => {
   }
   catch(e) {
     console.log(`Error sending string ` +
-                `"${str}" in sendWSObj: ${e.message}`);
+                `"${str}" in sendAllCmds: ${e.message}`);
   }
   sendNow = false;
 }

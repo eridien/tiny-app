@@ -1,20 +1,20 @@
 <template lang='pug'>
 #controls(
-    :style="{display:'flex', width:'100vw', \
+    :style="{display:'flex',                          \
+             minWidth: 'calc(100vw-30px)',            \
              minHeight:`calc(100vh - ${HDR_HGT}px)`}"
     @click="stopClick")
     
   vel-pane(
       :reset="reset" :ctrlDisabled="ctrlDisabled" 
-      :style="{border:'1px solid black', \
-               width:'25%',              \
+      :style="{border:'1px solid black',               \
+               width:'24%',                            \
                minHeight:`calc(100vh - ${HDR_HGT}px)`}"
       @vel="vel" @stop="stopEvt")
 
   wheel-pane(
       :reset="reset" :ctrlDisabled="ctrlDisabled" 
-      :style="{border:'1px solid black', \
-              width:'75%',              \
+      :style="{border:'1px solid black', width:'75%',  \
               minHeight:`calc(100vh - ${HDR_HGT}px)`}"
       @angle="angle" @stop="stopEvt")
 </template>
@@ -27,9 +27,9 @@
   const props = defineProps([
     'HDR_HGT','ctrlDisabled', 'resetCtrls'
   ]);
-  const emit  = defineEmits(['stop']);
+  const emit  = defineEmits(['stop','vel','angle']);
 
-  const vel     = (vel) => emit('vel', vel);
+  const vel     = (vel)   => emit('vel', vel);
   const angle   = (angle) => emit('angle', angle);
   const stopEvt = ()      => emit('stop');
 

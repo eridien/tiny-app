@@ -1,15 +1,16 @@
 <template lang='pug'>
-#app(style="position:fixed;")
+#app
   Header(:rssi="rssi" :batv="batv" 
-         :style="{width:'80vw', height:`${HDR_HGT-15}px`, \
-                 padding:'5px', margin:'0 5vw 0 5vw'}"
+         :style="{width:'100vw', \
+                  height:`${HDR_HGT-15}px`, \
+                  margin:'0 5vw 0 5vw'}"
          @stop="stopEvt" @pwrOff="pwrOffEvt" )
   Controls(:HDR_HGT="HDR_HGT" 
-            style="width=100%;"
-           @vel="setVel" @angle="setYaw"
-           @stop="stopEvt"
+            style="width:calc(100vw-20px);"
            :resetCtrls="resetCtrls"
-           :ctrlDisabled="ctrlDisabled")
+           :ctrlDisabled="ctrlDisabled"
+           @vel="setVel" @angle="setYaw"
+           @stop="stopEvt")
 </template>
 
 <script setup>
@@ -31,7 +32,7 @@
   const fcRssi        = 'w';
   const fcVelPwm      = 'v';
   const fcYawRate     = 'y';
-  const fcYawErrInt   = 'j';
+  const fcYawErrInt   = 'i';
   const fcLeftPwm     = 'l';
   const fcRightPwm    = 'r';
   const fcError       = 'e';
@@ -43,11 +44,9 @@
     if(err) console.log(`BOT ERROR: ${err}`);
   }
   
-  const ctrlDisabled = ref(false);
-  const resetCtrls   = ref(0);
+  const resetCtrls = ref(0);
 
-  const menuOpened = () => ctrlDisabled.value = true;
-  const stopEvt = () => {    
+  const stopEvt  = () => {    
     resetCtrls.value++; 
     stop();
   }
@@ -55,7 +54,6 @@
     resetCtrls.value++; 
     pwrOff();
   }
-  const menuClosed = () => ctrlDisabled.value = false;
 
   const app = getCurrentInstance();
   const {hostname} = 

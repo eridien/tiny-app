@@ -1,5 +1,5 @@
 <template lang='pug'>
-#header(style="display:flex;                   \
+#header(style="display:flex; padding:5px;      \
            justifyContent:space-between;       \
            alignItems:stretch;                 \
            fontWeight:bold; backgroundColor:   \
@@ -7,25 +7,28 @@
   img(src="/images/icon.png" 
       style="width:64px;height:36px;marginTop:5px;")
   img(:src="`/images/wifi-${rssiId}.png`"  
-      style="width:40px; height:55px; \
+      style="width:40px; height:55px;         \
              marginTop:-6px")
   img(:src="`/images/bat-${batvId}.png`" 
-      style="width:15px; height:35px; \
-               margin:4px 20px 40px 0;")
-  BurgerMenu(
-      @stop="stopEvt", @pwrOff="pwrOffEvt"
-      @menuOpened="menuOpened", 
-      @menuClosed="menuClosed")
+      style="width:15px; height:35px; margin-top:5px;")
+  img(:src="`/images/hamburger.png`" 
+      @click="hamburgerClick"
+      style="width:35px; height:35px;         \
+             margin-top:8px; margin-right:48px;")
+  BurgerMenu(v-show="menuOpen"
+             style="position:fixed;           \
+                    top:70px; right:60px;"
+             @pwrOff="pwrOffEvt" @close="closeEvt" 
+             @stop="stopEvt")
 </template>
 
 <script setup>
 import {onMounted, watch, ref} from 'vue';
 import  BurgerMenu from './burgerMenu.vue'
 
-const props = defineProps(['rssi', 'batv']);
-  const emit = defineEmits([
-    'menuOpened', 'stop', 'pwrOff', 'menuClosed',
-  ]);
+const props = defineProps(['rssi', 'batv', 'HDR_HGT',]);
+
+const emit = defineEmits(['stop', 'pwrOff']);
 
 const rssiId = ref(2);
 watch(()=> props.rssi, (rssi, oldRssi) => {
@@ -52,10 +55,16 @@ watch(()=> props.batv, (batv, oldbatv) => {
   batvId.value = id;
 });
 
-const menuOpened = () => emit('menuOpened');
-const stopEvt    = () => emit('stop');
-const pwrOffEvt  = () => emit('pwrOff');
-const menuClosed = () => emit('menuClosed');
+let menuOpen = ref(false);
+
+const hamburgerClick = ()=> {
+  menuOpen.value = !menuOpen.value;
+  console.log("hamburgerClick, menu open:", menuOpen.value);
+}
+
+const stopEvt   = () => emit('stop');
+const pwrOffEvt = () => emit('pwrOff');
+const closeEvt  = () => menuOpen.value = false;
 
 </script>
 
