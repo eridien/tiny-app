@@ -16,7 +16,7 @@
       style="width:35px; height:35px;         \
              margin-top:8px; margin-right:48px;")
 
-  BurgerMenu(v-show="menuOpen" :closing="closing"
+  BurgerMenu(v-if="menuOpen" :closing="closing"
              style="position:fixed; z-index:1000;  \
                     top:70px; right:60px;"
              @stop="stopEvt" @pwrOff="pwrOffEvt" 
