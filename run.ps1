@@ -1,1 +1,1 @@
-vite
+vite --host

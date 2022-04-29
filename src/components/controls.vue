@@ -1,9 +1,8 @@
 <template lang='pug'>
 #controls(
-    :style="{display:'flex',                          \
+    :style="{display:'flex', touchAction:'none',      \
              minWidth: 'calc(100vw-30px)',            \
-             minHeight:`calc(100vh - ${HDR_HGT}px)`}"
-    @click="stopClick")
+             minHeight:`calc(100vh - ${HDR_HGT}px)`}")
     
   vel-pane(
       :reset="reset"
@@ -13,6 +12,7 @@
       @vel="vel" @stop="stopEvt")
 
   wheel-pane(
+      :reset="reset"
       :style="{border:'1px solid black', width:'75%',  \
               minHeight:`calc(100vh - ${HDR_HGT}px)`}"
       @angle="angle" @stop="stopEvt")
@@ -26,11 +26,10 @@
   const props = defineProps([
     'HDR_HGT', 'resetCtrls'
   ]);
-  const emit  = defineEmits(['stop','vel','angle']);
+  const emit  = defineEmits(['vel','angle','stop']);
 
   const vel     = (vel)   => emit('vel', vel);
   const angle   = (angle) => emit('angle', angle);
-  const stopEvt = ()      => emit('stop');
 
   const reset = ref(0);
 
@@ -38,7 +37,7 @@
     reset.value++; 
   });
 
-  const stopClick = () => { 
+  const stopEvt = () => { 
     reset.value++; 
     emit('stop'); 
   }

@@ -11,29 +11,29 @@
   import {ref, watch, onMounted} from 'vue'
 
   const props = defineProps(['reset']);
-  const emit  = defineEmits(['stop', 'angle']);
+  const emit  = defineEmits(['angle', 'stop']);
 
   const angle = ref(0);
 
-  const stopAllPropogation= (event) => {
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    event.preventDefault();
-  }
-
   onMounted(() => { 
+
     const paneEle  = document.getElementById('wheelPane');
     const wheelEle = document.getElementById('wheel');
     
+    const getCenterX = ()=> {
+      return window.outerWidth * (0.25 + 0.75/2);
+    }
+    const getCenterY = ()=> {
+      const  paneHgt = paneEle.offsetHeight;
+      const  hdrHgt  = window.outerHeight - paneHgt;
+      return hdrHgt + (window.outerHeight - hdrHgt) / 2;
+    }
+
     const drawWheel = (x,y) => {
       const paneHgt = paneEle.offsetHeight;
       const hdrHgt  = window.outerHeight - paneHgt;
-      const centerX = window.outerWidth  
-                        * (0.25 + 0.75/2);
-      const centerY = 
-            hdrHgt + (window.outerHeight - hdrHgt) / 2;
-      let   relX =   x-centerX;
-      const relY = -(y-centerY);
+      let   relX    =   x-getCenterX();
+      const relY    = -(y-getCenterY());
       if(relX >= 0 && relX <  1e-3) relX += 2e-3;
       if(relX <  0 && relX > -1e-3) relX -= 2e-3;
       const radians = Math.atan(relY/relX);
@@ -42,21 +42,50 @@
       else          angle.value = -90 - degrees;
     }
 
+    watch(() => props.reset, () => {
+      angle.value = 0;
+      drawWheel(getCenterX(), getCenterY() - 1);
+    });
+  
+    const stopAllPropogation= (event) => {
+      if(!event) return;
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      event.preventDefault();
+    }
+
     window.addEventListener('resize', () => {
       const paneHgt = paneEle.offsetHeight;
       const hdrHgt  = window.outerHeight - paneHgt;
-      const centerX = window.outerWidth  
-                  * (0.25 + 0.75/2);
-      const centerY = 
-            hdrHgt + (window.outerHeight - hdrHgt) / 2;
-      drawWheel(centerX, centerY-1);
+      drawWheel(getCenterX(), getCenterY());
       emit('stop');
     });
 
+    let clickStarted = false;
+
+    paneEle.addEventListener("touchstart", 
+      (event) => {
+        stopAllPropogation();
+        clickStarted = true;
+      },
+      {passive:false, capture:true}
+    );
+
+    paneEle.addEventListener("touchend", 
+      () => {
+        stopAllPropogation();
+        if(clickStarted) {
+          emit('stop');
+          clickStarted = false;
+        }
+      },
+      {passive:false, capture:true}
+    );
     paneEle.addEventListener("touchmove", 
       (event) => {
         stopAllPropogation(event);
-        
+        clickStarted = false;
+
         let touch = null;
         for(let chgdTouch of event.changedTouches) {
           if(chgdTouch.target == paneEle ||
@@ -67,12 +96,9 @@
           drawWheel(touch.pageX, touch.pageY);
           emit('angle', angle.value);
         }
-      }
+      },
+      {passive:false, capture:true}
     );
-  });
-
-  watch(() => props.reset, () => {
-    angle.value = 0;
   });
 </script>
 

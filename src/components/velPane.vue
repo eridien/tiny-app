@@ -19,7 +19,7 @@
   import {ref, watch, onMounted} from 'vue'
 
   const props = defineProps(['reset']);
-  const emit  = defineEmits(['stop','vel']);
+  const emit  = defineEmits(['vel', 'stop']);
 
   const THUMB_BRDR  = 5;
   const THUMB_INNER = 40;
@@ -31,7 +31,8 @@
   // 0 to 100%
   const vel  = ref(0); 
 
-  const stopAllPropogation= (event) => {
+  const stopAllPropogation = (event) => {
+    if(!event) return;
     event.stopPropagation();
     event.stopImmediatePropagation();
     event.preventDefault();
@@ -61,10 +62,32 @@
       emit('stop');
     });      
 
+    let clickStarted = false;
+
+    paneEle.addEventListener("touchstart", 
+      (event) => {
+        stopAllPropogation();
+        clickStarted = true;
+      },
+      {passive:false, capture:true}
+    );
+
+    paneEle.addEventListener("touchend", 
+      () => {
+        stopAllPropogation();
+        if(clickStarted) {
+          emit('stop');
+          clickStarted = false;
+        }
+      },
+      {passive:false, capture:true}
+    );
+
     paneEle.addEventListener("touchmove", 
       (event) => {
         stopAllPropogation(event);
-        
+        clickStarted = false;
+
         let touch = null;
         for(let chgdTouch of event.changedTouches) {
           if(chgdTouch.target == paneEle  ||
@@ -74,20 +97,19 @@
         }
         if(touch == null) return;
 
-        vel.value = (paneHgt 
-                        - (touch.pageY - THUMB_HGT)) 
-                        / paneHgt;
+        vel.value = (paneHgt - (touch.pageY - THUMB_HGT)) 
+                             / paneHgt;
         vel.value = Math.max(0, 
                         Math.min(vel.value, 1));
         drawSlider();
         emit('vel', Math.round(vel.value * 100));
-      }
+      }, 
+      {passive:false, capture:true}
     );
 
     watch(() => props.reset, () => {
       vel.value = 0;
       drawSlider();
-      emit('vel', 0);
     });
 
     drawSlider(0);
