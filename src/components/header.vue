@@ -1,8 +1,8 @@
 <template lang='pug'>
 #header(style="display:flex; padding:5px;      \
-           justifyContent:space-between;       \
-           alignItems:stretch;                 \
-           fontWeight:bold; backgroundColor:   \
+          justifyContent:space-between;        \
+          alignItems:stretch;                  \
+          fontWeight:bold; backgroundColor:    \
             (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
   img(src="/images/icon.png" 
       style="width:64px;height:36px;marginTop:5px;")
@@ -15,11 +15,12 @@
       @click="hamburgerClick"
       style="width:35px; height:35px;         \
              margin-top:8px; margin-right:48px;")
-  BurgerMenu(v-show="menuOpen"
+
+  BurgerMenu(v-show="menuOpen" :closing="closing"
              style="position:fixed; z-index:1000;  \
                     top:70px; right:60px;"
              @stop="stopEvt" @pwrOff="pwrOffEvt" 
-             @close="closeEvt")
+             @closeMenu="closeMenuEvt")
 </template>
 
 <script setup>
@@ -27,7 +28,8 @@ import {onMounted, watch, ref} from 'vue';
 import  BurgerMenu from './burgerMenu.vue'
 
 const props = defineProps(['rssi', 'batv']);
-const emit  = defineEmits(['stop', 'pwrOff']);
+const emit  = defineEmits(['stop', 'pwrOff', 
+                           'menuOpenStateEvt']);
 
 const rssiId = ref(2);
 watch(()=> props.rssi, (rssi, oldRssi) => {
@@ -55,15 +57,26 @@ watch(()=> props.batv, (batv, oldbatv) => {
 });
 
 let menuOpen = ref(false);
+let closing  = ref(0);
 
 const hamburgerClick = ()=> {
   menuOpen.value = !menuOpen.value;
+  if(menuOpen.value) 
+    emit('menuOpenStateEvt', true);
+  else {
+    closing.value++;
+    emit('menuOpenStateEvt', false);
+  }
   console.log("hamburgerClick, menu open:", menuOpen.value);
 }
 
 const stopEvt   = () => emit('stop');
 const pwrOffEvt = () => emit('pwrOff');
-const closeEvt  = () => menuOpen.value = false;
+
+const closeMenuEvt  = () => {
+  emit('menuOpenStateEvt', false);
+  menuOpen.value = false;
+}
 
 </script>
 

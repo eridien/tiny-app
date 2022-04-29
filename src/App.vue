@@ -1,15 +1,17 @@
 <template lang='pug'>
 #app
   Header(:rssi="rssi" :batv="batv" 
-         :style="{width:'100vw', \
+         :style="{width:'100vw',            \
                   height:`${HDR_HGT-15}px`, \
                   margin:'0 5vw 0 5vw'}"
+         @menuOpenStateEvt="menuOpenStateEvt"
          @stop="stopEvt" @pwrOff="pwrOffEvt" )
-  Controls(:HDR_HGT="HDR_HGT" 
+  Controls(:HDR_HGT="HDR_HGT"
             style="width:calc(100vw-20px);"
            :resetCtrls="resetCtrls"
            @vel="setVel" @angle="setYaw"
-           @stop="stopEvt")
+           @stop="stopEvt" 
+           :menuOpenState="menuOpenState")
 </template>
 
 <script setup>
@@ -21,8 +23,9 @@
 
   const HDR_HGT = 65;
 
-  const rssi = ref(0);
-  const batv = ref(0);
+  const rssi          = ref(0);
+  const batv          = ref(0);
+  const menuOpenState = ref(false)
 
 // status constants from bot
   const fcTime        = 't';
@@ -45,7 +48,11 @@
   
   const resetCtrls = ref(0);
 
-  const stopEvt  = () => {    
+  const menuOpenStateEvt = (open) => {  
+    menuOpenState.value = open;
+  }
+
+  const stopEvt = () => {    
     resetCtrls.value++; 
     stop();
   }

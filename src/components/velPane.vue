@@ -76,6 +76,7 @@
       () => {
         stopAllPropogation();
         if(clickStarted) {
+          console.log("touchend stop");
           emit('stop');
           clickStarted = false;
         }

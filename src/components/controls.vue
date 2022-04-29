@@ -16,6 +16,13 @@
       :style="{border:'1px solid black', width:'75%',  \
               minHeight:`calc(100vh - ${HDR_HGT}px)`}"
       @angle="angle" @stop="stopEvt")
+
+  #cover(v-if="menuOpenState"
+         style="position:absolute; left:0;       \
+                width:100%; height:100%;         \
+                opacity:0.3;                     \
+                background-color:black;          \
+                display: table-cell;")
 </template>
 
 <script setup>
@@ -24,20 +31,21 @@
   import  wheelPane   from './wheelPane.vue';
 
   const props = defineProps([
-    'HDR_HGT', 'resetCtrls'
-  ]);
+         'HDR_HGT', 'resetCtrls', 'menuOpenState' ]);
   const emit  = defineEmits(['vel','angle','stop']);
 
   const vel     = (vel)   => emit('vel', vel);
   const angle   = (angle) => emit('angle', angle);
 
-  const reset = ref(0);
+  const reset    = ref(0);
+  const menuOpen = ref(false);
 
   watch(() => props.resetCtrls, () => {
     reset.value++; 
   });
 
   const stopEvt = () => { 
+    console.log("controls stopEvt");
     reset.value++; 
     emit('stop'); 
   }
