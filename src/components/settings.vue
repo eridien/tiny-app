@@ -24,7 +24,7 @@
 <script setup>
   import {onMounted, ref} from 'vue';
 
-  const emit = defineEmits(['closeMenu']);
+  const evtBus = inject('evtBus');   
 
   const sensVal = ref(5);
 
@@ -44,7 +44,7 @@
     sensEle.value = val;
   });
 
-  const doneClick = () => emit('closeMenu');
+  const doneClick = () => evtBus.emit('closeMenu');
 </script>
 
 <style>

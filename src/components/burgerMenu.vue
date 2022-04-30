@@ -21,9 +21,7 @@
 
   Settings(v-show="settingsOpen"
           style="position:fixed; z-index:1001;  \
-                top:90px; right:70px;"
-          @steering="steeringEvt"
-          @closeMenu="closeMenuEvt")
+                top:90px; right:70px;")
 </template>
 
 <style>
@@ -39,34 +37,30 @@
   import {ref, watch} from 'vue'
   import Settings from './settings.vue';
 
-  const props= defineProps(['closing']);
-  const emit = defineEmits(['stop', 'pwrOff', 'closeMenu']);
+  const evtBus = inject('evtBus');   
 
   const settingsOpen = ref(false);
 
-  const closeMenu = ()=> {
-    settingsOpen.value = false;
-    emit('closeMenu' );
-  }
+  evtBus.on('menuOpenState', (open) => {
+    if(!open) settingsOpen.value = false;
+  });
 
   const settingsEvt = ()=> {
     settingsOpen.value = true;
   }
 
   const stopEvt = () => {
-    emit('stop');
+    evtBus.emit('stop');
     closeMenu();
   }
 
   const pwrOffEvt = () => {
-    emit('pwrOff');
+    evtBus.emit('pwrOff');
     closeMenu();
   }
 
-  const closeMenuEvt = () => closeMenu();
-
-  watch(() => props.closing, () => {
+  const closeMenuEvt = () => {
     closeMenu();
-  });
+  }
 
 </script>

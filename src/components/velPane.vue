@@ -16,10 +16,9 @@
 </template>
 
 <script setup>
-  import {ref, watch, onMounted} from 'vue'
+  import {ref, watch, onMounted, inject } from 'vue'
 
-  const props = defineProps(['reset']);
-  const emit  = defineEmits(['vel', 'stop']);
+  const evtBus = inject('evtBus'); 
 
   const THUMB_BRDR  = 5;
   const THUMB_INNER = 40;
@@ -54,7 +53,7 @@
       thumbTop.value = barTop.value - (THUMB_HGT/2);
     };
 
-    window.addEventListener('resize', () => {
+    addEventListener('resize', () => {
       paneHgt = paneEle.offsetHeight;
       travel  = paneHgt - THUMB_HGT;
       vel.value = 0;
@@ -76,7 +75,7 @@
       () => {
         stopAllPropogation();
         if(clickStarted) {
-          emit('stop');
+          evtBus.emit('stop');
           clickStarted = false;
         }
       },
@@ -102,12 +101,12 @@
         vel.value = Math.max(0, 
                         Math.min(vel.value, 1));
         drawSlider();
-        emit('vel', Math.round(vel.value * 100));
+        evtBus.emit('vel', Math.round(vel.value * 100));
       }, 
       {passive:false, capture:true}
     );
 
-    watch(() => props.reset, () => {
+    evtBus.on('stop', () => {
       vel.value = 0;
       drawSlider();
     });

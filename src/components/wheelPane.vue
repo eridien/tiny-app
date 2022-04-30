@@ -8,10 +8,9 @@
 </template>
 
 <script setup>
-  import {ref, watch, onMounted} from 'vue'
+  import {ref, onMounted, inject} from 'vue'
 
-  const props = defineProps(['reset']);
-  const emit  = defineEmits(['angle', 'stop']);
+  const evtBus = inject('evtBus'); 
 
   const angle = ref(0);
 
@@ -42,7 +41,7 @@
       else          angle.value = -90 - degrees;
     }
 
-    watch(() => props.reset, () => {
+    evtBus.on('stop', () => {
       angle.value = 0;
       drawWheel(getCenterX(), getCenterY() - 1);
     });
@@ -58,7 +57,7 @@
       const paneHgt = paneEle.offsetHeight;
       const hdrHgt  = window.outerHeight - paneHgt;
       drawWheel(getCenterX(), getCenterY());
-      emit('stop');
+      evtBus.emit('stop');
     });
 
     let clickStarted = false;
@@ -75,7 +74,7 @@
       () => {
         stopAllPropogation();
         if(clickStarted) {
-          emit('stop');
+          evtBus.emit('stop');
           clickStarted = false;
         }
       },
@@ -94,7 +93,7 @@
         }
         if(touch != null) {
           drawWheel(touch.pageX, touch.pageY);
-          emit('angle', angle.value);
+          evtBus.emit('angle', angle.value);
         }
       },
       {passive:false, capture:true}

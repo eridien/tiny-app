@@ -1,13 +1,14 @@
-import { createApp, getCurrentInstance } from 'vue'
-import App from './App.vue'
+import {createApp} from 'vue'
+import App         from './App.vue'
+import mitt        from 'mitt'
+
 const app = createApp(App);
 
-if(import.meta.env.MODE == 'development') {
-  app.config.globalProperties.hostname = '192.168.1.145';
-}
-else {
-  const hostname = window.location.hostname;
-  app.config.globalProperties.hostname = hostname;
-}
+app.provide('global', app.config.globalProperties);
+app.provide('evtBus', mitt()); 
+
+if(import.meta.env.MODE == 'development')
+     app.provide('hostname', '192.168.1.145');
+else app.provide('hostname', location.hostname);
 
 app.mount('body');

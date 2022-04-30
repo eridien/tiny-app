@@ -11,13 +11,19 @@
 </template>
 
 <script setup>
-  import {onMounted, ref} from 'vue';
+  import {inject, ref} from 'vue';
 
-  const emit = defineEmits(['closeMenu']);
+  const evtBus = inject('evtBus');   
+  const doneClick = () => evtBus.emit('closeMenu');
 
-  const sensVal = ref(5);
+  const msgText = ref('');
+  const btnText = ref('');
 
-  const doneClick = () => emit('closeMenu');
+  evtBus.on('message', (msgText, btnText) => {
+    msgText.value = msgText;
+    btnText.value = btnText;
+  });
+  
 </script>
 
 <style>

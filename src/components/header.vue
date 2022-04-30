@@ -11,28 +11,25 @@
              marginTop:-6px")
   img(:src="`/images/bat-${batvId}.png`" 
       style="width:15px; height:35px; margin-top:5px;")
+      
   img(:src="`/images/hamburger.png`" 
       @click="hamburgerClick"
       style="width:35px; height:35px;         \
              margin-top:8px; margin-right:48px;")
 
-  BurgerMenu(v-if="menuOpen" :closing="closing"
+  BurgerMenu(v-if="menuOpen"
              style="position:fixed; z-index:1000;  \
-                    top:70px; right:60px;"
-             @stop="stopEvt" @pwrOff="pwrOffEvt" 
-             @closeMenu="closeMenuEvt")
+                    top:70px; right:60px;")
 </template>
 
 <script setup>
-import {onMounted, watch, ref} from 'vue';
+import {ref, inject} from 'vue';
 import  BurgerMenu from './burgerMenu.vue'
 
-const props = defineProps(['rssi', 'batv']);
-const emit  = defineEmits(['stop', 'pwrOff', 
-                           'menuOpenStateEvt']);
+const evtBus = inject('evtBus');   
 
 const rssiId = ref(2);
-watch(()=> props.rssi, (rssi, oldRssi) => {
+evtBus.on('rssi', (rssi) => {
   if(rssi === undefined) return;
   let id;
   if(     rssi < -80) id = 1; 
@@ -44,7 +41,7 @@ watch(()=> props.rssi, (rssi, oldRssi) => {
 });
 
 const batvId = ref(100);
-watch(()=> props.batv, (batv, oldbatv) => {
+evtBus.on('batv', (batv) => {
   if(batv === undefined) return;
   let id;
   if(     batv < 340) id =   0;
@@ -57,24 +54,10 @@ watch(()=> props.batv, (batv, oldbatv) => {
 });
 
 let menuOpen = ref(false);
-let closing  = ref(0);
 
 const hamburgerClick = ()=> {
   menuOpen.value = !menuOpen.value;
-  if(menuOpen.value) 
-    emit('menuOpenStateEvt', true);
-  else {
-    closing.value++;
-    emit('menuOpenStateEvt', false);
-  }
-}
-
-const stopEvt   = () => emit('stop');
-const pwrOffEvt = () => emit('pwrOff');
-
-const closeMenuEvt  = () => {
-  emit('menuOpenStateEvt', false);
-  menuOpen.value = false;
+  evtBus.emit('menuOpenState', menuOpen.value);
 }
 
 </script>
