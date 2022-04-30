@@ -2,7 +2,7 @@
 #settings(style="border-radius:12px; font-size:28px; \
                  background-color:white;             \
                  margin:20px; padding:20px;")
-  div(style="margin-bottom:20px;") Turning Sensitivity
+  div(style="margin-bottom:20px;") Steering Sensitivity
   div(style="position:relative; font-size:25px; display:flex; \
              justifyContent:space-between;                    \
              alignItems:stretch;")
@@ -22,19 +22,29 @@
 </template>
 
 <script setup>
-  import {ref} from 'vue';
+  import {onMounted, ref} from 'vue';
 
-  const emit = defineEmits(['steeringSens', 'closeMenu']);
-  const doneClick = () => emit('closeMenu');
+  const emit = defineEmits(['closeMenu']);
 
   const sensVal = ref(5);
 
   const sensEvt = (event) => {
     const val = event.target.value;
-    console.log("sensitivity", val);
     sensVal.value = val;
-    emit('steeringSens', +val);
+    // wheelPane.vue uses localStorage
+    localStorage.setItem('steeringSens', val);
   }
+
+  onMounted(()=> {
+    const sensEle = document.getElementById('sens');
+    if(!localStorage.getItem('steeringSens'))
+        localStorage.setItem('steeringSens', '5');
+    const val = localStorage.getItem('steeringSens');
+    sensVal.value = val;
+    sensEle.value = val;
+  });
+
+  const doneClick = () => emit('closeMenu');
 </script>
 
 <style>
