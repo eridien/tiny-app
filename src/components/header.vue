@@ -1,9 +1,9 @@
 <template lang='pug'>
-#header(style="display:flex; padding:5px;      \
-          justifyContent:space-between;        \
-          alignItems:stretch;                  \
-          fontWeight:bold; backgroundColor:    \
-            (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
+#header(style="display:flex; padding:5px;           \
+               justifyContent:space-between;        \
+               alignItems:stretch;                  \
+               fontWeight:bold; backgroundColor:    \
+                 (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
   img(src="/images/icon.png" 
       style="width:64px;height:36px;marginTop:5px;")
   img(:src="`/images/wifi-${rssiId}.png`"  
@@ -55,13 +55,18 @@ evtBus.on('batv', (batv) => {
 
 let menuOpen = ref(false);
 
-evtBus.on('menuOpen', (
-           open) => menuOpen.value = open);
-
 const hamburgerClick = ()=> {
   menuOpen.value = !menuOpen.value;
   evtBus.emit('menuOpen', menuOpen.value);
 }
+
+evtBus.on('menuOpen', (open) => {
+    menuOpen.value = open;
+    if(!open) {
+      evtBus.emit('settingsOpen', false);
+    }
+  }
+);
 
 </script>
 

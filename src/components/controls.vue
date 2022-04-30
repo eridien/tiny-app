@@ -21,9 +21,11 @@
                 display: table-cell;")
 
   Message(v-show="messageOpen"
-          style="position:fixed; z-index:1001;  \
-                top:90px; right:70px;")
-
+          :messageText="messageText"
+          :buttonText="buttonText"
+          :callbackText="callbackText"
+           style="position:fixed; z-index:1001;  \
+                  top:90px; right:70px;")
 </template>
 
 <script setup>
@@ -35,17 +37,29 @@
   const global = inject('global');
   const evtBus = inject('evtBus');   
 
-  const menuOpen    = ref(false);
-  const messageOpen = ref(false)
+  const menuOpen      = ref(false);
+  const messageOpen   = ref(false)
+
+  const messageText   = ref('');
+  const buttonText    = ref('');
+  const callbackText  = ref('');
 
   evtBus.on('menuOpen', open => {
     menuOpen.value = open;
   });
 
-  evtBus.on('messageOpenState', open => {
-    messageOpen.value = open;
+  evtBus.on('showMessage', (params) => {
+    console.log('showing message', params);
+    messageText.value  = params.messageText;
+    buttonText.value   = params.buttonText
+    callbackText.value = params.callbackText
+    messageOpen.value  = true;
   });
- 
+
+  evtBus.on('closeMessage', () => {
+    messageOpen.value = false;
+  });
+
 </script>
 
 <style>

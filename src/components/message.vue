@@ -2,27 +2,26 @@
 #message(style="border-radius:12px; font-size:28px; \
                  background-color:white;             \
                  margin:20px; padding:20px;") 
-  div {{msgText}}
+  div {{messageText}}
   div(@click="doneClick"
     style="float:right; font-size:26px;   \
             background-color:#ddd;         \
             border-radius:6px;             \
-            padding:5px; margin:20px 5px 0 0") {{btnText}}
+            padding:5px; margin:20px 5px 0 0") {{buttonText}}
 </template>
 
 <script setup>
   import {inject, ref} from 'vue';
 
-  const evtBus = inject('evtBus');   
-  const doneClick = () => evtBus.emit('menuState');
+  const props= defineProps([
+          'messageText', 'buttonText', 'callbackText']);
 
-  const msgText = ref('');
-  const btnText = ref('');
+  const evtBus = inject('evtBus');
 
-  evtBus.on('message', (msgText, btnText) => {
-    msgText.value = msgText;
-    btnText.value = btnText;
-  });
+  const doneClick = () => {
+    evtBus.emit(callbackText.value);
+    evtBus.emit('closeMessage');
+  }
 </script>
 
 <style>

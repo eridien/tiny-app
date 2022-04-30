@@ -5,14 +5,16 @@ const YAW_PK    = 2.00;
 const YAW_MAX_I = 512;
 
 // commands to bot
-const fcReport   = 'R';
-const fcVelCmd   = 'V';
-const fcYawCmd   = 'Y';
-const fcStopCmd  = 'S';
-const fcPowerOff = 'P';
-const fcYawPk    = 'M';
-const fcYawIk    = 'N';
-const fcMaxYawI  = 'O';
+const fcReport    = 'R';
+const fcVelCmd    = 'V';
+const fcYawCmd    = 'Y';
+const fcStopCmd   = 'S';
+const fcPowerOff  = 'P';
+const fcYawPk     = 'M';
+const fcYawIk     = 'N';
+const fcMaxYawI   = 'O';
+const fcCalibrate = 'C';
+
 
 let hostname = '';
 
@@ -130,7 +132,11 @@ export const pwrOff = () => {
                console.log('sending pwroff to bot');
                send(fcPowerOff);
              };
-
+export const calibrate = () => {
+               console.log('sending calibrate to bot');
+               send(fcCalibrate);
+             };
+             
 // debug PID (PI) tuning
 export const setYawPk   = yawPk => send(fcYawPk,   YAW_PK);
 export const setYawIk   = yawIk => send(fcYawIk,   YAW_IK);

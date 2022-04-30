@@ -45,6 +45,15 @@
     if(!open) settingsOpen.value = false;
   });
 
+  const calibrateEvt = ()=> {
+    console.log('emitting calibration message');
+    evtBus.emit('showMessage', {
+      messageText:  'Keep T-Bot still and press start.',
+      buttonText:   'Start',
+      callbackText: 'startCalibration'}
+    );
+  }
+
   const settingsEvt = ()=> {
     settingsOpen.value = true;
   }

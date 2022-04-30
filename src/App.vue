@@ -13,8 +13,8 @@
           getCurrentInstance } from 'vue'
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
-  import {initWebsocket, setVel, setYaw, stop, pwrOff} 
-                          from "./websocket.js";
+  import {initWebsocket, setVel, setYaw, 
+          stop, pwrOff, calibrate} from "./websocket.js";
 
   const global = inject('global');
   const evtBus = inject('evtBus');   
@@ -31,6 +31,7 @@
   const fcYawErrInt   = 'i';
   const fcLeftPwm     = 'l';
   const fcRightPwm    = 'r';
+  const fcCalibDone   = 'c';
   const fcError       = 'e';
 
   const websocketCB = (status) => {
@@ -39,8 +40,23 @@
     const err = status?.[fcError];
     if(err) console.log(`BOT ERROR: ${err}`);
   }
-  evtBus.on('stop',   () => { stop();  });
-  evtBus.on('pwrOff', () => { pwrOff();});
+  evtBus.on('stop',             () => { stop();     });
+  evtBus.on('pwrOff',           () => { pwrOff();   });
+
+  evtBus.on('startCalibration', () => { 
+    console.log(`startCalibration`);
+    evtBus.emit('showMessage', {
+      messageText:  'Calibrating...',
+      buttonText:   'Cancel',
+      callbackText: 'cancelCalibration'
+    });
+    calibrate();
+  });
+
+  evtBus.on('cancelCalibration', () => {
+    console.log(`cancelling calibration`);
+    evtBus.emit('menuOpen', false);
+  });
 
   onMounted(async() => { 
     console.log(`---- App Mounted, ` +
