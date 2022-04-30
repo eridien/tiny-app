@@ -67,7 +67,6 @@ const hamburgerClick = ()=> {
     closing.value++;
     emit('menuOpenStateEvt', false);
   }
-  console.log("hamburgerClick, menu open:", menuOpen.value);
 }
 
 const stopEvt   = () => emit('stop');

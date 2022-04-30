@@ -45,7 +45,6 @@
   });
 
   const stopEvt = () => { 
-    console.log("controls stopEvt");
     reset.value++; 
     emit('stop'); 
   }

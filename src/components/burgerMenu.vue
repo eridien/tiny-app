@@ -21,7 +21,8 @@
   Settings(v-show="settingsOpen"
           style="position:fixed; z-index:1001;  \
                 top:90px; right:70px;"
-          @steering="steeringEvt")
+          @steering="steeringEvt"
+          @closeMenu="closeMenuEvt")
 </template>
 
 <style>
