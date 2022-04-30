@@ -4,9 +4,10 @@
                    display:table;\
                    position:relative;")
   div
-    .button(@click="settingsEvt" ) Settings 
     .button(@click="stopEvt"     ) Stop
     .button(@click="pwrOffEvt"   ) Power Off
+    .button(@click="calibrateEvt") Calibrate
+    .button(@click="settingsEvt" ) Settings 
     .button(@click="closeMenuEvt") Close 
 
   #cover(v-show="settingsOpen"
@@ -43,10 +44,6 @@
 
   const settingsOpen = ref(false);
 
-  const steeringEvt = ()=> {
-
-  }
-  
   const closeMenu = ()=> {
     settingsOpen.value = false;
     emit('closeMenu' );
@@ -69,7 +66,6 @@
   const closeMenuEvt = () => closeMenu();
 
   watch(() => props.closing, () => {
-    settingsOpen.value = false;
     closeMenu();
   });
 

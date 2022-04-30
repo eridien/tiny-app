@@ -17,12 +17,19 @@
               minHeight:`calc(100vh - ${HDR_HGT}px)`}"
       @angle="angle" @stop="stopEvt")
 
-  #cover(v-if="menuOpenState"
+  #cover(v-if="menuOpenState || messageOpen"
          style="position:absolute; left:0;       \
                 width:100%; height:100%;         \
                 opacity:0.3;                     \
                 background-color:black;          \
                 display: table-cell;")
+
+  Message(v-show="messageOpen"
+          style="position:fixed; z-index:1001;  \
+                top:90px; right:70px;"
+          @steering="steeringEvt"
+          @closeMenu="closeMenuEvt")
+
 </template>
 
 <script setup>
@@ -30,8 +37,8 @@
   import  velPane     from './velPane.vue';
   import  wheelPane   from './wheelPane.vue';
 
-  const props = defineProps([
-         'HDR_HGT', 'resetCtrls', 'menuOpenState' ]);
+  const props = defineProps([ 'HDR_HGT', 
+          'resetCtrls', 'menuOpenState', 'showMessage' ]);
   const emit  = defineEmits(['vel','angle','stop']);
 
   const vel     = (vel)   => emit('vel', vel);
@@ -39,10 +46,17 @@
 
   const reset    = ref(0);
   const menuOpen = ref(false);
+  const msgText  = ref(null);
+  const doneText = ref(null);
 
   watch(() => props.resetCtrls, () => {
     reset.value++; 
   });
+
+  watch(() => props.showMessage, (text) => {
+    msgText.value  = text[0];
+    doneText.value = text[1];
+  }
 
   const stopEvt = () => { 
     reset.value++; 

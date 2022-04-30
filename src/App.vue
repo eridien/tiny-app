@@ -5,13 +5,16 @@
                   height:`${HDR_HGT-15}px`, \
                   margin:'0 5vw 0 5vw'}"
          @menuOpenStateEvt="menuOpenStateEvt"
-         @stop="stopEvt" @pwrOff="pwrOffEvt" )
+         @stop="stopEvt" @pwrOff="pwrOffEvt"
+         @showMessage="showMessageEvt")
   Controls(:HDR_HGT="HDR_HGT"
             style="width:calc(100vw-20px);"
            :resetCtrls="resetCtrls"
-           @vel="setVel" @angle="setYaw"
+           :menuOpenState="menuOpenState"
+           :showMessage="showMessage"
+           @vel="setVel"   @angle="setYaw"
            @stop="stopEvt" 
-           :menuOpenState="menuOpenState")
+           @showMessage="showMessageEvt")
 </template>
 
 <script setup>
@@ -26,6 +29,7 @@
   const rssi          = ref(0);
   const batv          = ref(0);
   const menuOpenState = ref(false)
+  const showMessage   = ref(null);
 
 // status constants from bot
   const fcTime        = 't';
@@ -59,6 +63,9 @@
   const pwrOffEvt = () => {
     resetCtrls.value++; 
     pwrOff();
+  }
+  const showMessageEvt = (msgText, doneText) => {
+    showMessage.value=[msgText, doneText];
   }
 
   const app = getCurrentInstance();
