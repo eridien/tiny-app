@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-  import {onMounted, ref} from 'vue';
+  import {onMounted, ref, inject} from 'vue';
 
   const evtBus = inject('evtBus');   
 
@@ -44,7 +44,8 @@
     sensEle.value = val;
   });
 
-  const doneClick = () => evtBus.emit('closeMenu');
+  const doneClick = () => 
+          evtBus.emit('menuOpen', false);
 </script>
 
 <style>

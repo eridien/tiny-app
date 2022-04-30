@@ -55,9 +55,12 @@ evtBus.on('batv', (batv) => {
 
 let menuOpen = ref(false);
 
+evtBus.on('menuOpen', (
+           open) => menuOpen.value = open);
+
 const hamburgerClick = ()=> {
   menuOpen.value = !menuOpen.value;
-  evtBus.emit('menuOpenState', menuOpen.value);
+  evtBus.emit('menuOpen', menuOpen.value);
 }
 
 </script>

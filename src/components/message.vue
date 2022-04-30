@@ -14,7 +14,7 @@
   import {inject, ref} from 'vue';
 
   const evtBus = inject('evtBus');   
-  const doneClick = () => evtBus.emit('closeMenu');
+  const doneClick = () => evtBus.emit('menuState');
 
   const msgText = ref('');
   const btnText = ref('');
@@ -23,7 +23,6 @@
     msgText.value = msgText;
     btnText.value = btnText;
   });
-  
 </script>
 
 <style>

@@ -34,20 +34,23 @@
 </style>
 
 <script setup>
-  import {ref, watch} from 'vue'
+  import {ref, inject} from 'vue'
   import Settings from './settings.vue';
 
   const evtBus = inject('evtBus');   
 
   const settingsOpen = ref(false);
 
-  evtBus.on('menuOpenState', (open) => {
+  evtBus.on('menuOpen', (open) => {
     if(!open) settingsOpen.value = false;
   });
 
   const settingsEvt = ()=> {
     settingsOpen.value = true;
   }
+
+  const closeMenu = 
+        () => evtBus.emit('menuOpen', false);
 
   const stopEvt = () => {
     evtBus.emit('stop');

@@ -38,7 +38,7 @@
   const menuOpen    = ref(false);
   const messageOpen = ref(false)
 
-  evtBus.on('menuOpenState', open => {
+  evtBus.on('menuOpen', open => {
     menuOpen.value = open;
   });
 
