@@ -13,10 +13,10 @@
           getCurrentInstance } from 'vue'
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
-  import {initWebsocket,  
-          stop, pwrOff, calibrate,
-          setYawPk, setYawIk, setMaxYawIk, setBoostK}
-                      from "./websocket.js";
+  import { initWebsocket,  
+           stop, pwrOff, calibrate,
+           setYawPk, setYawIk, setMaxYawIk, setBoostK }
+          from "./websocket.js";
 
   const global = inject('global');
   const evtBus = inject('evtBus'); 

@@ -58,7 +58,7 @@
       travel  = paneHgt - THUMB_HGT;
       vel.value = 0;
       drawSlider();
-      emit('stop');
+      evtBus.emit('stop');
     });      
 
     let clickStarted = false;

@@ -6,8 +6,10 @@
   div
     .button(@click="stopEvt"     ) Stop
     .button(@click="pwrOffEvt"   ) Power Off
-    .button(@click="calibrateEvt") Calibrate
     .button(@click="settingsEvt" ) Settings 
+    .button(@click="calibrateEvt") Calibrate
+    .button(@click="setMotionEvt") Constants
+    .button(@click="showStatusEvt") Status 
     .button(@click="closeMenuEvt") Close 
 
   #cover(v-show="settingsOpen"
@@ -22,29 +24,45 @@
   Settings(v-show="settingsOpen"
           style="position:fixed; z-index:1001;  \
                 top:90px; right:70px;")
+  SetMotion(v-show="motionOpen"
+          style="position:fixed; z-index:1001;  \
+                top:90px; right:70px;")
+  Status(v-show="statusOpen"
+          style="position:fixed; z-index:1001;  \
+                top:90px; right:70px;")
 </template>
 
 <style>
 .button {
   border:1px solid black;
-  margin:20px; padding:10px;
+  margin:10px; padding:10px;
   background-color:white;
-  border-radius:15px;
+  border-radius:12px;
 }
 </style>
 
 <script setup>
   import {ref, inject} from 'vue'
-  import Settings from './settings.vue';
+  import Settings  from './settings.vue';
+  import SetMotion from './setMotion.vue';
+  import Status    from './status.vue';
 
   const evtBus = inject('evtBus');   
 
   const settingsOpen = ref(false);
+  const motionOpen   = ref(false);
+  const statusOpen   = ref(false);
 
   evtBus.on('menuOpen', (open) => {
     if(!open) settingsOpen.value = false;
   });
 
+  const closeMenu = 
+        () => evtBus.emit('menuOpen', false);
+
+  const settingsEvt = ()=> {
+    settingsOpen.value = true;
+  }
   const calibrateEvt = ()=> {
     console.log('emitting calibration message');
     evtBus.emit('showMessage', {
@@ -55,12 +73,12 @@
     );
   }
 
-  const settingsEvt = ()=> {
-    settingsOpen.value = true;
+  const setMotionEvt = ()=> {
+    motionOpen.value = true;
   }
-
-  const closeMenu = 
-        () => evtBus.emit('menuOpen', false);
+  const showStatusEvt = ()=> {
+    statusOpen.value = true;
+  }
 
   const stopEvt = () => {
     evtBus.emit('stop');
