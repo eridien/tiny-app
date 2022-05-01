@@ -13,29 +13,47 @@
           getCurrentInstance } from 'vue'
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
-  import {initWebsocket, setVel, setYaw, 
-          stop, pwrOff, calibrate} from "./websocket.js";
+  import {initWebsocket,  
+          stop, pwrOff, calibrate,
+          setYawPk, setYawIk, setMaxYawI, setBoost}
+                      from "./websocket.js";
 
   const global = inject('global');
   const evtBus = inject('evtBus'); 
 
   global.HDR_HGT = 65;
 
-// status constants from bot
-  const fcTime        = 't';
-  const fcElapsedMs   = 'm';
-  const fcBatV        = 'b';
-  const fcRssi        = 'w';
-  const fcVelPwm      = 'v';
-  const fcYawRate     = 'y';
-  const fcYawErrInt   = 'i';
-  const fcLeftPwm     = 'l';
-  const fcRightPwm    = 'r';
-  const fcCalibDone   = 'c';
-  const fcError       = 'e';
+// status from bot
+  const fcBatV      = 'b';
+  const fcRssi      = 'w';
 
-  evtBus.on('stop',   () => { stop();   });
-  evtBus.on('pwrOff', () => { pwrOff(); });
+// motion state from bot
+  const fcAccelOfs  = 'a';
+  const fcYawOfs    = 'd';
+  const fcVelPwm    = 'v';
+  const fcYawRate   = 'y';
+  const fcYawErrInt = 'i';
+  const fcLeftPwm   = 'l';
+  const fcRightPwm  = 'r';
+
+// motion constants from bot
+  const fcYawPkC    = 'm';
+  const fcYawIkC    = 'n';
+  const fcMaxYawIC  = 'o';
+  const fcBoostC    = 'q';
+
+  const fcCalibDone = 'c';
+  const fcError     = 'e';
+
+  global.curStatus = {};
+
+  evtBus.on('stop',       () =>      { stop();          });
+  evtBus.on('pwrOff',     () =>      { pwrOff();        });
+
+  evtBus.on('setYawPk',   (awPk)  => { setYawPk(awPk);  });
+  evtBus.on('setYawIk',   (awIk)  => { setYawIk(awIk);  });
+  evtBus.on('setMaxYawI', (max)   => { setMaxYawI(max); });
+  evtBus.on('setBoost',   (boost) => { setBoost(boost); });
 
   let calibrating = false;
 
