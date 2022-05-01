@@ -31,12 +31,6 @@ let lastRecvVal = {};
 let sendNow     = false;
 const wsRecv = (event) => {
   const recvdStr = event.data;
-  // if(recvdStr != lastRecvStr &&
-  //    recvdStr[0] == "{"      &&
-  //    recvdStr[1] != "}") {
-  //   console.log(`--> msg recvd: ${recvdStr}`);
-  //   lastRecvStr = recvdStr;
-  // }
   if(recvdStr[0] != "{") {
     if(recvdStr[1] != "}") 
       console.log(`--> MSG: ${recvdStr}`);
@@ -44,9 +38,7 @@ const wsRecv = (event) => {
   }
   sendNow = true;
   let res;
-  try {
-    res = JSON.parse(recvdStr);
-  }
+  try { res = JSON.parse(recvdStr); }
   catch(e) {
     console.log(`Error parsing JSON ` +
                 `from bot:', "${recvdStr}"`);
@@ -80,7 +72,7 @@ const sendAllCmds = async () => {
   const str = JSON.stringify(pendingCmds);
   try{
     await webSocket.send(str);
-    sentPwrOff = (pendingCmds[fcPowerOff] !== undefined);
+    sentPwrOff = (pendingCmds?.[fcPowerOff] !== undefined);
     pendingCmds = null;
     if(str != '{"R":0}')
      console.log(`<-- msg sent: ${str}`);

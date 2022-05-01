@@ -37,6 +37,8 @@
   evtBus.on('stop',   () => { stop();   });
   evtBus.on('pwrOff', () => { pwrOff(); });
 
+  let calibrating = false;
+
   evtBus.on('startCalibration', () => { 
     console.log(`startCalibration`);
     evtBus.emit('showMessage', {
@@ -46,13 +48,13 @@
       busyIndicator:'on',
     });
     calibrate();
+    calibrating = true;
   });
 
-  let calibrating = false;
-
   const calibrationDone = () => {
+    console.log('calibrationDone', {calibrating});
     if(!calibrating) return;
-    
+    calibrating = false;
     console.log('calibration done');
     evtBus.emit('showMessage', {
       messageText:  'Calibrating finished.',
@@ -64,6 +66,7 @@
 
   evtBus.on('closeCalibration', () => {
     console.log('closing calibration');
+    calibrating = false;
     evtBus.emit('menuOpen', false);
   });
 
@@ -88,9 +91,11 @@
       websocketOpen = status.websocketOpen;
       return;
     }
+    if(status?.[fcCalibDone] === 1) {
+      calibrationDone();
+    }
     evtBus.emit('rssi', status?.[fcRssi]);
     evtBus.emit('batv', status?.[fcBatV]);
-    if(status?.[fcCalibDone]) calibrationDone();
     const err = status?.[fcError];
     if(err) console.log(`BOT ERROR: ${err}`);
   };
