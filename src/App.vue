@@ -15,7 +15,7 @@
   import  Controls   from './components/controls.vue'
   import {initWebsocket,  
           stop, pwrOff, calibrate,
-          setYawPk, setYawIk, setMaxYawI, setBoost}
+          setYawPk, setYawIk, setMaxYawIk, setBoostK}
                       from "./websocket.js";
 
   const global = inject('global');
@@ -40,20 +40,20 @@
   const fcYawPkC    = 'm';
   const fcYawIkC    = 'n';
   const fcMaxYawIC  = 'o';
-  const fcBoostC    = 'q';
+  const fcBoostKStC    = 'q';
 
   const fcCalibDone = 'c';
   const fcError     = 'e';
 
   global.curStatus = {};
 
-  evtBus.on('stop',       () =>      { stop();          });
-  evtBus.on('pwrOff',     () =>      { pwrOff();        });
+  evtBus.on('stop',   () => { stop();   });
+  evtBus.on('pwrOff', () => { pwrOff(); });
 
-  evtBus.on('setYawPk',   (awPk)  => { setYawPk(awPk);  });
-  evtBus.on('setYawIk',   (awIk)  => { setYawIk(awIk);  });
-  evtBus.on('setMaxYawI', (max)   => { setMaxYawI(max); });
-  evtBus.on('setBoost',   (boost) => { setBoost(boost); });
+  evtBus.on('setYawPk',    (awPk)  => { setYawPk(awPk);  });
+  evtBus.on('setYawIk',    (awIk)  => { setYawIk(awIk);  });
+  evtBus.on('setMaxYawIk', (max)   => { setMaxYawIk(max);});
+  evtBus.on('setBoostK',   (boost) => { setBoostK(boost);});
 
   let calibrating = false;
 

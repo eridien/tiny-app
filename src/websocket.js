@@ -9,8 +9,8 @@ const fcCalibrate = 'C';
 // set motion constants
 const fcYawPkS     = 'M';
 const fcYawIkS     = 'N';
-const fcMaxYawIS   = 'O';
-const fcBoostS     = 'Q';
+const fcMaxYawIkS  = 'O';
+const fcBoostKS    = 'Q';
 
 let hostname = '';
 
@@ -121,17 +121,33 @@ export const pwrOff = () => {
                console.log('sending pwroff to bot');
                send(fcPowerOff);
              };
+             
+export const setYawPk = yawPk => {
+               console.log(
+                  'sending yawPk to bot', yawPk);
+               send(fcYawPkS, yawPk);
+             }
+export const setYawIk = yawIk => {
+               console.log(
+                  'sending yawIk to bot', yawIk);
+               send(fcYawIkS, yawIk);
+             }
+export const setMaxYawIk = maxYawIk => {
+               console.log(
+                  'sending maxYawIk to bot', maxYawIk);
+               send(fcMaxYawIkS, maxYawIk);
+             }
+export const setBoostK = boostK => {
+               console.log(
+                  'sending boostK to bot', boostK);
+               send(fcBoostKS, boostK);
+             }
+
 export const calibrate = () => {
                console.log('sending calibrate to bot');
                send(fcCalibrate);
              };
              
-// debug PID (PI) tuning
-export const setYawPk   = yawPk => send(fcYawPkS,   yawPk);
-export const setYawIk   = yawIk => send(fcYawIkS,   yawIk);
-export const setMaxYawI = max   => send(fcMaxYawIS, max);
-export const setBoost   = boost => send(fcBoostS,   boost);
-
 
 //////////////  MANAGE WEBSOCKET  /////////////////
 
