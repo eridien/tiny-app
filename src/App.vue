@@ -52,7 +52,6 @@
   });
 
   const calibrationDone = () => {
-    console.log('calibrationDone', {calibrating});
     if(!calibrating) return;
     calibrating = false;
     console.log('calibration done');
@@ -83,7 +82,7 @@
 
   const websocketCB = (status) => {
     if(status.websocketOpen !== undefined) {
-      if(websocketOpen  && !status.websocketOpen)
+      if(websocketOpen && !status.websocketOpen)
         showNoWebsocket();
       if(!websocketOpen &&  status.websocketOpen &&
           global.curMsg == noWsMsg)
@@ -91,9 +90,8 @@
       websocketOpen = status.websocketOpen;
       return;
     }
-    if(status?.[fcCalibDone] === 1) {
+    if(status?.[fcCalibDone] === 1)
       calibrationDone();
-    }
     evtBus.emit('rssi', status?.[fcRssi]);
     evtBus.emit('batv', status?.[fcBatV]);
     const err = status?.[fcError];

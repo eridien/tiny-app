@@ -65,10 +65,10 @@ const wsRecv = (event) => {
 
 let pendingCmds   = null;
 let sentPwrOff    = false;
-let webSocketOpen = false;
+let websocketOpen = false;
 
 const sendAllCmds = async () => {
-  if(!webSocketOpen || pendingCmds === null) return;
+  if(!websocketOpen || pendingCmds === null) return;
   const str = JSON.stringify(pendingCmds);
   try{
     await webSocket.send(str);
@@ -149,15 +149,15 @@ const connectToWs = async () => {
 
   webSocket.addEventListener('open', (event) => {
     console.log('webSocket connected:', event);
-    webSocketOpen = true;
-    appCB({webSocketOpen});
+    websocketOpen = true;
+    appCB({websocketOpen});
     pendingCmds   = null;
   });
 
   webSocket.addEventListener('error', (event) => {
     console.log('webSocket error:', event);
-    webSocketOpen = false;
-    appCB({webSocketOpen});
+    websocketOpen = false;
+    appCB({websocketOpen});
     pendingCmds = null;
     if(sentPwrOff) {
       // sending power off always causes error
@@ -174,8 +174,8 @@ const connectToWs = async () => {
 
   webSocket.addEventListener('close', (event) => {
     console.log('webSocket closed:', event);
-    webSocketOpen = false;
-    appCB({webSocketOpen});
+    websocketOpen = false;
+    appCB({websocketOpen});
     pendingCmds = null;
     if(!waitingToRetry) {
       waitingToRetry = true;
