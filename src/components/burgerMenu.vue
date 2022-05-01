@@ -50,7 +50,8 @@
     evtBus.emit('showMessage', {
       messageText:  'Keep T-Bot still and press start.',
       buttonText:   'Start',
-      callbackText: 'startCalibration'}
+      callbackText: 'startCalibration',
+      busyIndicator: 'off'}
     );
   }
 

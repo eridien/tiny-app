@@ -24,6 +24,7 @@
           :messageText="messageText"
           :buttonText="buttonText"
           :callbackText="callbackText"
+          :busyIndicator="busyIndicator"
            style="position:fixed; z-index:1001;  \
                   top:90px; right:70px;")
 </template>
@@ -43,6 +44,7 @@
   const messageText   = ref('');
   const buttonText    = ref('');
   const callbackText  = ref('');
+  const busyIndicator = ref('off');
 
   evtBus.on('menuOpen', open => {
     menuOpen.value = open;
@@ -50,14 +52,20 @@
 
   evtBus.on('showMessage', (params) => {
     console.log('showing message', params);
-    messageText.value  = params.messageText;
-    buttonText.value   = params.buttonText
-    callbackText.value = params.callbackText
-    messageOpen.value  = true;
+    messageText.value   = params.messageText;
+    buttonText.value    = params.buttonText;
+    callbackText.value  = params.callbackText;
+    busyIndicator.value = params.busyIndicator;
+    messageOpen.value   = true;
+    global.curMsg       = params.messageText;
+    evtBus.emit('menuOpen', false);
   });
 
   evtBus.on('closeMessage', () => {
+    console.log('closing message');
+    busyIndicator.value = "off";
     messageOpen.value = false;
+    global.curMsg = null;
   });
 
 </script>

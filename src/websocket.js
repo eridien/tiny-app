@@ -82,8 +82,8 @@ const sendAllCmds = async () => {
     await webSocket.send(str);
     sentPwrOff = (pendingCmds[fcPowerOff] !== undefined);
     pendingCmds = null;
-    // if(str != '{"R":0}')
-    //  console.log(`<-- msg sent: ${str}`);
+    if(str != '{"R":0}')
+     console.log(`<-- msg sent: ${str}`);
   }
   catch(e) {
     console.log(`Error sending string ` +
@@ -113,7 +113,8 @@ const send = (code, val = null) => {
   else
     pendingCmds[code] = sendVal;
   if(val !== null) lastFcVal[code] = val;
-  if(code == fcReport) sendAllCmds();
+  if(code == fcReport || code == fcCalibrate) 
+      sendAllCmds();
 }
 
 export const setVel = vel => {
@@ -157,12 +158,14 @@ const connectToWs = async () => {
   webSocket.addEventListener('open', (event) => {
     console.log('webSocket connected:', event);
     webSocketOpen = true;
+    appCB({webSocketOpen});
     pendingCmds   = null;
   });
 
   webSocket.addEventListener('error', (event) => {
     console.log('webSocket error:', event);
     webSocketOpen = false;
+    appCB({webSocketOpen});
     pendingCmds = null;
     if(sentPwrOff) {
       // sending power off always causes error
@@ -180,6 +183,7 @@ const connectToWs = async () => {
   webSocket.addEventListener('close', (event) => {
     console.log('webSocket closed:', event);
     webSocketOpen = false;
+    appCB({webSocketOpen});
     pendingCmds = null;
     if(!waitingToRetry) {
       waitingToRetry = true;

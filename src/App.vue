@@ -17,7 +17,7 @@
           stop, pwrOff, calibrate} from "./websocket.js";
 
   const global = inject('global');
-  const evtBus = inject('evtBus');   
+  const evtBus = inject('evtBus'); 
 
   global.HDR_HGT = 65;
 
@@ -34,33 +34,70 @@
   const fcCalibDone   = 'c';
   const fcError       = 'e';
 
-  const websocketCB = (status) => {
-    evtBus.emit('rssi', status?.[fcRssi]);
-    evtBus.emit('batv', status?.[fcBatV]);
-    const err = status?.[fcError];
-    if(err) console.log(`BOT ERROR: ${err}`);
-  }
-  evtBus.on('stop',             () => { stop();     });
-  evtBus.on('pwrOff',           () => { pwrOff();   });
+  evtBus.on('stop',   () => { stop();   });
+  evtBus.on('pwrOff', () => { pwrOff(); });
 
   evtBus.on('startCalibration', () => { 
     console.log(`startCalibration`);
     evtBus.emit('showMessage', {
       messageText:  'Calibrating...',
       buttonText:   'Cancel',
-      callbackText: 'cancelCalibration'
+      callbackText: 'closeCalibration',
+      busyIndicator:'on',
     });
     calibrate();
   });
 
-  evtBus.on('cancelCalibration', () => {
-    console.log(`cancelling calibration`);
+  let calibrating = false;
+
+  const calibrationDone = () => {
+    if(!calibrating) return;
+    
+    console.log('calibration done');
+    evtBus.emit('showMessage', {
+      messageText:  'Calibrating finished.',
+      buttonText:   'Close',
+      callbackText: 'closeCalibration',
+      busyIndicator: 'off',
+    });
+  };
+
+  evtBus.on('closeCalibration', () => {
+    console.log('closing calibration');
     evtBus.emit('menuOpen', false);
   });
 
+  const noWsMsg = 'No connection to T-Bot.';
+
+  const showNoWebsocket = () => {
+    console.log('showNoWebsocket');
+    evtBus.emit('menuOpen', false);
+
+    evtBus.emit('showMessage', { messageText:noWsMsg });
+  };
+
+  let websocketOpen = false;
+
+  const websocketCB = (status) => {
+    if(status.websocketOpen !== undefined) {
+      if(websocketOpen  && !status.websocketOpen)
+        showNoWebsocket();
+      if(!websocketOpen &&  status.websocketOpen &&
+          global.curMsg == noWsMsg)
+        evtBus.emit('closeMessage');
+      websocketOpen = status.websocketOpen;
+      return;
+    }
+    evtBus.emit('rssi', status?.[fcRssi]);
+    evtBus.emit('batv', status?.[fcBatV]);
+    if(status?.[fcCalibDone]) calibrationDone();
+    const err = status?.[fcError];
+    if(err) console.log(`BOT ERROR: ${err}`);
+  };
+
   onMounted(async() => { 
     console.log(`---- App Mounted, ` +
-                `hostname: ${global.hostName} ---`);
+                `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
   });
 </script>

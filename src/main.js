@@ -4,11 +4,12 @@ import mitt        from 'mitt'
 
 const app = createApp(App);
 
-app.provide('global', app.config.globalProperties);
+const global = app.config.globalProperties;
+app.provide('global', global);
 app.provide('evtBus', mitt()); 
 
 if(import.meta.env.MODE == 'development')
-     app.provide('hostname', '192.168.1.145');
-else app.provide('hostname', location.hostname);
+     global.hostname = '192.168.1.145';
+else global.hostname = location.hostname;
 
 app.mount('body');
