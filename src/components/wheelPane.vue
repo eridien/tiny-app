@@ -1,9 +1,10 @@
 <template lang='pug'>
-#wheelPane(style="display:flex;             \
-                  justify-content:center;   \
+#wheelPane(style="display:flex;                      \
+                  justify-content:center;            \
                   align-items:center;")
+  //- why is the 2.5 needed ???
   img(id="wheel" src="/images/steering-wheel.png"
-        :style="{transform:`rotate(${2*angle}deg)`,  \
+        :style="{transform:`rotate(${angle}deg)`,  \
                  width:'65vmin', height:'65vmin'}" )
 </template>
 
@@ -15,13 +16,8 @@
 
   const angle = ref(0);
 
-// max steering sensitivity is SENS_FACTOR**5-steeringSens
+// max steering sensitivity is SENS_FACTOR**(5-steeringSens)
   const SENS_FACTOR = 1.25;
-  let steeringSens;
-  evtBus.on('steeringSens', (sens) => {
-    console.log("evtBus.on('steeringSens:'", sens);
-    steeringSens = sens;
-  });
 
   onMounted(() => { 
 
@@ -37,7 +33,7 @@
       return hdrHgt + (window.outerHeight - hdrHgt) / 2;
     }
 
-    const drawWheel = (x,y) => {
+    const calcAngle = (x,y) => {
       const paneHgt = paneEle.offsetHeight;
       const hdrHgt  = window.outerHeight - paneHgt;
       let   relX    =   x-getCenterX();
@@ -52,7 +48,7 @@
 
     evtBus.on('stop', () => {
       angle.value = 0;
-      drawWheel(getCenterX(), getCenterY() - 1);
+      calcAngle(getCenterX(), getCenterY() - 1);
     });
   
     const stopAllPropogation= (event) => {
@@ -65,7 +61,7 @@
     window.addEventListener('resize', () => {
       const paneHgt = paneEle.offsetHeight;
       const hdrHgt  = window.outerHeight - paneHgt;
-      drawWheel(getCenterX(), getCenterY());
+      calcAngle(getCenterX(), getCenterY());
       evtBus.emit('stop');
     });
 
@@ -89,11 +85,11 @@
       },
       {passive:false, capture:true}
     );
+
     paneEle.addEventListener("touchmove", 
       (event) => {
         stopAllPropogation(event);
         clickStarted = false;
-
         let touch = null;
         for(let chgdTouch of event.changedTouches) {
           if(chgdTouch.target == paneEle ||
@@ -101,11 +97,10 @@
             touch = chgdTouch;
         }
         if(touch != null) {
-          // drawWheel also sets angle.value
-          drawWheel(touch.pageX, touch.pageY);
-          angle.value *= 
+          calcAngle(touch.pageX, touch.pageY);
+          const yaw = angle.value * 
               Math.pow(SENS_FACTOR, global.steeringSens-5);
-          evtBus.emit('angle', angle.value);
+          evtBus.emit('yaw', yaw);
         }
       },
       {passive:false, capture:true}

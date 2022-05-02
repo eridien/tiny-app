@@ -46,7 +46,7 @@
   const fcCalibDone = 'c';
   const fcError     = 'e';
 
-  evtBus.on('angle',  (angle) => {setYaw(angle); });
+  evtBus.on('yaw',    (yaw)   => {setYaw(yaw); });
   evtBus.on('stop',   ()      => {stop();        });
   evtBus.on('pwrOff', ()      => {pwrOff();      });
 

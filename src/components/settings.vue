@@ -7,7 +7,7 @@
              justifyContent:space-between;                    \
              alignItems:stretch;")
     span Min
-    div {{sensVal}}
+    div {{dispVal}}
     span Max
 
   input(id="sens" type="range" 
@@ -24,22 +24,24 @@
 <script setup>
   import {onMounted, ref, inject} from 'vue';
 
+  const global = inject('global');
   const evtBus = inject('evtBus');   
 
-  const sensVal = ref(5);
+  const dispVal = ref(5);
 
   const sensEvt = (event) => {
     const val = event.target.value;
-    sensVal.value = val;
-    evtBus.emit('steeringSens', sensVal.value);
+    dispVal.value = val;
+    global.steeringSens = val;
     localStorage.setItem('steeringSens', val);
   }
 
   onMounted(()=> {
+    // input ele
     const sensEle = document.getElementById('sens');
-    const val = localStorage.getItem('steeringSens');
-    sensVal.value = val;
-    sensEle.value = val;
+    sensEle.value = global.steeringSens;
+    // display
+    dispVal.value = global.steeringSens;
   });
 
   const doneClick = () => 

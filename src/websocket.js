@@ -1,3 +1,6 @@
+const SHOW_SENDS = false;
+const SHOW_RECVS = false;
+
 // commands to bot
 const fcReport    = 'R';
 const fcVelCmd    = 'V';
@@ -51,7 +54,8 @@ const wsRecv = (event) => {
       }
     }
     if(haveChgdVal) {
-      console.log("---> recvd", chgdVals);
+      if(SHOW_RECVS)
+        console.log("---> recvd", chgdVals);
       appCB(chgdVals);
     }
   }
@@ -70,8 +74,8 @@ const sendAllCmds = async () => {
     await webSocket.send(str);
     sentPwrOff = (pendingCmds?.[fcPowerOff] !== undefined);
     pendingCmds = null;
-    if(str != '{"R":0}')
-     console.log(`<-- msg sent: ${str}`);
+    if(SHOW_SENDS && str != '{"R":0}')
+     console.log(`<--- msg sent: ${str}`);
   }
   catch(e) {
     console.log(`Error sending string ` +
@@ -106,11 +110,13 @@ const send = (code, val = null) => {
 }
 
 export const setVel = vel => {
-               console.log('sending vel to bot', vel);
+               vel = Math.round(vel);
+              //  console.log('sending vel to bot', vel);
                send(fcVelCmd, vel);
              }
 export const setYaw = yaw => {
-               console.log('sending yaw to bot', yaw.toFixed(2));
+               yaw = Math.round(yaw);
+              //  console.log('sending yaw to bot', yaw);
                send(fcYawCmd, yaw);
              }
 export const stop = () => {
@@ -125,17 +131,17 @@ export const pwrOff = () => {
 export const setYawPk = yawPk => {
                console.log(
                   'sending yawPk to bot', yawPk);
-               send(fcYawPkS, yawPk);
+               send(fcYawPkS, Math.round(yawPk * 100));
              }
 export const setYawIk = yawIk => {
                console.log(
                   'sending yawIk to bot', yawIk);
-               send(fcYawIkS, yawIk);
+               send(fcYawIkS, Math.round(yawIk * 100));
              }
 export const setMaxYawIk = maxYawIk => {
                console.log(
                   'sending maxYawIk to bot', maxYawIk);
-               send(fcMaxYawIkS, maxYawIk);
+               send(fcMaxYawIkS, Math.round(maxYawIk * 100));
              }
 export const setBoostK = boostK => {
                console.log(
