@@ -76,10 +76,13 @@
   const calibrateEvt = ()=> {
     console.log('emitting calibration message');
     evtBus.emit('showMessage', {
-      messageText:  'Keep T-Bot still and press start.',
+      messageText:  'Keep T-Bot still on a level ' +
+                        'surface and press start.',
+      buttonText2:  'Cancel',
+      callbackText: 'closeMessage',
       buttonText:   'Start',
       callbackText: 'startCalibration',
-      busyIndicator: 'off'}
+      busyIndicator: true}
     );
   }
   const setMotionEvt = ()=> {

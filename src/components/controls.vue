@@ -22,11 +22,15 @@
 
   Message(v-show="messageOpen"
           :messageText="messageText"
+          :messageText2="messageText2"
+          :busy="busy"
+          :buttonText2="buttonText2"
+          :callbackText2="callbackText2"
           :buttonText="buttonText"
           :callbackText="callbackText"
-          :busyIndicator="busyIndicator"
            style="position:fixed; z-index:1001;  \
-                  top:90px; right:70px;")
+                  left:5vw; width: 70vw;        \
+                  top:90px;")
 </template>
 
 <script setup>
@@ -41,31 +45,48 @@
   const menuOpen      = ref(false);
   const messageOpen   = ref(false)
 
-  const messageText   = ref('');
-  const buttonText    = ref('');
-  const callbackText  = ref('');
-  const busyIndicator = ref('off');
+  let msgId = '';
 
   evtBus.on('menuOpen', open => {
     menuOpen.value = open;
   });
 
+  ///////// POPUP MESSAGE MANAGEMENT ///////////
+  const messageText   = ref('');
+  const messageText2  = ref('');
+  const busy          = ref(false);
+  const buttonText2   = ref('');
+  const callbackText2 = ref('');
+  const buttonText    = ref('');
+  const callbackText  = ref('');
+
   evtBus.on('showMessage', (params) => {
-    console.log('showing message', params);
+    console.log('showing message', params.id || '');
     messageText.value   = params.messageText;
+    messageText2.value  = params.messageText2;
+    busy.value          = params.busy;
+    buttonText2.value   = params.buttonText2;
+    callbackText2.value = params.callbackText2;
     buttonText.value    = params.buttonText;
     callbackText.value  = params.callbackText;
-    busyIndicator.value = params.busyIndicator;
+    msgId               = params.id;
     messageOpen.value   = true;
-    global.curMsg       = params.messageText;
     evtBus.emit('menuOpen', false);
   });
 
-  evtBus.on('closeMessage', () => {
-    console.log('closing message');
-    busyIndicator.value = "off";
-    messageOpen.value = false;
-    global.curMsg = null;
+  evtBus.on('closeMessage', (id) => {
+    if(!id || id == msgId) {
+      console.log('closing message', id);
+      messageText.value   = '';
+      messageText2.value  = '';
+      busy.value          = false; 
+      buttonText2.value   = ''; 
+      callbackText2.value = ''; 
+      buttonText.value    = ''; 
+      callbackText.value  = '';       
+      messageOpen.value   = false;
+      msgId = '';
+    }
   });
 
 </script>

@@ -45,8 +45,6 @@
   const fcCalibDone = 'c';
   const fcError     = 'e';
 
-  global.curStatus = {};
-
   evtBus.on('stop',   () => { stop();   });
   evtBus.on('pwrOff', () => { pwrOff(); });
 
@@ -63,7 +61,7 @@
       messageText:  'Calibrating...',
       buttonText:   'Cancel',
       callbackText: 'closeCalibration',
-      busyIndicator:'on',
+      busyIndicator:true,
     });
     calibrate();
     calibrating = true;
@@ -77,7 +75,7 @@
       messageText:  'Calibrating finished.',
       buttonText:   'Close',
       callbackText: 'closeCalibration',
-      busyIndicator: 'off',
+      busyIndicator: false,
     });
   };
 
@@ -87,27 +85,31 @@
     evtBus.emit('menuOpen', false);
   });
 
-  const noWsMsg = 'No connection to T-Bot.';
-
   const showNoWebsocket = () => {
     console.log('showNoWebsocket');
     evtBus.emit('menuOpen', false);
-
-    evtBus.emit('showMessage', { messageText:noWsMsg });
+    evtBus.emit('showMessage',
+            {messageText:  'Not connected to a T-Bot. ',
+             messageText2: 'Turn on the T-Bot and set ' +
+                           'your phone wi-fi to ' +
+                           'T-Bot-xxx.', 
+             id: 'wsOpen'});  
   };
 
   let websocketOpen = false;
+  global.curStatus  = {};
 
   const websocketCB = (status) => {
     if(status.websocketOpen !== undefined) {
       if(websocketOpen && !status.websocketOpen)
         showNoWebsocket();
-      if(!websocketOpen &&  status.websocketOpen &&
-          global.curMsg == noWsMsg)
-        evtBus.emit('closeMessage');
+      if(!websocketOpen && status.websocketOpen)
+        evtBus.emit('closeMessage', 'wsOpen');
       websocketOpen = status.websocketOpen;
       return;
     }
+    Object.assign(global.curStatus, status);
+
     if(status?.[fcCalibDone] === 1)
       calibrationDone();
     evtBus.emit('rssi', status?.[fcRssi]);
@@ -120,6 +122,7 @@
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
+    showNoWebsocket();
   });
 </script>
 
