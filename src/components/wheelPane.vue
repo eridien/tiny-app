@@ -3,16 +3,25 @@
                   justify-content:center;   \
                   align-items:center;")
   img(id="wheel" src="/images/steering-wheel.png"
-        :style="{transform:`rotate(${angle}deg)`,  \
+        :style="{transform:`rotate(${2*angle}deg)`,  \
                  width:'65vmin', height:'65vmin'}" )
 </template>
 
 <script setup>
   import {ref, onMounted, inject} from 'vue'
 
+  const global = inject('global');
   const evtBus = inject('evtBus'); 
 
   const angle = ref(0);
+
+// max steering sensitivity is SENS_FACTOR**5-steeringSens
+  const SENS_FACTOR = 1.25;
+  let steeringSens;
+  evtBus.on('steeringSens', (sens) => {
+    console.log("evtBus.on('steeringSens:'", sens);
+    steeringSens = sens;
+  });
 
   onMounted(() => { 
 
@@ -92,7 +101,10 @@
             touch = chgdTouch;
         }
         if(touch != null) {
+          // drawWheel also sets angle.value
           drawWheel(touch.pageX, touch.pageY);
+          angle.value *= 
+              Math.pow(SENS_FACTOR, global.steeringSens-5);
           evtBus.emit('angle', angle.value);
         }
       },

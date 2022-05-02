@@ -7,12 +7,12 @@
              justifyContent:space-between;                    \
              alignItems:stretch;")
     span Min
-    div(style="position:relative; left:-7px;") {{sensVal}}
+    div {{sensVal}}
     span Max
 
   input(id="sens" type="range" 
         style="width:100%;" @input="sensEvt" 
-        min="1" max="10" step="1" value="5")
+        min="1" max="9" step="1" value="5")
 
   div(@click="doneClick"
       style="float:right; font-size:26px;   \
@@ -31,14 +31,12 @@
   const sensEvt = (event) => {
     const val = event.target.value;
     sensVal.value = val;
-    // wheelPane.vue uses localStorage
+    evtBus.emit('steeringSens', sensVal.value);
     localStorage.setItem('steeringSens', val);
   }
 
   onMounted(()=> {
     const sensEle = document.getElementById('sens');
-    if(!localStorage.getItem('steeringSens'))
-        localStorage.setItem('steeringSens', '5');
     const val = localStorage.getItem('steeringSens');
     sensVal.value = val;
     sensEle.value = val;

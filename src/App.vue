@@ -14,8 +14,9 @@
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
   import { initWebsocket,  
-           stop, pwrOff, calibrate,
-           setYawPk, setYawIk, setMaxYawIk, setBoostK }
+           setYaw, stop, pwrOff, calibrate,
+           setYawPk, setYawIk, setMaxYawIk, setBoostK, }
+          //  getYawPk, getYawIk, getMaxYawIk, getBoostK,}
           from "./websocket.js";
 
   const global = inject('global');
@@ -40,13 +41,14 @@
   const fcYawPkC    = 'm';
   const fcYawIkC    = 'n';
   const fcMaxYawIC  = 'o';
-  const fcBoostKStC    = 'q';
+  const fcBoostKStC = 'q';
 
   const fcCalibDone = 'c';
   const fcError     = 'e';
 
-  evtBus.on('stop',   () => { stop();   });
-  evtBus.on('pwrOff', () => { pwrOff(); });
+  evtBus.on('angle',  (angle) => {setYaw(angle); });
+  evtBus.on('stop',   ()      => {stop();        });
+  evtBus.on('pwrOff', ()      => {pwrOff();      });
 
   evtBus.on('setYawPk',    (awPk)  => { setYawPk(awPk);  });
   evtBus.on('setYawIk',    (awIk)  => { setYawIk(awIk);  });
@@ -122,7 +124,7 @@
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
-    showNoWebsocket();
+    // showNoWebsocket();
   });
 </script>
 

@@ -4,12 +4,12 @@
              minWidth: 'calc(100vw-30px)',            \
              minHeight:`calc(100vh - ${global.HDR_HGT}px)`}")
     
-  vel-pane(
+  Vel-pane(
       :style="{border:'1px solid black',               \
                width:'24%',                            \
                minHeight:`calc(100vh - ${global.HDR_HGT}px)`}")
 
-  wheel-pane(
+  Wheel-pane(
       :style="{border:'1px solid black', width:'75%',  \
               minHeight:`calc(100vh - ${global.HDR_HGT}px)`}")
 
@@ -35,12 +35,17 @@
 
 <script setup>
   import {ref, inject} from 'vue'
-  import  velPane      from './velPane.vue';
-  import  wheelPane    from './wheelPane.vue';
+  import  VelPane      from './velPane.vue';
+  import  WheelPane    from './wheelPane.vue';
   import  Message      from './message.vue';
 
   const global = inject('global');
   const evtBus = inject('evtBus');   
+
+  const val = localStorage.getItem('steeringSens');  
+  if(val === null)
+    localStorage.setItem('steeringSens', '5');
+  global.steeringSens= val;
 
   const menuOpen      = ref(false);
   const messageOpen   = ref(false)

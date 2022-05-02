@@ -110,7 +110,7 @@ export const setVel = vel => {
                send(fcVelCmd, vel);
              }
 export const setYaw = yaw => {
-               console.log('sending yaw to bot', yaw);
+               console.log('sending yaw to bot', yaw.toFixed(2));
                send(fcYawCmd, yaw);
              }
 export const stop = () => {
