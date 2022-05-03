@@ -9,6 +9,8 @@
 </template>
 
 <script setup>
+  const SHOW_INIT_WS = false;
+
   import {onMounted, ref, inject, 
           getCurrentInstance } from 'vue'
   import  Header     from './components/header.vue'
@@ -91,11 +93,11 @@
     evtBus.emit('menuOpen', false);
   });
 
-  const showNoWebsocket = () => {
-    console.log('showNoWebsocket');
+  const showNoWebsocket = (initial = false) => {
+    console.log('showNoWebsocket', {initial});
     evtBus.emit('menuOpen', false);
     evtBus.emit('showMessage',
-            {messageText:  'Not connected to a T-Bot. ',
+            {messageText:  'Waiting for connection to a T-Bot. ',
              messageText2: 'Turn on the T-Bot and set ' +
                            'your phone wi-fi to ' +
                            'T-Bot-xxx.', 
@@ -128,6 +130,7 @@
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
-    // showNoWebsocket();
+    
+    if(SHOW_INIT_WS) showNoWebsocket(true);
   });
 </script>

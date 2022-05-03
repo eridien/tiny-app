@@ -41,7 +41,6 @@
 
   const dispVal = ref(5);
 
-  const ILLEGAL_WIFI_NAME_CHARS = '{":,}?$[\\]+';
   const wifiName = ref(global.wifiName);
 
   const sensEvt = (event) => {
@@ -51,6 +50,7 @@
     localStorage.setItem('steeringSens', val);
   }
   let nameEle;
+  let nameAtOpen;
 
   onMounted(()=> {
     // input ele
@@ -60,11 +60,30 @@
     dispVal.value = global.steeringSens;
     // wifiName text field element
     nameEle = document.getElementById('wifiName');
+    nameAtOpen = nameEle.value;
   });
+  const RE_ILLEGAL_NAME_CHARS = ;
+  const illegalCharInName = 
+          Regexp('[{":\\,}?$\[\]+]','g');
 
   const doneClick = () => {
-    console.log("doneClick, setting wifiName:", nameEle.value);
-    evtBus.emit("wifiName", nameEle.value);
     evtBus.emit('menuOpen', false);
+
+    let name = nameEle.value.trim();
+    if(name.length === 0 || 
+       name === nameAtOpen) return;
+
+      // evtBus.emit('showMessage', {
+      //   messageText:  'Name',
+      //   buttonText2:  'Cancel',
+      //   callbackText: 'closeMessage',
+      //   buttonText:   'Start',
+      //   callbackText: 'startCalibration',
+      //   busyIndicator: true}
+    // );
+    name = name.replace(illegalCharInName, '');
+    if(name.length === 0) return;
+    console.log("doneClick, setting wifiName:", name);
+    evtBus.emit("wifiName", name);
   }
 </script>
