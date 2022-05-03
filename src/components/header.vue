@@ -17,14 +17,14 @@
       style="width:35px; height:35px;         \
              margin-top:8px; margin-right:48px;")
 
-  BurgerMenu(v-if="menuOpen"
-             style="position:fixed; z-index:1000;  \
-                    top:70px; right:60px;")
+  Menu(v-if="menuOpen"
+       style="position:fixed; z-index:1000;  \
+             top:70px; right:60px;")
 </template>
 
 <script setup>
 import {ref, inject} from 'vue';
-import  BurgerMenu from './burgerMenu.vue'
+import  Menu from './menu.vue'
 
 const evtBus = inject('evtBus');   
 

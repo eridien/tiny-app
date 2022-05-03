@@ -2,18 +2,19 @@ const SHOW_SENDS = false;
 const SHOW_RECVS = false;
 
 // commands to bot
-const fcReport    = 'R';
-const fcVelCmd    = 'V';
-const fcYawCmd    = 'Y';
-const fcStopCmd   = 'S';
-const fcPowerOff  = 'P';
-const fcCalibrate = 'C';
+const fcReport     = 'R';
+const fcVelCmd     = 'V';
+const fcYawCmd     = 'Y';
+const fcStopCmd    = 'S';
+const fcPowerOff   = 'P';
+const fcCalibrate  = 'C';
+const fcNameS      = 'N';
 
 // set motion constants
-const fcYawPkS     = 'M';
-const fcYawIkS     = 'N';
-const fcMaxYawIkS  = 'O';
-const fcBoostKS    = 'Q';
+const fcYawPkS     = 'F';
+const fcYawIkS     = 'G';
+const fcMaxYawIkS  = 'H';
+const fcBoostKS    = 'J';
 
 let hostname = '';
 

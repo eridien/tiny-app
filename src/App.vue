@@ -27,6 +27,7 @@
 // status from bot
   const fcBatV      = 'b';
   const fcRssi      = 'w';
+  const fcName      = 'n';
 
 // motion state from bot
   const fcAccelOfs  = 'a';
@@ -38,10 +39,10 @@
   const fcRightPwm  = 'r';
 
 // motion constants from bot
-  const fcYawPkC    = 'm';
-  const fcYawIkC    = 'n';
-  const fcMaxYawIC  = 'o';
-  const fcBoostKStC = 'q';
+  const fcYawPkC    = 'f';
+  const fcYawIkC    = 'g';
+  const fcMaxYawIC  = 'h';
+  const fcBoostKStC = 'j';
 
   const fcCalibDone = 'c';
   const fcError     = 'e';
