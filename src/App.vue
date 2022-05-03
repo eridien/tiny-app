@@ -15,7 +15,8 @@
   import  Controls   from './components/controls.vue'
   import { initWebsocket,  
            setYaw, stop, pwrOff, calibrate,
-           setYawPk, setYawIk, setMaxYawIk, setBoostK, }
+           setYawPk, setYawIk, setMaxYawIk, 
+           setName, setBoostK}
           //  getYawPk, getYawIk, getMaxYawIk, getBoostK,}
           from "./websocket.js";
 
@@ -46,6 +47,8 @@
 
   const fcCalibDone = 'c';
   const fcError     = 'e';
+
+  global.fcName=fcName;
 
   evtBus.on('yaw',    (yaw)   => {setYaw(yaw); });
   evtBus.on('stop',   ()      => {stop();        });
@@ -128,6 +131,3 @@
     // showNoWebsocket();
   });
 </script>
-
-<style>
-</style>

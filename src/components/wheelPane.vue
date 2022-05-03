@@ -107,6 +107,3 @@
     );
   });
 </script>
-
-<style>
-</style>

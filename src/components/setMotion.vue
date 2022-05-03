@@ -47,6 +47,3 @@
   const doneClick = () => 
           evtBus.emit('menuOpen', false);
 </script>
-
-<style>
-</style>

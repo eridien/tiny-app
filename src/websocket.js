@@ -1,4 +1,4 @@
-const SHOW_SENDS = false;
+const SHOW_SENDS = true;
 const SHOW_RECVS = false;
 
 // commands to bot
@@ -27,9 +27,9 @@ let webSocket   = null;
 
 let lastRecvStr = "";
 let lastRecvVal = {};
+let sendNow = false;
 
-let sendNow     = false;
-const wsRecv = (event) => {
+const wsRecv  = (event) => {
   const recvdStr = event.data;
   if(recvdStr[0] != "{") {
     if(recvdStr[1] != "}") 
@@ -150,6 +150,10 @@ export const setBoostK = boostK => {
                send(fcBoostKS, boostK);
              }
 
+export const setName = (name) => {
+               console.log(`sending name "${name}" to bot`);
+               send(fcNameS,name);
+             };
 export const calibrate = () => {
                console.log('sending calibrate to bot');
                send(fcCalibrate);

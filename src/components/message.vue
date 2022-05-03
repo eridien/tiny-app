@@ -14,7 +14,7 @@
           style="float:right;") {{buttonText}}
 </template>
 
-<style>
+<style scoped>
   .button {
     font-size:23px;
     background-color:#ddd;

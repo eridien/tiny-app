@@ -114,6 +114,3 @@
     drawSlider(0);
   });
 </script>
-
-<style>
-</style>

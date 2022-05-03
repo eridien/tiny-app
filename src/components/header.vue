@@ -69,6 +69,3 @@ evtBus.on('menuOpen', (open) => {
 );
 
 </script>
-
-<style>
-</style>

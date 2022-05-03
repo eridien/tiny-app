@@ -20,10 +20,11 @@
              alignItems:stretch;")
   div(style="position:relative;")
     div(style="width:25%;float:left") T-Bot-
+
     input(id="wifiName" type="text" 
-          style="width:60%;height:25px; font-size:25px;       \
+          style="width:60%;height:25px; font-size:20px;       \
                   float:left;" 
-          v-model="wifiName")
+         :value="global.curStatus[global.fcName]")
 
   div(@click="doneClick"
       style="float:right; font-size:26px;   \
@@ -41,7 +42,6 @@
   const dispVal = ref(5);
 
   const ILLEGAL_WIFI_NAME_CHARS = '{":,}?$[\\]+';
-  
   const wifiName = ref(global.wifiName);
 
   const sensEvt = (event) => {
@@ -50,6 +50,7 @@
     global.steeringSens = val;
     localStorage.setItem('steeringSens', val);
   }
+  let nameEle;
 
   onMounted(()=> {
     // input ele
@@ -57,11 +58,13 @@
     sensEle.value = global.steeringSens;
     // display
     dispVal.value = global.steeringSens;
+    // wifiName text field element
+    nameEle = document.getElementById('wifiName');
   });
 
-  const doneClick = () => 
-          evtBus.emit('menuOpen', false);
+  const doneClick = () => {
+    console.log("doneClick, setting wifiName:", nameEle.value);
+    evtBus.emit("wifiName", nameEle.value);
+    evtBus.emit('menuOpen', false);
+  }
 </script>
-
-<style>
-</style>
