@@ -1,5 +1,5 @@
 <template lang='pug'>
-#message(style="border-radius:12px; font-size:26px;  \
+#message(style="border-radius:12px; font-size:13px;  \
                 background-color:white;              \
                 margin:10px; padding:20px;") 
   div                           {{messageText}}
@@ -16,7 +16,7 @@
 
 <style scoped>
   .button {
-    font-size:23px;
+    font-size:11px;
     background-color:#ddd;
     border-radius:6px;
     padding:5px; 

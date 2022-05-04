@@ -1,5 +1,5 @@
 <template lang='pug'>
-#menu(style="border-radius:12px; font-size:28px; \
+#menu(style="border-radius:12px; font-size:14px; \
              background-color:#c8c8c8;           \
              display:table;\
              position:relative;")
