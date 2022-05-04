@@ -18,7 +18,7 @@
   import { initWebsocket,  
            setYaw, stop, pwrOff, calibrate,
            setYawPk, setYawIk, setMaxYawIk, 
-           setName, setBoostK}
+           setName, setBoostK, resumeWs}
           //  getYawPk, getYawIk, getMaxYawIk, getBoostK,}
           from "./websocket.js";
 
@@ -52,15 +52,15 @@
 
   global.fcName=fcName;
 
-  evtBus.on('yaw',    (yaw)   => {setYaw(yaw); });
-  evtBus.on('stop',   ()      => {stop();        });
-  evtBus.on('pwrOff', ()      => {pwrOff();      });
-
-  evtBus.on('setYawPk',    (awPk)  => { setYawPk(awPk);   });
-  evtBus.on('setYawIk',    (awIk)  => { setYawIk(awIk);   });
-  evtBus.on('setMaxYawIk', (max)   => { setMaxYawIk(max); });
-  evtBus.on('setBoostK',   (boost) => { setBoostK(boost); });
-  evtBus.on("setWifiName", (name)  => { setName(name);    }); 
+  evtBus.on('yaw',         (yaw)   => {setYaw(yaw);      });
+  evtBus.on('stop',        ()      => {stop();           });
+  evtBus.on('pwrOff',      ()      => {pwrOff();         });
+  evtBus.on('setYawPk',    (awPk)  => {setYawPk(awPk);   });
+  evtBus.on('setYawIk',    (awIk)  => {setYawIk(awIk);   });
+  evtBus.on('setMaxYawIk', (max)   => {setMaxYawIk(max); });
+  evtBus.on('setBoostK',   (boost) => {setBoostK(boost); });
+  evtBus.on("setWifiName", (name)  => {setName(name);    }); 
+  evtBus.on("resumeWs",    ()      => {resumeWs();       }); 
 
   let calibrating = false;
 
@@ -102,18 +102,28 @@
              messageText2: 'Turn on the T-Bot and set ' +
                            'your phone wi-fi to ' +
                            'T-Bot-xxx.', 
-             id: 'wsOpen'});  
+             id: 'noWsMsg'});  
   };
 
   let websocketOpen = false;
   global.curStatus  = {};
 
   const websocketCB = (status) => {
+    if(status.newerConn !== undefined) {
+      evtBus.emit('showMessage',
+          {messageText: 'Another phone has connected to ' +
+                        'this T-Bot and you have been '   +
+                        'disconnected. Reconnecting '     +
+                        'will disconnect the other phone.',
+          buttonText:   'Reconnect',
+          ignoreNoWs:   true,
+          callbackText: 'resumeWs'});  
+    }
     if(status.websocketOpen !== undefined) {
       if(websocketOpen && !status.websocketOpen)
         showNoWebsocket();
       if(!websocketOpen && status.websocketOpen)
-        evtBus.emit('closeMessage', 'wsOpen');
+        evtBus.emit('closeMessage', 'noWsMsg');
       websocketOpen = status.websocketOpen;
       return;
     }

@@ -66,9 +66,16 @@
   const callbackText2 = ref('');
   const buttonText    = ref('');
   const callbackText  = ref('');
+  let   ignoreNoWs    = false;
 
   evtBus.on('showMessage', (params) => {
-    console.log('showing message', params.id || '');
+    console.log('showing message', params.id);
+    console.log('ignoreNoWs:',     params.ignoreNoWs);
+    if(params.id == 'noWsMsg' && ignoreNoWs) {
+      console.log('ignoring noWsMsg');
+      return;
+    }
+    ignoreNoWs          = params.ignoreNoWs;
     messageText.value   = params.messageText;
     messageText2.value  = params.messageText2;
     busy.value          = params.busy;

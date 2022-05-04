@@ -25,15 +25,24 @@ let webSocket   = null;
 
 //////////////  RECEIVE  /////////////////
 
-let lastRecvStr = "";
-let lastRecvVal = {};
-let sendNow = false;
+let lastRecvStr    = "";
+let lastRecvVal    = {};
+let sendNow        = false;
+let waitingToRetry = false;
+let wsBlocked      = false;
 
 const wsRecv  = (event) => {
   const recvdStr = event.data;
   if(recvdStr[0] != "{") {
-    if(recvdStr[1] != "}") 
+    if(recvdStr[1] != "}") {
+      // we have a plain-text, non-json, message
       console.log(`--> MSG: ${recvdStr}`);
+      if(recvdStr == 'newer connection') {
+        appCB?.({newerConn:true});
+        waitingToRetry = false;
+        wsBlocked      = true;
+      }
+    }
     return;
   }
   sendNow = true;
@@ -57,7 +66,7 @@ const wsRecv  = (event) => {
     if(haveChgdVal) {
       if(SHOW_RECVS)
         console.log("--> recvd", chgdVals);
-      appCB(chgdVals);
+      appCB?.(chgdVals);
     }
   }
 }
@@ -164,8 +173,6 @@ export const calibrate = () => {
 
 //////////////  MANAGE WEBSOCKET  /////////////////
 
-let waitingToRetry = false;
-
 const connectToWs = async () => {
   waitingToRetry = false;
   console.log("trying to open websocket");
@@ -174,9 +181,11 @@ const connectToWs = async () => {
   webSocket.onmessage = wsRecv;
 
   webSocket.addEventListener('open', (event) => {
+    if(wsBlocked) return;
+
     console.log('webSocket connected:', event);
     websocketOpen = true;
-    appCB({websocketOpen});
+    appCB?.({websocketOpen});
     pendingCmds   = null;
   });
 
@@ -192,7 +201,7 @@ const connectToWs = async () => {
       sentPwrOff = false;
       return;
     }
-    if(!waitingToRetry) {
+    if(!wsBlocked && !waitingToRetry) {
       waitingToRetry = true;
       setTimeout(connectToWs, 2000);
     }
@@ -203,11 +212,19 @@ const connectToWs = async () => {
     websocketOpen = false;
     appCB({websocketOpen});
     pendingCmds = null;
-    if(!waitingToRetry) {
+    if(!wsBlocked && !waitingToRetry) {
       waitingToRetry = true;
       setTimeout(connectToWs, 2000);
     }
   });
+}
+
+export const resumeWs = () => {
+  wsBlocked = false;
+  if(!waitingToRetry) {
+    waitingToRetry = true;
+    setTimeout(connectToWs, 2000);
+  }
 }
 
 const REPORT_INTERVAL = 250;
