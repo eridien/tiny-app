@@ -1,4 +1,4 @@
-const SHOW_SENDS = true;
+const SHOW_SENDS = false;
 const SHOW_RECVS = false;
 
 // commands to bot
@@ -56,7 +56,7 @@ const wsRecv  = (event) => {
     }
     if(haveChgdVal) {
       if(SHOW_RECVS)
-        console.log("---> recvd", chgdVals);
+        console.log("--> recvd", chgdVals);
       appCB(chgdVals);
     }
   }
@@ -76,7 +76,7 @@ const sendAllCmds = async () => {
     sentPwrOff = (pendingCmds?.[fcPowerOff] !== undefined);
     pendingCmds = null;
     if(SHOW_SENDS && str != '{"R":0}')
-     console.log(`<--- msg sent: ${str}`);
+     console.log(`<-- msg sent: ${str}`);
   }
   catch(e) {
     console.log(`Error sending string ` +
@@ -84,9 +84,10 @@ const sendAllCmds = async () => {
   }
   sendNow = false;
 }
-const SEND_TIMEOUT = 1000;
 
-let lastSendTime = 0;
+const SEND_TIMEOUT = 1000;
+let   lastSendTime = 0;
+
 setInterval(async () => {
   const now = Date.now();
   if(sendNow || (now-lastSendTime) > SEND_TIMEOUT) {
@@ -98,7 +99,8 @@ setInterval(async () => {
 const lastFcVal = {};
 
 const send = (code, val = null) => {
-  // console.log(`send:`, {code, val});
+  if(code === fcNameS) 
+      console.log(`<-- send:`, {code, val});
   if(val === lastFcVal[code]) return;
   const sendVal = (val === null ? 0 : val);
   if(pendingCmds === null) 
@@ -152,7 +154,7 @@ export const setBoostK = boostK => {
 
 export const setName = (name) => {
                console.log(`sending name "${name}" to bot`);
-               send(fcNameS,name);
+               send(fcNameS, name);
              };
 export const calibrate = () => {
                console.log('sending calibrate to bot');

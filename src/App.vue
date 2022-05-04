@@ -56,10 +56,11 @@
   evtBus.on('stop',   ()      => {stop();        });
   evtBus.on('pwrOff', ()      => {pwrOff();      });
 
-  evtBus.on('setYawPk',    (awPk)  => { setYawPk(awPk);  });
-  evtBus.on('setYawIk',    (awIk)  => { setYawIk(awIk);  });
-  evtBus.on('setMaxYawIk', (max)   => { setMaxYawIk(max);});
-  evtBus.on('setBoostK',   (boost) => { setBoostK(boost);});
+  evtBus.on('setYawPk',    (awPk)  => { setYawPk(awPk);   });
+  evtBus.on('setYawIk',    (awIk)  => { setYawIk(awIk);   });
+  evtBus.on('setMaxYawIk', (max)   => { setMaxYawIk(max); });
+  evtBus.on('setBoostK',   (boost) => { setBoostK(boost); });
+  evtBus.on("setWifiName", (name)  => { setName(name);    }); 
 
   let calibrating = false;
 
@@ -130,7 +131,7 @@
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
-    
+
     if(SHOW_INIT_WS) showNoWebsocket(true);
   });
 </script>

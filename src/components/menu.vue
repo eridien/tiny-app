@@ -79,7 +79,7 @@
       messageText:  'Keep T-Bot still on a level ' +
                         'surface and press start.',
       buttonText2:  'Cancel',
-      callbackText: 'closeMessage',
+      callbackText2:'closeMessage',
       buttonText:   'Start',
       callbackText: 'startCalibration',
       busyIndicator: true}

@@ -9,28 +9,30 @@
     span Min
     div {{dispVal}}
     span Max
-
   input(id="sens" type="range" 
         style="width:100%;" @input="sensEvt" 
         min="1" max="9" step="1" value="5")
+
+  hr(style="color:black; margin:26px;")
 
   div(style="margin:15px 0 15px 0") Wi-Fi Name
   div(style="position:relative; font-size:25px; display:flex; \
              justifyContent:left;                             \
              alignItems:stretch;")
-  div(style="position:relative;")
+  div(style="position:relative; margin:5px 0 10px 0;")
     div(style="width:25%;float:left") T-Bot-
-
     input(id="wifiName" type="text" 
           style="width:60%;height:25px; font-size:20px;       \
                   float:left;" 
          :value="global.curStatus[global.fcName]")
 
+  hr(style="color:black; margin-top:56px;")
+
   div(@click="doneClick"
-      style="float:right; font-size:26px;   \
-             background-color:#ddd;         \
-             border-radius:6px;             \
-             padding:5px; margin:20px 5px 0 0") Done
+      style="float:right; font-size:26px;           \
+             background-color:#ddd;                 \
+             border-radius:6px;                     \
+             padding:5px; margin:5px 5px 0 0") Done
 </template>
 
 <script setup>
@@ -49,41 +51,65 @@
     global.steeringSens = val;
     localStorage.setItem('steeringSens', val);
   }
+
   let nameEle;
   let nameAtOpen;
 
   onMounted(()=> {
-    // input ele
+    // sensitivity input ele
     const sensEle = document.getElementById('sens');
     sensEle.value = global.steeringSens;
     // display
     dispVal.value = global.steeringSens;
-    // wifiName text field element
+    // wifiName input element
     nameEle = document.getElementById('wifiName');
     nameAtOpen = nameEle.value;
   });
-  const RE_ILLEGAL_NAME_CHARS = ;
-  const illegalCharInName = 
-          Regexp('[{":\\,}?$\[\]+]','g');
+
+  evtBus.on('savedName', () => {
+    evtBus.emit('showMessage', {
+      messageText:  'Wifi name was saved. ' +
+                    'Please turn T-Bot back on.',
+      callbackText: 'closeMessage',
+      buttonText:   'Ok'}
+    );
+  });
+
+  // This doesn't work ???
+  // const reBadChars = new RegExp(/[{":\\,}?\$\[\]+]/,'g');
 
   const doneClick = () => {
     evtBus.emit('menuOpen', false);
 
-    let name = nameEle.value.trim();
-    if(name.length === 0 || 
-       name === nameAtOpen) return;
+    let   name    = nameEle.value.trim();
+    const newName = name;
+    let   strlen  = name.length;
+    if(name === nameAtOpen) return;
+    
+    const hadBadChar = /[{":\\,}?\$\[\]+]/.test(name);
+    if(hadBadChar)
+      name = name.replace(/[{":\\,}?\$\[\]+]/g, ' ').trim();
+    if(name.length == 0) {
+      evtBus.emit('showMessage', {
+        messageText:  `Invalid name "${newName}" was not saved.`,
+        callbackText: 'closeMessage',
+        buttonText:   'Ok'}
+      );
+      return;
+    }
+    console.log("setting wifiName:", name);
+    global.wifiName = name;
+    evtBus.emit("setWifiName", name);
 
-      // evtBus.emit('showMessage', {
-      //   messageText:  'Name',
-      //   buttonText2:  'Cancel',
-      //   callbackText: 'closeMessage',
-      //   buttonText:   'Start',
-      //   callbackText: 'startCalibration',
-      //   busyIndicator: true}
-    // );
-    name = name.replace(illegalCharInName, '');
-    if(name.length === 0) return;
-    console.log("doneClick, setting wifiName:", name);
-    evtBus.emit("wifiName", name);
+    if(hadBadChar) {
+      evtBus.emit('showMessage', {
+        messageText:  'The characters {}[]":\,?$+ ' +
+                      'are not allowed and have '   +
+                      'been replaced with spaces.',
+        callbackText: 'savedName',
+        buttonText:   'Ok'}
+      );
+    }
+    else evtBus.emit("savedName");
   }
 </script>
