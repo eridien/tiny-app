@@ -9,8 +9,6 @@
 </template>
 
 <script setup>
-  const SHOW_INIT_WS = false;
-
   import {onMounted, ref, inject, 
           getCurrentInstance } from 'vue'
   import  Header     from './components/header.vue'
@@ -21,6 +19,8 @@
            setName, setBoostK, resumeWs}
           //  getYawPk, getYawIk, getMaxYawIk, getBoostK,}
           from "./websocket.js";
+          
+  const SHOW_INIT_WS = false;
 
   const global = inject('global');
   const evtBus = inject('evtBus'); 
@@ -111,12 +111,12 @@
   const websocketCB = (status) => {
     if(status.newerConn !== undefined) {
       evtBus.emit('showMessage',
-          {messageText: 'Another phone has connected to ' +
+          {messageText: 'Another controller has connected to ' +
                         'this T-Bot and you have been '   +
                         'disconnected. Reconnecting '     +
-                        'will disconnect the other phone.',
+                        'will disconnect the other controller.',
           buttonText:   'Reconnect',
-          ignoreNoWs:   true,
+          ignoreNoWs:    true,
           callbackText: 'resumeWs'});  
     }
     if(status.websocketOpen !== undefined) {

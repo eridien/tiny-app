@@ -181,8 +181,7 @@ const connectToWs = async () => {
   webSocket.onmessage = wsRecv;
 
   webSocket.addEventListener('open', (event) => {
-    if(wsBlocked) return;
-
+    wsBlocked = false;
     console.log('webSocket connected:', event);
     websocketOpen = true;
     appCB?.({websocketOpen});
