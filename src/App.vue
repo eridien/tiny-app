@@ -19,8 +19,13 @@
            setName, setBoostK, resumeWs}
           //  getYawPk, getYawIk, getMaxYawIk, getBoostK,}
           from "./websocket.js";
-          
+
   const SHOW_INIT_WS = false;
+
+  const setYawPkDbg    =    1.0;
+  const setYawIkDbg    =    0.0;
+  const setMaxYawIkDbg =  255.0;
+  const setBoostKDbg   =      0;
 
   const global = inject('global');
   const evtBus = inject('evtBus'); 
@@ -66,6 +71,7 @@
 
   evtBus.on('startCalibration', () => { 
     console.log(`startCalibration`);
+    stop();
     evtBus.emit('showMessage', {
       messageText:  'Calibrating...',
       buttonText:   'Cancel',
@@ -122,8 +128,14 @@
     if(status.websocketOpen !== undefined) {
       if(websocketOpen && !status.websocketOpen)
         showNoWebsocket();
-      if(!websocketOpen && status.websocketOpen)
+      if(!websocketOpen && status.websocketOpen) {
         evtBus.emit('closeMessage', 'noWsMsg');
+        
+        evtBus.emit('setYawPk',    setYawPkDbg   );
+        evtBus.emit('setYawIk',    setYawIkDbg   );
+        evtBus.emit('setMaxYawIk', setMaxYawIkDbg);
+        evtBus.emit('setBoostK',   setBoostKDbg  );
+      }
       websocketOpen = status.websocketOpen;
       return;
     }

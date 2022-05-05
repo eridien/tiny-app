@@ -1,4 +1,4 @@
-const SHOW_SENDS = false;
+const SHOW_SENDS = true;
 const SHOW_RECVS = false;
 
 // commands to bot
@@ -25,7 +25,6 @@ let webSocket   = null;
 
 //////////////  RECEIVE  /////////////////
 
-let lastRecvStr    = "";
 let lastRecvVal    = {};
 let sendNow        = false;
 let waitingToRetry = false;
@@ -79,6 +78,9 @@ let websocketOpen = false;
 
 const sendAllCmds = async () => {
   if(!websocketOpen || pendingCmds === null) return;
+
+  console.log("sendAllCmds", {pendingCmds});
+
   const str = JSON.stringify(pendingCmds);
   try{
     await webSocket.send(str);
@@ -108,8 +110,7 @@ setInterval(async () => {
 const lastFcVal = {};
 
 const send = (code, val = null) => {
-  if(code === fcNameS) 
-      console.log(`<-- send:`, {code, val});
+  console.log("sendAllCmds", {code, val});
   if(val === lastFcVal[code]) return;
   const sendVal = (val === null ? 0 : val);
   if(pendingCmds === null) 
@@ -185,7 +186,6 @@ const connectToWs = async () => {
     console.log('webSocket connected:', event);
     websocketOpen = true;
     appCB?.({websocketOpen});
-    pendingCmds   = null;
   });
 
   webSocket.addEventListener('error', (event) => {
@@ -226,7 +226,7 @@ export const resumeWs = () => {
   }
 }
 
-const REPORT_INTERVAL = 250;
+const REPORT_INTERVAL = 3000;
 
 //////////////  INIT  /////////////////
 
