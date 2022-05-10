@@ -79,7 +79,7 @@ let websocketOpen = false;
 const sendAllCmds = async () => {
   if(!websocketOpen || pendingCmds === null) return;
 
-  console.log("sendAllCmds", {pendingCmds});
+  // console.log("sendAllCmds", {pendingCmds});
 
   const str = JSON.stringify(pendingCmds);
   try{
@@ -110,8 +110,7 @@ setInterval(async () => {
 const lastFcVal = {};
 
 const send = (code, val = null) => {
-  console.log("sendAllCmds", {code, val});
-  if(val === lastFcVal[code]) return;
+  if(val == lastFcVal[code]) return;
   const sendVal = (val === null ? 0 : val);
   if(pendingCmds === null) 
     pendingCmds = {[code]: sendVal};
@@ -124,7 +123,7 @@ const send = (code, val = null) => {
 
 export const setVel = vel => {
                vel = Math.round(vel);
-              //  console.log('sending vel to bot', vel);
+               console.log('sending vel to bot', vel);
                send(fcVelCmd, vel);
              }
 export const setYaw = yaw => {
