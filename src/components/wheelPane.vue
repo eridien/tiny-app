@@ -34,8 +34,6 @@
     }
 
     const calcAngle = (x,y) => {
-      const paneHgt = paneEle.offsetHeight;
-      const hdrHgt  = window.outerHeight - paneHgt;
       let   relX    =   x-getCenterX();
       const relY    = -(y-getCenterY());
       if(relX >= 0 && relX <  1e-3) relX += 2e-3;
@@ -100,6 +98,8 @@
           calcAngle(touch.pageX, touch.pageY);
           const yaw = angle.value * 
               Math.pow(SENS_FACTOR, global.steeringSens-5);
+          // console.log(`touch, yaw: ${yaw}, angle: ${angle.value}, ` +
+          //     `SENS_FACTOR: ${SENS_FACTOR}, sens: ${global.steeringSens}`);
           evtBus.emit('yaw', yaw);
         }
       },

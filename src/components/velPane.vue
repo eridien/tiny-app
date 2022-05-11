@@ -101,7 +101,7 @@
         vel.value = Math.max(0, 
                         Math.min(vel.value, 1));
         drawSlider();
-        evtBus.emit('vel', Math.round(vel.value * 100));
+        evtBus.emit('vel', Math.round(vel.value * 1000));
       }, 
       {passive:false, capture:true}
     );

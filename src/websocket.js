@@ -110,7 +110,7 @@ setInterval(async () => {
 const lastFcVal = {};
 
 const send = (code, val = null) => {
-  if(val == lastFcVal[code]) return;
+  if(val === lastFcVal[code]) return;
   const sendVal = (val === null ? 0 : val);
   if(pendingCmds === null) 
     pendingCmds = {[code]: sendVal};
@@ -128,7 +128,7 @@ export const setVel = vel => {
              }
 export const setYaw = yaw => {
                yaw = Math.round(yaw);
-              //  console.log('sending yaw to bot', yaw);
+               console.log('sending yaw to bot', yaw);
                send(fcYawCmd, yaw);
              }
 export const stop = () => {
@@ -143,17 +143,17 @@ export const pwrOff = () => {
 export const setYawPk = yawPk => {
                console.log(
                   'sending yawPk to bot', yawPk);
-               send(fcYawPkS, Math.round(yawPk * 100));
+               send(fcYawPkS, Math.round(yawPk * 1000));
              }
 export const setYawIk = yawIk => {
                console.log(
                   'sending yawIk to bot', yawIk);
-               send(fcYawIkS, Math.round(yawIk * 100));
+               send(fcYawIkS, Math.round(yawIk * 1000));
              }
 export const setMaxYawIk = maxYawIk => {
                console.log(
                   'sending maxYawIk to bot', maxYawIk);
-               send(fcMaxYawIkS, Math.round(maxYawIk * 100));
+               send(fcMaxYawIkS, Math.round(maxYawIk * 1000));
              }
 export const setBoostK = boostK => {
                console.log(
