@@ -1,5 +1,5 @@
 const SHOW_SENDS = true;
-const SHOW_RECVS = false;
+const SHOW_RECVS = true;
 
 // commands to bot
 const fcReport     = 'R';
@@ -158,7 +158,7 @@ export const setMaxYawIk = maxYawIk => {
 export const setBoostK = boostK => {
                console.log(
                   'sending boostK to bot', boostK);
-               send(fcBoostKS, boostK);
+               send(fcBoostKS, Math.round(boostK * 1000));
              }
 
 export const setName = (name) => {
@@ -233,6 +233,13 @@ export const initWebsocket =
   async (hostnameIn, appCBIn) => {
     hostname = hostnameIn;
     appCB    = appCBIn;
+    appCB({fcCmds:{
+      fcYawPk:    fcYawPkS, 
+      fcYawIk:    fcYawIkS, 
+      fcMaxYawIk: fcMaxYawIkS, 
+      fcBoostK:   fcYawPkS, 
+    }});
     connectToWs();
+    send(fcReport);
     setInterval(send, REPORT_INTERVAL, fcReport);
   };

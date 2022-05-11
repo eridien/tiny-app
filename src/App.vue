@@ -17,7 +17,6 @@
            setVel, setYaw, stop, pwrOff, calibrate,
            setYawPk, setYawIk,  setMaxYawIk, 
            setName,  setBoostK, resumeWs}
-          //  getYawPk, getYawIk, getMaxYawIk, getBoostK,}
           from "./websocket.js";
 
   const SHOW_INIT_WS = false;
@@ -116,6 +115,10 @@
   global.curStatus  = {};
 
   const websocketCB = (status) => {
+    if(status.fcCmds !== undefined) {
+      global.fcCmds = status.fcCmds;
+      return;
+    }
     if(status.newerConn !== undefined) {
       evtBus.emit('showMessage',
           {messageText: 'Another controller has connected to ' +
@@ -132,10 +135,10 @@
       if(!websocketOpen && status.websocketOpen) {
         evtBus.emit('closeMessage', 'noWsMsg');
         
-        evtBus.emit('setYawPk',    setYawPkDbg   );
-        evtBus.emit('setYawIk',    setYawIkDbg   );
-        evtBus.emit('setMaxYawIk', setMaxYawIkDbg);
-        evtBus.emit('setBoostK',   setBoostKDbg  );
+        // evtBus.emit('setYawPk',    setYawPkDbg   );
+        // evtBus.emit('setYawIk',    setYawIkDbg   );
+        // evtBus.emit('setMaxYawIk', setMaxYawIkDbg);
+        // evtBus.emit('setBoostK',   setBoostKDbg  );
       }
       websocketOpen = status.websocketOpen;
       return;

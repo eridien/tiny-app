@@ -58,6 +58,7 @@
   onMounted(()=> {
     // sensitivity input ele
     const sensEle = document.getElementById('sens');
+    console.log({sensEle,global});
     sensEle.value = global.steeringSens;
     // display
     dispVal.value = global.steeringSens;

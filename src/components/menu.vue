@@ -29,9 +29,9 @@
             style="position:fixed; z-index:1001;  \
                    top:90px; right:70px;")
 
-  Status(v-show="statusOpen"
-         style="position:fixed; z-index:1001;  \
-                top:90px; right:70px;")
+  //- Status(v-show="statusOpen"
+  //-        style="position:fixed; z-index:1001;  \
+  //-               top:90px; right:70px;")
 </template>
 
 <style scoped>
