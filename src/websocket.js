@@ -1,5 +1,6 @@
-const SHOW_SENDS = true;
-const SHOW_RECVS = true;
+const SHOW_SENDS      = true;
+const SHOW_RECVS      = false;
+const REPORT_INTERVAL = 200;
 
 // commands to bot
 const fcReport     = 'R';
@@ -224,8 +225,6 @@ export const resumeWs = () => {
     setTimeout(connectToWs, 2000);
   }
 }
-
-const REPORT_INTERVAL = 3000;
 
 //////////////  INIT  /////////////////
 
