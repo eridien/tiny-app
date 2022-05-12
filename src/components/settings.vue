@@ -56,15 +56,11 @@
   let nameAtOpen;
 
   onMounted(()=> {
-    // sensitivity input ele
     const sensEle = document.getElementById('sens');
-    console.log({sensEle,global});
     sensEle.value = global.steeringSens;
-    // display
     dispVal.value = global.steeringSens;
-    // wifiName input element
-    nameEle = document.getElementById('wifiName');
-    nameAtOpen = nameEle.value;
+    nameEle       = document.getElementById('wifiName');
+    nameAtOpen    = nameEle.value;
   });
 
   evtBus.on('savedName', () => {

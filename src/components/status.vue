@@ -1,18 +1,15 @@
 <template lang='pug'>
-#settings(style="border-radius:12px; font-size:14px; \
-                 background-color:white;             \
-                 margin:20px; padding:20px;")
-  div(style="margin-bottom:20px;") Steering Sensitivity
-  div(style="position:relative; font-size:12px; display:flex; \
-             justifyContent:space-between;                    \
-             alignItems:stretch;")
-    span Min
-    div(style="position:relative; left:-7px;") {{sensVal}}
-    span Max
+#status(style="border-radius:12px; font-size:22px; \
+               background-color:white;             \
+               margin:20px; padding:20px;")
+  div(style="margin-bottom:20px;") Status
+  div(style="position:relative; margin:5px 0 10px 0;")
 
-  input(id="sens" type="range" 
-        style="width:100%;" @input="sensEvt" 
-        min="1" max="10" step="1" value="5")
+  table
+    tr(v-for="(fcCode, name) in global.fcStateCodes")
+      td(style="text-align:right;") {{name.slice(2)}}
+      td(style="padding:5px; font-size:20px; \
+                text-align:left") {{status[fcCode]}}
 
   div(@click="doneClick"
       style="float:right; font-size:13px;   \
@@ -22,26 +19,16 @@
 </template>
 
 <script setup>
-  import {onMounted, ref, inject} from 'vue';
+  import {ref, inject} from 'vue';
 
-  const evtBus = inject('evtBus');   
+  const global = inject('global');
+  const evtBus = inject('evtBus');  
 
-  const sensVal = ref(5);
+  const status = ref({y:null});
 
-  const sensEvt = (event) => {
-    const val = event.target.value;
-    sensVal.value = val;
-    // wheelPane.vue uses localStorage
-    localStorage.setItem('steeringSens', val);
-  }
-
-  onMounted(()=> {
-    const sensEle = document.getElementById('sens');
-    if(!localStorage.getItem('steeringSens'))
-        localStorage.setItem('steeringSens', '5');
-    const val = localStorage.getItem('steeringSens');
-    sensVal.value = val;
-    sensEle.value = val;
+  evtBus.on('stateChg', () => {
+    status.value.y = global.curStatus.y;
+    console.log({status:status.value.y});
   });
 
   const doneClick = () => 

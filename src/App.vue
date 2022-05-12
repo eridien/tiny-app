@@ -19,13 +19,6 @@
            setName,  setBoostK, resumeWs}
           from "./websocket.js";
 
-  const SHOW_INIT_WS = false;
-
-  const setYawPkDbg    =    1.0;
-  const setYawIkDbg    =    0.0;
-  const setMaxYawIkDbg =  255.0;
-  const setBoostKDbg   =      0;
-
   const global = inject('global');
   const evtBus = inject('evtBus'); 
 
@@ -34,27 +27,26 @@
 // status from bot
   const fcBatV      = 'b';
   const fcRssi      = 'w';
-  const fcName      = 'n';
-
-// motion state from bot
-  const fcAccelOfs  = 'a';
-  const fcYawOfs    = 'd';
-  const fcVelPwm    = 'v';
-  const fcYawRate   = 'y';
-  const fcYawErrInt = 'i';
-  const fcLeftPwm   = 'l';
-  const fcRightPwm  = 'r';
-
-// motion constants from bot
-  const fcYawPkC    = 'f';
-  const fcYawIkC    = 'g';
-  const fcMaxYawIC  = 'h';
-  const fcBoostKStC = 'j';
-
+  const AccelOfs    = 'a';
+  const YawOfs      = 'd';
   const fcCalibDone = 'c';
   const fcError     = 'e';
 
-  global.fcName=fcName;
+  // wifi ssid suffix from bot
+  global.fcName = 'n';
+  
+  // motion state debug from bot
+  global.fcStateCodes = {
+    fcBatV          : 'b',
+    fcRssi          : 'w',
+    fcVelTgt        : 'v',
+    fcYawTgt        : 't',
+    fcYawRate       : 'y',
+    fcYawRateErr    : 'z',
+    fcYawRateErrInt : 'i',
+    fcLeftPwm       : 'l',
+    fcRightPwm      : 'r',
+  }
 
   evtBus.on('vel',         (vel)   => {setVel(vel);      });
   evtBus.on('yaw',         (yaw)   => {setYaw(yaw);      });
@@ -85,7 +77,9 @@
   const calibrationDone = () => {
     if(!calibrating) return;
     calibrating = false;
-    console.log('calibration done');
+    console.log('calibration done', 
+      {AccelOfs: global.curStatus[AccelOfs], 
+       YawOfs:   global.curStatus[YawOfs]});
     evtBus.emit('showMessage', {
       messageText:  'Calibrating finished.',
       buttonText:   'Close',
@@ -128,27 +122,33 @@
           buttonText:   'Reconnect',
           ignoreNoWs:    true,
           callbackText: 'resumeWs'});  
+      return;
     }
     if(status.websocketOpen !== undefined) {
       if(websocketOpen && !status.websocketOpen)
-        showNoWebsocket();
-      if(!websocketOpen && status.websocketOpen) {
-        evtBus.emit('closeMessage', 'noWsMsg');
-        
-        // evtBus.emit('setYawPk',    setYawPkDbg   );
-        // evtBus.emit('setYawIk',    setYawIkDbg   );
-        // evtBus.emit('setMaxYawIk', setMaxYawIkDbg);
-        // evtBus.emit('setBoostK',   setBoostKDbg  );
-      }
+           showNoWebsocket();
+      if(!websocketOpen && status.websocketOpen)
+           evtBus.emit('closeMessage', 'noWsMsg');
       websocketOpen = status.websocketOpen;
       return;
     }
     Object.assign(global.curStatus, status);
 
+    let stateChg = false;
+    for(const fc in global.fcStateCodes) {
+      if(status[global.fcStateCodes[fc]] !== undefined) {
+        stateChg = true;
+        break;
+      }
+    }
+    if(stateChg) evtBus.emit('stateChg');
+
     if(status?.[fcCalibDone] === 1)
-      calibrationDone();
+          calibrationDone();
+
     evtBus.emit('rssi', status?.[fcRssi]);
     evtBus.emit('batv', status?.[fcBatV]);
+
     const err = status?.[fcError];
     if(err) console.log(`BOT ERROR: ${err}`);
   };
@@ -158,6 +158,8 @@
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
 
-    if(SHOW_INIT_WS) showNoWebsocket(true);
+    setTimeout(() => {
+      if(!websocketOpen) showNoWebsocket();
+    }, 1000);
   });
 </script>

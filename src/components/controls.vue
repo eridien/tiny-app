@@ -17,8 +17,7 @@
          style="position:absolute; left:0;       \
                 width:100%; height:100%;         \
                 opacity:0.3;                     \
-                background-color:black;          \
-                display: table-cell;")
+                background-color:black;")
 
   Message(v-show="messageOpen"
           :messageText="messageText"

@@ -1,12 +1,12 @@
 <template lang='pug'>
 #set-motion(style="border-radius:12px; font-size:22px; \
-                 background-color:white;             \
+                 background-color:white;               \
                  margin:20px; padding:20px;")
   div(style="margin-bottom:20px;") Motion Constants
   div(style="position:relative; margin:5px 0 10px 0;")
 
   div(v-for="(fcCode,fcCmd) in fcCmds")
-    div(style="width:45%;float:left;text-align:right;  \
+    div(style="width:45%;float:left;text-align:right;    \
                margin-right:10px;") {{fcCmd}}
     input(:id="fcCmd" type="number" 
           @change="(e)=>chgVal(e, fcCmd)"
@@ -22,18 +22,12 @@
 </template>
 
 <script setup>
-  import {onMounted, reactive, inject} from 'vue';
+  import {reactive, inject} from 'vue';
 
   const global = inject('global');
   const evtBus = inject('evtBus');   
 
-  const fcCmds     = reactive(global.fcCmds);
-  const fcStatVals = reactive({});
-
-  for(const fcCmd in fcCmds) {
-    const fcStatName       = fcCmd;
-    fcStatVals[fcStatName] = "";
-  }
+  const fcCmds = reactive(global.fcCmds);
 
   const chgVal = (evt, fcCmd) => {
     const inpEle = evt.srcElement;
@@ -41,9 +35,6 @@
     evtBus.emit('set' + fcCmd.slice(2), val);
   }
 
-  onMounted(()=> {
-  });
-
   const doneClick = () => 
-          evtBus.emit('menuOpen', false);
+        evtBus.emit('menuOpen', false);
 </script>
