@@ -98,8 +98,9 @@
           calcAngle(touch.pageX, touch.pageY);
           const yaw = angle.value * 
               Math.pow(SENS_FACTOR, global.steeringSens-5);
-          // console.log(`touch, yaw: ${yaw}, angle: ${angle.value}, ` +
-          //     `SENS_FACTOR: ${SENS_FACTOR}, sens: ${global.steeringSens}`);
+          // console.log(`touch, yaw: ${yaw}, angle: ` +
+            //  `${angle.value}, SENS_FACTOR: ${SENS_FACTOR}, +
+            //  `ens: ${global.steeringSens}`);
           evtBus.emit('yaw', yaw);
         }
       },

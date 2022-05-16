@@ -90,14 +90,8 @@
   evtBus.on('closeMessage', (id) => {
     if(!id || id == msgId) {
       console.log('closing message', id);
-      messageText.value   = '';
-      messageText2.value  = '';
-      busy.value          = false; 
-      buttonText2.value   = ''; 
-      callbackText2.value = ''; 
-      buttonText.value    = ''; 
-      callbackText.value  = '';       
-      messageOpen.value   = false;
+      busy.value        = false; 
+      messageOpen.value = false;
       msgId = '';
     }
   });

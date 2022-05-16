@@ -80,8 +80,6 @@ let websocketOpen = false;
 const sendAllCmds = async () => {
   if(!websocketOpen || pendingCmds === null) return;
 
-  // console.log("sendAllCmds", {pendingCmds});
-
   const str = JSON.stringify(pendingCmds);
   try{
     await webSocket.send(str);

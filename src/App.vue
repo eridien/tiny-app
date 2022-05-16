@@ -94,14 +94,13 @@
     evtBus.emit('menuOpen', false);
   });
 
-  const showNoWebsocket = (initial = false) => {
-    console.log('showNoWebsocket', {initial});
+  const showNoWebsocket = () => {
     evtBus.emit('menuOpen', false);
     evtBus.emit('showMessage',
             {messageText:  'Waiting for connection to a T-Bot. ',
              messageText2: 'Turn on the T-Bot and set ' +
                            'your phone wi-fi to ' +
-                           'T-Bot-xxx.', 
+                           `T-Bot-${global.curStatus.n}.`, 
              id: 'noWsMsg'});  
   };
 
@@ -160,6 +159,6 @@
 
     setTimeout(() => {
       if(!websocketOpen) showNoWebsocket();
-    }, 1000);
+    }, 2000);
   });
 </script>
