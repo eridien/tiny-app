@@ -19,7 +19,8 @@
                top:   `${fwdThumbTop}px`,              \
                height:`${THUMB_INNER}px`,              \
                marginLeft:'5%', width:'80%',           \
-               backgroundColor:'green'}")
+               backgroundColor:'green',                \
+               zIndex:dir}")
 
   #revThumb(
       :style="{border:`${THUMB_BRDR}px solid  black`,  \
@@ -28,7 +29,8 @@
                top:   `${revThumbTop}px`,              \
                height:`${THUMB_INNER}px`,              \
                marginLeft:'5%', width:'80%',           \
-               backgroundColor:'#a00'}")
+               backgroundColor:'#a00',                 \
+               zIndex:0}")
 </template>
 
 <script setup>
@@ -47,7 +49,9 @@
   const revBarHgt   = ref(0);
 
   const vel = ref(0); // 0 to 100%
-  let   dir = 0; // 1 => fwd, 0 => stopped, -1 => rev
+
+  // 1 => fwd, 0 => stopped, -1 => rev
+  const dir = ref(0); 
 
   const stopAllPropogation = (event) => {
     if(!event) return;
@@ -72,22 +76,20 @@
       fwdThumbTop.value = fwdBarTop.value - (THUMB_HGT/2);
       revBarHgt.value   = THUMB_HGT/2;
       revThumbTop.value = 0;
-      dir               = 0;
     }
 
     const drawSliders = () => {
       clrSliders();
-      if(dir == 1) { // fwd
+      if(dir.value == 1) { // fwd
         fwdBarTop.value   = paneHgt
                             - travel*vel.value
                             - THUMB_HGT/2;
         fwdBarHgt.value   = paneHgt -  fwdBarTop.value;
-        fwdThumbTop.value = fwdBarTop.value - (THUMB_HGT/2);
+        fwdThumbTop.value = fwdBarTop.value - THUMB_HGT/2;
       }
       else {        // rev
-        revBarHgt.value   = travel * vel.value 
-                            + global.HDR_HGT;
-        revThumbTop.value = global.HDR_HGT - (THUMB_HGT/2);
+        revBarHgt.value   = travel * vel.value;
+        revThumbTop.value = revBarHgt.value;
       }
     };
 
@@ -96,6 +98,7 @@
       travel  = paneHgt - THUMB_HGT;
       vel.value = 0;
       clrSliders();
+      dir.value = 0;
       evtBus.emit('stop');
     });      
 
@@ -144,10 +147,11 @@
         const touch = getTouch(event);
         if(touch == null) return;
 
-        if(dir == 0) 
-          dir = ((touch.pageY - startY) > 0 ? -1 : +1);
-
-        if(dir == 1)
+        if(dir.value == 0) {
+          dir.value = ((touch.pageY - startY) > 0 ? -1 : +1);
+          console.log("dir.value == 0  =>  dir.value ==", dir.value);
+        }
+        if(dir.value == 1)
           vel.value = (paneHgt - (touch.pageY - THUMB_HGT)); 
         else
           vel.value = (touch.pageY - global.HDR_HGT); 
@@ -158,16 +162,19 @@
         drawSliders();
 
         evtBus.emit('vel', 
-                     dir * Math.round(vel.value * 1000));
+                dir.value * Math.round(vel.value * 1000));
+        if(vel.value == 0) dir.value = 0;
       }, 
       {passive:false, capture:true}
     );
 
     evtBus.on('stop', () => {
       vel.value = 0;
+      dir.value = 0;
       clrSliders();
     });
 
     clrSliders();
+    dir.value = 0;
   });
 </script>
