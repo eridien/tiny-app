@@ -124,6 +124,9 @@
         const touch = getTouch(event);
         if(touch == null) return;
         startY = touch.pageY;
+        if(startY > paneHgt - THUMB_HGT || 
+           startY < global.HDR_HGT + THUMB_HGT) 
+          dir.value = 0;
         moved = false;
       },
       {passive:false, capture:true}
@@ -132,13 +135,13 @@
     paneEle.addEventListener("touchend", 
       () => {
         stopAllPropogation();
-        if(!moved) {
+        if(!moved || vel.value == 0) {
           evtBus.emit('stop');
         }
       },
       {passive:false, capture:true}
     );
-
+      
     paneEle.addEventListener("touchmove", 
       (event) => {
         stopAllPropogation(event);
@@ -163,7 +166,6 @@
 
         evtBus.emit('vel', 
                 dir.value * Math.round(vel.value * 1000));
-        if(vel.value == 0) dir.value = 0;
       }, 
       {passive:false, capture:true}
     );
