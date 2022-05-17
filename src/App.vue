@@ -1,16 +1,17 @@
 <template lang='pug'>
 #app
-  Header(:style="{width:'100vw',                   \
-                  height:`${global.HDR_HGT-15}px`, \
-                  margin:'0 5vw 0 5vw'}")
+  #appBoot(v-show="boot") hello
 
-  Controls(style="width:calc(100vw-20px);")
+  #appMain(v-show="!boot")
+    Header(:style="{width:'100vw',                   \
+                    height:`${global.HDR_HGT-15}px`, \
+                    margin:'0 5vw 0 5vw'}")
+    Controls(style="width:calc(100vw-20px);")
 
 </template>
 
 <script setup>
-  import {onMounted, ref, inject, 
-          getCurrentInstance } from 'vue'
+  import {onMounted, inject, ref} from 'vue'
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
   import { initWebsocket,  
@@ -21,6 +22,11 @@
 
   const global = inject('global');
   const evtBus = inject('evtBus'); 
+  const dev = (global.env == 'development');
+
+  let href = window.location.href;
+  let boot = ref(!href.includes('tbot-app'));
+  console.log("App Started", {href, boot:boot.value, dev});
 
   global.HDR_HGT = 65;
 
@@ -152,11 +158,23 @@
     if(err) console.log(`BOT ERROR: ${err}`);
   };
 
-  onMounted(async() => { 
+  onMounted(() => {
+    if(boot.value) { // boot page showing
+      const newURL = 
+              "http://" + location.host + "/tbot-app";
+      console.log('---- boot app loaded -------');
+      console.log('---- opening new window:', newURL);
+      document.getElementById("appBoot").innerHTML = 
+                                "Switching to " + newURL;
+      setTimeout(() =>
+         window.location.href = newURL,
+      1000);
+      return;
+    }
+ 
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
-
     setTimeout(() => {
       if(!websocketOpen) showNoWebsocket();
     }, 2000);

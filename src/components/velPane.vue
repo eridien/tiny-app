@@ -71,7 +71,7 @@
     let travel  = paneHgt - THUMB_HGT;
     
     const clrSliders = () => {
-      fwdBarTop.value   = paneHgt - THUMB_HGT/2;
+      fwdBarTop.value   = paneHgt - THUMB_HGT/2 - THUMB_BRDR/2;
       fwdBarHgt.value   = paneHgt - fwdBarTop.value;
       fwdThumbTop.value = fwdBarTop.value - (THUMB_HGT/2);
       revBarHgt.value   = THUMB_HGT/2;
