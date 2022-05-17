@@ -8,7 +8,8 @@ const BOT_HOSTNAME_DEV = "192.168.1.155"; // hahn-fi
 
 const global = {};
 global.env = import.meta.env.MODE;
-if(global.env == 'development')
+global.dev = (global.env == 'development');
+if(global.dev)
      global.hostname = BOT_HOSTNAME_DEV;
 else global.hostname = location.hostname;
 

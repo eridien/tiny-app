@@ -22,11 +22,6 @@
 
   const global = inject('global');
   const evtBus = inject('evtBus'); 
-  const dev = (global.env == 'development');
-
-  let href = window.location.href;
-  let boot = ref(!href.includes('tbot-app'));
-  console.log("App Started", {href, boot:boot.value, dev});
 
   global.HDR_HGT = 65;
 
@@ -159,19 +154,6 @@
   };
 
   onMounted(() => {
-    if(boot.value) { // boot page showing
-      const newURL = 
-              "http://" + location.host + "/tbot-app";
-      console.log('---- boot app loaded -------');
-      console.log('---- opening new window:', newURL);
-      document.getElementById("appBoot").innerHTML = 
-                                "Switching to " + newURL;
-      setTimeout(() =>
-         window.location.href = newURL,
-      1000);
-      return;
-    }
- 
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
