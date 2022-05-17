@@ -41,7 +41,7 @@
   const global = inject('global');
   const evtBus = inject('evtBus');   
 
-  const val = localStorage.getItem('steeringSens');  
+  let val = localStorage.getItem('steeringSens');  
   if(val === null) {
     val = 5;
     localStorage.setItem('steeringSens', val);

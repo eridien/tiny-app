@@ -140,7 +140,7 @@
     Object.assign(global.curStatus, status);
 
     let stateChg = false;
-    for(const fc in global.fcStateCodes) {
+    for(let fc in global.fcStateCodes) {
       if(status[global.fcStateCodes[fc]] !== undefined) {
         stateChg = true;
         break;
