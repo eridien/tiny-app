@@ -43,9 +43,13 @@
       else          angle.value = -90 - degrees;
     }
 
+    let clickStarted = false;
+    let oneClick     = false;
+
     evtBus.on('stop', () => {
-      angle.value = 0;
-      calcAngle(getCenterX(), getCenterY() - 1);
+      angle.value  = 0;
+      clickStarted = false;
+      oneClick     = false;
     });
   
     const stopAllPropogation= (event) => {
@@ -62,8 +66,6 @@
       evtBus.emit('stop');
     });
 
-    let clickStarted = false;
-
     paneEle.addEventListener("touchstart", 
       (event) => {
         stopAllPropogation();
@@ -76,7 +78,13 @@
       () => {
         stopAllPropogation();
         if(clickStarted) {
-          evtBus.emit('stop');
+          if(!oneClick) {
+            oneClick = true;
+            angle.value = 0;
+            evtBus.emit('yaw', 0);
+          }
+          else 
+            evtBus.emit('stop');
           clickStarted = false;
         }
       },

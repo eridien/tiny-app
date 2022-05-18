@@ -46,16 +46,31 @@
     fcRightPwm      : 'r',
   }
 
-  evtBus.on('vel',         (vel)   => {setVel(vel);      });
-  evtBus.on('yaw',         (yaw)   => {setYaw(yaw);      });
-  evtBus.on('stop',        ()      => {stop();           });
-  evtBus.on('pwrOff',      ()      => {pwrOff();         });
   evtBus.on('setYawPk',    (awPk)  => {setYawPk(awPk);   });
   evtBus.on('setYawIk',    (awIk)  => {setYawIk(awIk);   });
   evtBus.on('setMaxYawIk', (max)   => {setMaxYawIk(max); });
   evtBus.on('setBoostK',   (boost) => {setBoostK(boost); });
   evtBus.on("setWifiName", (name)  => {setName(name);    }); 
-  evtBus.on("resumeWs",    ()      => {resumeWs();       }); 
+  evtBus.on("resumeWs",    ()      => {resumeWs();       });
+        
+  let stopped = true;
+
+  evtBus.on('vel', (vel) => {
+    if(vel) stopped = false;
+    setVel(vel);      
+  });
+  evtBus.on('yaw', (yaw) => {
+    if(yaw) stopped = false;
+    setYaw(yaw); 
+  });
+  evtBus.on('stop', () => {
+    stop();
+    stopped = true;
+  });
+  evtBus.on('pwrOff', () => {
+    pwrOff();
+    stopped = true;
+  });
 
   let calibrating = false;
 
@@ -151,19 +166,21 @@
     // console.log(global.curStatus);
 
     const now = new Date();
-    console.log(
-      now.getUTCSeconds()
-          .toString().padStart(2,'0') + ':' + 
-      now.getUTCMilliseconds()
-          .toString().padStart(3,'0') + ' ' + 
-      dbg('v','vel') +
-      dbg('t','tgt') +
-      dbg('y','yaw',1000) +
-      dbg('z','err') +
-      dbg('i','int') +
-      dbg('l','lft') +
-      dbg('r','rgt')
-    );
+    if(!stopped) {
+      console.log(
+        now.getUTCSeconds()
+            .toString().padStart(2,'0') + ':' + 
+        now.getUTCMilliseconds()
+            .toString().padStart(3,'0') + ' ' + 
+        dbg('v','vel') +
+        dbg('t','tgt') +
+        dbg('y','yaw',1000) +
+        dbg('z','err') +
+        dbg('i','int') +
+        dbg('l','lft') +
+        dbg('r','rgt')
+      );
+    };
 
     if(status?.[fcCalibDone] === 1)
           calibrationDone();
