@@ -152,7 +152,7 @@
 
         if(dir.value == 0) {
           dir.value = ((touch.pageY - startY) > 0 ? -1 : +1);
-          console.log("dir.value == 0  =>  dir.value ==", dir.value);
+          // console.log("dir.value == 0  =>  dir.value ==", dir.value);
         }
         if(dir.value == 1)
           vel.value = (paneHgt - (touch.pageY - THUMB_HGT)); 

@@ -1,4 +1,4 @@
-const SHOW_SENDS      = true;
+const SHOW_SENDS      = false;
 const SHOW_RECVS      = false;
 const REPORT_INTERVAL = 200;
 
@@ -122,12 +122,12 @@ const send = (code, val = null) => {
 
 export const setVel = vel => {
                vel = Math.round(vel);
-               console.log('sending vel to bot', vel);
+              //  console.log('sending vel to bot', vel);
                send(fcVelCmd, vel);
              }
 export const setYaw = yaw => {
                yaw = Math.round(yaw);
-               console.log('sending yaw to bot', yaw);
+              //  console.log('sending yaw to bot', yaw);
                send(fcYawCmd, yaw);
              }
 export const stop = () => {

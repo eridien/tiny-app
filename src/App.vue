@@ -140,6 +140,31 @@
     }
     if(stateChg) evtBus.emit('stateChg');
 
+    const dbg = (fc, name, div = 1, wid = 3) => {
+      // console.log(fc, global.curStatus[fc]);
+
+      const str = Math.round(+global.curStatus[fc] / div)
+                 .toString()
+                 .padStart(wid,' ');
+      return `${name}:${str}, `;
+    }
+    // console.log(global.curStatus);
+
+    const now = new Date();
+    console.log(
+      now.getUTCSeconds()
+          .toString().padStart(2,'0') + ':' + 
+      now.getUTCMilliseconds()
+          .toString().padStart(3,'0') + ' ' + 
+      dbg('v','vel') +
+      dbg('t','tgt') +
+      dbg('y','yaw',1000) +
+      dbg('z','err') +
+      dbg('i','int') +
+      dbg('l','lft') +
+      dbg('r','rgt')
+    );
+
     if(status?.[fcCalibDone] === 1)
           calibrationDone();
 
