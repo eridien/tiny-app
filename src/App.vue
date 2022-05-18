@@ -1,12 +1,9 @@
 <template lang='pug'>
 #app
-  #appBoot(v-show="boot") hello
-
-  #appMain(v-show="!boot")
-    Header(:style="{width:'100vw',                   \
-                    height:`${global.HDR_HGT-15}px`, \
-                    margin:'0 5vw 0 5vw'}")
-    Controls(style="width:calc(100vw-20px);")
+  Header(:style="{width:'100vw',                   \
+                  height:`${global.HDR_HGT-15}px`, \
+                  margin:'0 5vw 0 5vw'}")
+  Controls(style="width:calc(100vw-20px);")
 
 </template>
 
@@ -153,7 +150,44 @@
     if(err) console.log(`BOT ERROR: ${err}`);
   };
 
+  const android = () => {
+  // windows: "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Mobile Safari/537.36"
+  return navigator.userAgent.includes('Android');
+}
+
+  const setHeight = (android) => {
+    const footerH = 0; // debug?
+      // document.getElementById('footer')
+               //.offsetHeight;
+    if(android) {
+        const wrapperH = 
+            window.outerHeight / 
+            window.devicePixelRatio - footerH - 1;
+        document.getElementById('app')
+                .style.height = wrapperH + 'px';
+        window.scrollTo(0, 1);
+    }
+    else {
+        window.scrollTo(0, 1);
+        //var headerH = document
+        //  .getElementById('header').offsetHeight;
+        const wrapperH = 
+              window.innerHeight - footerH - 1;
+        document.getElementById('app')
+                .style.height = wrapperH + 'px';
+    }
+  }
+
   onMounted(() => {
+    global.ua = navigator.userAgent;
+    const android = global.ua.includes('Android');
+    console.log({ua:global.ua,android});
+
+    setTimeout(() => {
+        window.scrollTo(0, 1);
+        setTimeout(() => setHeight(android), 100);
+    }, 100);
+
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);

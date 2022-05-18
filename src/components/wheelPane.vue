@@ -23,7 +23,6 @@
 
     const paneEle  = document.getElementById('wheelPane');
     const wheelEle = document.getElementById('wheel');
-    
     const getCenterX = ()=> {
       return window.outerWidth * (0.25 + 0.75/2);
     }
