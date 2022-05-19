@@ -100,7 +100,7 @@
       busyIndicator: false,
     });
   };
-
+  
   evtBus.on('closeCalibration', () => {
     console.log('closing calibration');
     calibrating = false;
@@ -119,6 +119,10 @@
 
   let websocketOpen = false;
   global.curStatus  = {};
+    
+  let min = Math.min();
+  let max = Math.max();
+  let minMaxDelay = 10;
 
   const websocketCB = (status) => {
     if(status.fcCmds !== undefined) {
@@ -155,33 +159,68 @@
     }
     if(stateChg) evtBus.emit('stateChg');
 
-    const dbg = (fc, name, div = 1, wid = 3) => {
-      // console.log(fc, global.curStatus[fc]);
-
+    const dbgStr = (fc, name, div = 1, wid = 3) => {
       const str = Math.round(+global.curStatus[fc] / div)
-                 .toString()
-                 .padStart(wid,' ');
+                 .toString().padStart(wid);
       return `${name}:${str}, `;
     }
-    // console.log(global.curStatus);
+
+    const plotStr = (fc, char, div) => {
+      const zeroLen  =  15;
+      const zeroChar = '|';
+      const totalLen = Math.round(
+            zeroLen + global.curStatus[fc] / div);
+      let str;
+      if(totalLen > zeroLen) 
+        str = zeroChar.padStart(zeroLen) +
+                  char.padStart(totalLen-zeroLen)
+      else if(totalLen == zeroLen) 
+        str = char.padStart(zeroLen);
+      else // (totalLen < zeroLen) 
+        str = char.padStart(totalLen) +
+          zeroChar.padStart(zeroLen-totalLen);
+      return str;
+    }
 
     const now = new Date();
-    if(!stopped) {
+    if(!stopped && 
+        Math.abs(global.curStatus.y) > 2000) {
+
+      if(minMaxDelay-- < 0) {
+        const err = +global.curStatus.z;
+        max = Math.max(max, err);
+        min = Math.min(min, err);
+      }
+
       console.log(
         now.getUTCSeconds()
             .toString().padStart(2,'0') + ':' + 
         now.getUTCMilliseconds()
             .toString().padStart(3,'0') + ' ' + 
-        dbg('v','vel') +
-        dbg('t','tgt') +
-        dbg('y','yaw',1000) +
-        dbg('z','err') +
-        dbg('i','int') +
-        dbg('l','lft') +
-        dbg('r','rgt')
+        global.curStatus.b.toString().padStart(4) + ', ' +
+        // dbgStr('v','vel')          +
+        // dbgStr('t','tgt',    1, 4) +
+        dbgStr('y','yaw', 1000, 4) +
+        dbgStr('z','err',    1, 4) +
+        dbgStr('i','int',   10, 4) +
+        // dbgStr('l','lft')          +
+        // dbgStr('r','rgt')          +
+        min.toString().padStart(4) +
+        max.toString().padStart(4) +
+        plotStr('z', '*', 5)
       );
     };
+/*
+  Pk    Ik   err
 
+  0.1  10.0  -25/27  -19/16 -25/27 -25/27 -20/23
+  
+  0.5   0.0  -39/35   -7/29 -17/32 -39/28 -21/35
+  0.5   1.0  -22/30  -19/30 -15/27 -10/20 -22/25
+  0.5  10.0  -86/28  -24/28 -38/26 -86/28 -21/19
+  1.0  10.0  wobble
+  0.5 100.0  wobble
+*/
     if(status?.[fcCalibDone] === 1)
           calibrationDone();
 

@@ -10,10 +10,10 @@
                 text-align:right")  {{status[fcCode]}}
 
   div(@click="doneClick"
-      style="float:right; font-size:13px;   \
-             background-color:#ddd;         \
-             border-radius:6px;             \
-             padding:5px; margin:20px 5px 0 0") Done
+      style="float:right; font-size:13px;     \
+                 background-color:#ddd;         \
+                 border-radius:6px;                 \
+                 padding:5px; margin:20px 5px 0 0") Done
 </template>
 
 <script setup>

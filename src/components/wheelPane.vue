@@ -44,12 +44,10 @@
     }
 
     let clickStarted = false;
-    let oneClick     = false;
 
     evtBus.on('stop', () => {
       angle.value  = 0;
       clickStarted = false;
-      oneClick     = false;
     });
   
     const stopAllPropogation= (event) => {
@@ -78,12 +76,14 @@
       () => {
         stopAllPropogation();
         if(clickStarted) {
-          if(!oneClick) {
-            oneClick = true;
+          // touch click
+          if(angle.value != 0) {
+            // first click just straightens wheel
             angle.value = 0;
             evtBus.emit('yaw', 0);
           }
           else 
+            // second click stops
             evtBus.emit('stop');
           clickStarted = false;
         }
@@ -105,9 +105,6 @@
           calcAngle(touch.pageX, touch.pageY);
           const yaw = angle.value * 
               Math.pow(SENS_FACTOR, global.steeringSens-5);
-          // console.log(`touch, yaw: ${yaw}, angle: ` +
-            //  `${angle.value}, SENS_FACTOR: ${SENS_FACTOR}, +
-            //  `ens: ${global.steeringSens}`);
           evtBus.emit('yaw', yaw);
         }
       },

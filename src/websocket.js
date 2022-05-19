@@ -1,6 +1,6 @@
 const SHOW_SENDS      = false;
 const SHOW_RECVS      = false;
-const REPORT_INTERVAL = 200;
+const REPORT_INTERVAL =    25;
 
 // commands to bot
 const fcReport     = 'R';
