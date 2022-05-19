@@ -2,7 +2,6 @@
 #wheelPane(style="display:flex;                      \
                   justify-content:center;            \
                   align-items:center;")
-  //- why is the 2.5 needed ???
   img(id="wheel" src="/images/steering-wheel.png"
         :style="{transform:`rotate(${angle}deg)`,  \
                  width:'65vmin', height:'65vmin'}" )
@@ -17,15 +16,17 @@
   const angle = ref(0);
 
 // max steering sensitivity is SENS_FACTOR**(5-steeringSens)
-  const SENS_FACTOR = 1.25;
+  const SENS_FACTOR = 1.2;
 
   onMounted(() => { 
 
     const paneEle  = document.getElementById('wheelPane');
     const wheelEle = document.getElementById('wheel');
+
     const getCenterX = ()=> {
       return window.outerWidth * (0.25 + 0.75/2);
     }
+
     const getCenterY = ()=> {
       const  paneHgt = paneEle.offsetHeight;
       const  hdrHgt  = window.outerHeight - paneHgt;
@@ -33,14 +34,18 @@
     }
 
     const calcAngle = (x,y) => {
-      let   relX    =   x-getCenterX();
-      const relY    = -(y-getCenterY());
-      if(relX >= 0 && relX <  1e-3) relX += 2e-3;
-      if(relX <  0 && relX > -1e-3) relX -= 2e-3;
-      const radians = Math.atan(relY/relX);
-      let   degrees = Math.round(radians*90/(Math.PI/2));
-      if(relX >= 0) angle.value =  90 - degrees;
-      else          angle.value = -90 - degrees;
+      let   relX =   x-getCenterX();
+      const relY = -(y-getCenterY());
+
+      // deg is -180 to +180 clockwise, top is zero
+      const deg = 90 - Math.atan2(relY, relX) * 180 / Math.PI;
+      if(deg < -180) deg += 360;
+
+      let diff = deg - angle.value;
+           if(diff >  180) diff -= 360;
+      else if(diff < -180) diff += 360;
+
+      angle.value += diff;
     }
 
     let clickStarted = false;

@@ -120,6 +120,7 @@
   let websocketOpen = false;
   global.curStatus  = {};
     
+  // for debug plot
   let min = Math.min();
   let max = Math.max();
   let minMaxDelay = 10;
@@ -158,6 +159,9 @@
       }
     }
     if(stateChg) evtBus.emit('stateChg');
+
+
+    /////////////////  PLOT DEBUG  /////////////////
 
     const dbgStr = (fc, name, div = 1, wid = 3) => {
       const str = Math.round(+global.curStatus[fc] / div)
@@ -214,13 +218,15 @@
   Pk    Ik   err
 
   0.1  10.0  -25/27  -19/16 -25/27 -25/27 -20/23
-  
+
   0.5   0.0  -39/35   -7/29 -17/32 -39/28 -21/35
   0.5   1.0  -22/30  -19/30 -15/27 -10/20 -22/25
   0.5  10.0  -86/28  -24/28 -38/26 -86/28 -21/19
   1.0  10.0  wobble
   0.5 100.0  wobble
 */
+    //////////////  END PLOT DEBUG  //////////////
+
     if(status?.[fcCalibDone] === 1)
           calibrationDone();
 
