@@ -6,8 +6,8 @@
   div(style="position:relative; margin:5px 0 10px 0;")
 
   div(v-for="(fcCode,fcCmd) in fcCmds")
-    div(style="width:45%;float:left;text-align:right;    \
-               margin-right:10px;") {{fcCmd}}
+    div(style="width:48%;float:left;text-align:right;    \
+               margin-right:10px;") {{fcCmd.slice(2)}}
     input(:id="fcCmd" type="number" 
           @change="(e)=>chgVal(e, fcCmd)"
           style="width:40%;height:25px; font-size:20px;  \

@@ -13,8 +13,9 @@
   import  Controls   from './components/controls.vue'
   import { initWebsocket,  
            setVel, setYaw, stop, pwrOff, calibrate,
-           setYawPk, setYawIk,  setMaxYawIk, 
-           setName,  setBoostK, resumeWs}
+           setYawPk, setYawIk, setMaxYawIk, 
+           setName, resumeWs,
+           setBoostK, setMaxBoostTgt, setBoostPwm }
           from "./websocket.js";
 
   const global = inject('global');
@@ -42,14 +43,22 @@
     fcYawRate       : 'y',
     fcYawRateErr    : 'z',
     fcYawRateErrInt : 'i',
+    fcBoostSpeed    : 'o',
+
+    fcBoostKC       : 'j',
+    fcMaxBoostTgtC  : 'k',
+    fcBoostPwmC     : 'm',
     fcLeftPwm       : 'l',
     fcRightPwm      : 'r',
   }
 
-  evtBus.on('setYawPk',    (awPk)  => {setYawPk(awPk);   });
-  evtBus.on('setYawIk',    (awIk)  => {setYawIk(awIk);   });
-  evtBus.on('setMaxYawIk', (max)   => {setMaxYawIk(max); });
-  evtBus.on('setBoostK',   (boost) => {setBoostK(boost); });
+  evtBus.on('setYawPk',       (awPk)=> {setYawPk(awPk);      });
+  evtBus.on('setYawIk',       (awIk)=> {setYawIk(awIk);      });
+  evtBus.on('setMaxYawIk',    (max) => {setMaxYawIk(max);    });
+  evtBus.on('setBoostK',      (bt)  => {setBoostK(bt);       });
+  evtBus.on('setMaxBoostTgt', (btT) => {setMaxBoostTgt(btT); });
+  evtBus.on('setBoostPwm',    (btP) => {setBoostPwm(btP);    });
+
   evtBus.on("setWifiName", (name)  => {setName(name);    }); 
   evtBus.on("resumeWs",    ()      => {resumeWs();       });
         
@@ -214,17 +223,6 @@
         plotStr('z', '*', 5)
       );
     };
-/*
-  Pk    Ik   err
-
-  0.1  10.0  -25/27  -19/16 -25/27 -25/27 -20/23
-
-  0.5   0.0  -39/35   -7/29 -17/32 -39/28 -21/35
-  0.5   1.0  -22/30  -19/30 -15/27 -10/20 -22/25
-  0.5  10.0  -86/28  -24/28 -38/26 -86/28 -21/19
-  1.0  10.0  wobble
-  0.5 100.0  wobble
-*/
     //////////////  END PLOT DEBUG  //////////////
 
     if(status?.[fcCalibDone] === 1)
@@ -278,8 +276,8 @@
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
-    setTimeout(() => {
-      if(!websocketOpen) showNoWebsocket();
-    }, 2000);
+    // setTimeout(() => {
+    //   if(!websocketOpen) showNoWebsocket();
+    // }, 2000);
   });
 </script>

@@ -12,10 +12,12 @@ const fcCalibrate  = 'C';
 const fcNameS      = 'N';
 
 // set motion constants
-const fcYawPkS     = 'F';
-const fcYawIkS     = 'G';
-const fcMaxYawIkS  = 'H';
-const fcBoostKS    = 'J';
+const fcYawPkS       = 'F';
+const fcYawIkS       = 'G';
+const fcMaxYawIkS    = 'H';
+const fcBoostKS      = 'J';
+const fcMaxBoostTgtS = 'K';
+const fcBoostPwmS    = 'M';
 
 let hostname = '';
 
@@ -159,6 +161,16 @@ export const setBoostK = boostK => {
                   'sending boostK to bot', boostK);
                send(fcBoostKS, Math.round(boostK * 1000));
              }
+export const setMaxBoostTgt = maxBoostTgt => {
+               console.log(
+                  'sending maxBoostTgt to bot', maxBoostTgt);
+               send(fcMaxBoostTgtS, Math.round(maxBoostTgt * 1000));
+             }
+export const setBoostPwm = boostPwm => {
+               console.log(
+                  'sending boostPwm to bot', boostPwm);
+               send(fcBoostPwmS, Math.round(boostPwm * 1000));
+             }
 
 export const setName = (name) => {
                console.log(`sending name "${name}" to bot`);
@@ -231,10 +243,12 @@ export const initWebsocket =
     hostname = hostnameIn;
     appCB    = appCBIn;
     appCB({fcCmds:{
-      fcYawPk:    fcYawPkS, 
-      fcYawIk:    fcYawIkS, 
-      fcMaxYawIk: fcMaxYawIkS, 
-      fcBoostK:   fcYawPkS, 
+      fcYawPk:       fcYawPkS, 
+      fcYawIk:       fcYawIkS, 
+      fcMaxYawIk:    fcMaxYawIkS, 
+      fcBoostK:      fcYawPkS, 
+      fcMaxBoostTgt: fcMaxBoostTgtS, 
+      fcBoostPwm:    fcBoostPwmS, 
     }});
     connectToWs();
     send(fcReport);
