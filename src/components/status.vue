@@ -29,6 +29,5 @@
       status.value[fc] = global.curStatus[fc];
   })
 
-  const doneClick = () => 
-          evtBus.emit('menuOpen', false);
+  const doneClick = () => evtBus.emit('menuOpen', false);
 </script>

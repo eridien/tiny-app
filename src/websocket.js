@@ -1,9 +1,10 @@
 const SHOW_SENDS      = false;
 const SHOW_RECVS      = false;
-const REPORT_INTERVAL =    25;
+const REPORT_INTERVAL =   50;
 
 // commands to bot
 const fcReport     = 'R';
+const fcReportAll  = 'Q';
 const fcVelCmd     = 'V';
 const fcYawCmd     = 'Y';
 const fcStopCmd    = 'S';
@@ -118,7 +119,8 @@ const send = (code, val = null) => {
   else
     pendingCmds[code] = sendVal;
   if(val !== null) lastFcVal[code] = val;
-  if(code == fcReport || code == fcCalibrate) 
+  if(code == fcReport    || 
+     code == fcReportAll || code == fcCalibrate) 
       sendAllCmds();
 }
 
@@ -196,6 +198,7 @@ const connectToWs = async () => {
     console.log('webSocket connected:', event);
     websocketOpen = true;
     appCB?.({websocketOpen});
+    send(fcReportAll);
   });
 
   webSocket.addEventListener('error', (event) => {
@@ -246,11 +249,11 @@ export const initWebsocket =
       fcYawPk:       fcYawPkS, 
       fcYawIk:       fcYawIkS, 
       fcMaxYawIk:    fcMaxYawIkS, 
-      fcBoostK:      fcYawPkS, 
+      fcBoostK:      fcBoostKS, 
       fcMaxBoostTgt: fcMaxBoostTgtS, 
       fcBoostPwm:    fcBoostPwmS, 
     }});
     connectToWs();
-    send(fcReport);
+    send(fcReportAll);
     setInterval(send, REPORT_INTERVAL, fcReport);
   };

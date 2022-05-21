@@ -32,7 +32,7 @@
   const fcError     = 'e';
 
   // wifi ssid suffix from bot
-  global.fcName = 'n';
+  global.fcName     = 'n';
   
   // motion state debug from bot
   global.fcStateCodes = {
@@ -61,7 +61,7 @@
 
   evtBus.on("setWifiName", (name)  => {setName(name);    }); 
   evtBus.on("resumeWs",    ()      => {resumeWs();       });
-        
+
   let stopped = true;
 
   evtBus.on('vel', (vel) => {
@@ -159,6 +159,7 @@
       return;
     }
     Object.assign(global.curStatus, status);
+    // console.log({j:global.curStatus.j});
 
     let stateChg = false;
     for(let fc in global.fcStateCodes) {
@@ -211,16 +212,18 @@
         now.getUTCMilliseconds()
             .toString().padStart(3,'0') + ' ' + 
         global.curStatus.b.toString().padStart(4) + ', ' +
-        // dbgStr('v','vel')          +
+        dbgStr('o','bst')          +
+        dbgStr('v','vel')          +
         // dbgStr('t','tgt',    1, 4) +
-        dbgStr('y','yaw', 1000, 4) +
-        dbgStr('z','err',    1, 4) +
-        dbgStr('i','int',   10, 4) +
-        // dbgStr('l','lft')          +
-        // dbgStr('r','rgt')          +
-        min.toString().padStart(4) +
-        max.toString().padStart(4) +
-        plotStr('z', '*', 5)
+        // dbgStr('y','yaw', 1000, 4) +
+        // dbgStr('z','err',    1, 4) +
+        // dbgStr('i','int',   10, 4) +
+        dbgStr('l','lft')          +
+        dbgStr('r','rgt')          +
+
+        // min.toString().padStart(4) +
+        // max.toString().padStart(4) +
+        plotStr('o', '*', 20)
       );
     };
     //////////////  END PLOT DEBUG  //////////////
