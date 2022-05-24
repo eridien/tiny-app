@@ -8,6 +8,7 @@ const fcReportAll  = 'Q';
 const fcVelCmd     = 'V';
 const fcYawCmd     = 'Y';
 const fcStopCmd    = 'S';
+const fcReset      = 'U';
 const fcPowerOff   = 'P';
 const fcCalibrate  = 'C';
 const fcNameS      = 'N';
@@ -16,8 +17,7 @@ const fcNameS      = 'N';
 const fcYawPkS       = 'F';
 const fcYawIkS       = 'G';
 const fcMaxYawIkS    = 'H';
-const fcBoostKS      = 'J';
-const fcMaxBoostTgtS = 'K';
+const fcBoostMsS     = 'J';
 const fcBoostPwmS    = 'M';
 
 let hostname = '';
@@ -33,6 +33,8 @@ let lastRecvVal    = {};
 let sendNow        = false;
 let waitingToRetry = false;
 let wsBlocked      = false;
+
+const stateNamesByCode = {};
 
 const wsRecv  = (event) => {
   const recvdStr = event.data;
@@ -57,18 +59,30 @@ const wsRecv  = (event) => {
     return;
   }
   if(appCB) {
-    const chgdVals    = {};
-    let   haveChgdVal = false;
+    const chgdVals           = {};
+    let   haveChgdVal        = false;
+    let   haveWBChgdVal = false;
     for(const fcCode in res) {
       if(res[fcCode] != lastRecvVal[fcCode]) {
         chgdVals[fcCode]    = res[fcCode];
         lastRecvVal[fcCode] = res[fcCode];
         haveChgdVal = true;
+        if(fcCode != 'b' && fcCode != 'w') 
+          haveWBChgdVal = true;
       }
     }
     if(haveChgdVal) {
-      if(SHOW_RECVS)
-        console.log("--> recvd", chgdVals);
+      if(SHOW_RECVS && haveWBChgdVal) {
+        let str = '{';
+        for (let fc in chgdVals) {
+          let name = stateNamesByCode[fc]?.slice(2);
+          if(!name) name = fc;
+          const val  = chgdVals[fc];
+          str += `${name}:${val}, `;
+        }
+        str = str.slice(0,-2) + '}';
+        console.log("--> recvd", str);
+      }
       appCB?.(chgdVals);
     }
   }
@@ -124,9 +138,10 @@ const send = (code, val = null) => {
       sendAllCmds();
 }
 
-export const setVel = vel => {
+export const setVel = vel => {  // 0 to 100%
                vel = Math.round(vel);
-              //  console.log('sending vel to bot', vel);
+               console.log('sending vel to bot', 
+                            Math.round(vel * 1000));
                send(fcVelCmd, vel);
              }
 export const setYaw = yaw => {
@@ -137,6 +152,10 @@ export const setYaw = yaw => {
 export const stop = () => {
                console.log('sending stop to bot');
                send(fcStopCmd);
+             };
+export const reset = () => {
+               console.log('sending reset to bot');
+               send(fcReset);
              };
 export const pwrOff = () => {
                console.log('sending pwroff to bot');
@@ -158,15 +177,10 @@ export const setMaxYawIk = maxYawIk => {
                   'sending maxYawIk to bot', maxYawIk);
                send(fcMaxYawIkS, Math.round(maxYawIk * 1000));
              }
-export const setBoostK = boostK => {
+export const setBoostMs = boostMs => {
                console.log(
-                  'sending boostK to bot', boostK);
-               send(fcBoostKS, Math.round(boostK * 1000));
-             }
-export const setMaxBoostTgt = maxBoostTgt => {
-               console.log(
-                  'sending maxBoostTgt to bot', maxBoostTgt);
-               send(fcMaxBoostTgtS, Math.round(maxBoostTgt * 1000));
+                  'sending boostMs to bot', boostMs);
+               send(fcBoostMsS, +boostMs);
              }
 export const setBoostPwm = boostPwm => {
                console.log(
@@ -245,14 +259,16 @@ export const initWebsocket =
   async (hostnameIn, appCBIn) => {
     hostname = hostnameIn;
     appCB    = appCBIn;
-    appCB({fcCmds:{
+    const fcStateCodes = appCB({fcCmds:{
       fcYawPk:       fcYawPkS, 
       fcYawIk:       fcYawIkS, 
       fcMaxYawIk:    fcMaxYawIkS, 
-      fcBoostK:      fcBoostKS, 
-      fcMaxBoostTgt: fcMaxBoostTgtS, 
+      fcBoostMs:     fcBoostMsS, 
       fcBoostPwm:    fcBoostPwmS, 
     }});
+    for(let [name, fc] of 
+          Object.entries(fcStateCodes))
+      stateNamesByCode[fc] = name;
     connectToWs();
     send(fcReportAll);
     setInterval(send, REPORT_INTERVAL, fcReport);

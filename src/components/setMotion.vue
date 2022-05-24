@@ -12,7 +12,8 @@
           @change="(e)=>chgVal(e, fcCmd)"
           style="width:40%;height:25px; font-size:20px;  \
                   float:left;" 
-         :value="global.curStatus[fcCode.toLowerCase()]/1000")
+         :value="global.curStatus[fcCode.toLowerCase()] / \
+                 (fcCode == 'J' ? 1 : 1000)")
 
   div(@click="doneClick"
       style="float:right; font-size:13px;   \

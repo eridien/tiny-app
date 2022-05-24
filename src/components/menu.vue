@@ -5,6 +5,7 @@
              position:relative;")
   #buttons
     .button(@click="stopEvt"     )  Stop
+    .button(@click="resetEvt"    )  Reset
     .button(@click="pwrOffEvt"   )  Power Off
     .button(@click="settingsEvt" )  Settings 
     .button(@click="calibrateEvt")  Calibrate
@@ -64,6 +65,10 @@
 
   const stopEvt = () => {
     evtBus.emit('stop');
+    closeMenu();
+  }
+  const resetEvt = () => {
+    evtBus.emit('reset');
     closeMenu();
   }
   const pwrOffEvt = () => {

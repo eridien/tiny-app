@@ -12,10 +12,10 @@
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
   import { initWebsocket,  
-           setVel, setYaw, stop, pwrOff, calibrate,
+           setVel, setYaw, stop, reset, pwrOff, calibrate,
            setYawPk, setYawIk, setMaxYawIk, 
            setName, resumeWs,
-           setBoostK, setMaxBoostTgt, setBoostPwm }
+           setBoostMs, setBoostPwm }
           from "./websocket.js";
 
   const global = inject('global');
@@ -45,8 +45,7 @@
     fcYawRateErrInt : 'i',
     fcBoostSpeed    : 'o',
 
-    fcBoostKC       : 'j',
-    fcMaxBoostTgtC  : 'k',
+    fcBoostMsC      : 'j',
     fcBoostPwmC     : 'm',
     fcLeftPwm       : 'l',
     fcRightPwm      : 'r',
@@ -55,8 +54,7 @@
   evtBus.on('setYawPk',       (awPk)=> {setYawPk(awPk);      });
   evtBus.on('setYawIk',       (awIk)=> {setYawIk(awIk);      });
   evtBus.on('setMaxYawIk',    (max) => {setMaxYawIk(max);    });
-  evtBus.on('setBoostK',      (bt)  => {setBoostK(bt);       });
-  evtBus.on('setMaxBoostTgt', (btT) => {setMaxBoostTgt(btT); });
+  evtBus.on('setBoostMs',     (bms) => {setBoostMs(bms);     });
   evtBus.on('setBoostPwm',    (btP) => {setBoostPwm(btP);    });
 
   evtBus.on("setWifiName", (name)  => {setName(name);    }); 
@@ -74,6 +72,10 @@
   });
   evtBus.on('stop', () => {
     stop();
+    stopped = true;
+  });
+  evtBus.on('reset', () => {
+    reset();
     stopped = true;
   });
   evtBus.on('pwrOff', () => {
@@ -137,7 +139,7 @@
   const websocketCB = (status) => {
     if(status.fcCmds !== undefined) {
       global.fcCmds = status.fcCmds;
-      return;
+      return global.fcStateCodes;
     }
     if(status.newerConn !== undefined) {
       evtBus.emit('showMessage',
@@ -197,9 +199,8 @@
     }
 
     const now = new Date();
-    if(!stopped && 
-        Math.abs(global.curStatus.y) > 2000) {
-
+    if(!stopped) {
+      // console.log(global.curStatus);
       if(minMaxDelay-- < 0) {
         const err = +global.curStatus.z;
         max = Math.max(max, err);
@@ -211,11 +212,10 @@
             .toString().padStart(2,'0') + ':' + 
         now.getUTCMilliseconds()
             .toString().padStart(3,'0') + ' ' + 
-        global.curStatus.b.toString().padStart(4) + ', ' +
-        dbgStr('o','bst')          +
+        // global.curStatus.b.toString().padStart(4) + ', ' +
         dbgStr('v','vel')          +
-        // dbgStr('t','tgt',    1, 4) +
-        // dbgStr('y','yaw', 1000, 4) +
+        dbgStr('t','tgt',    1, 4) +
+        dbgStr('y','yaw', 1000, 4) +
         // dbgStr('z','err',    1, 4) +
         // dbgStr('i','int',   10, 4) +
         dbgStr('l','lft')          +
@@ -226,6 +226,7 @@
         plotStr('o', '*', 20)
       );
     };
+
     //////////////  END PLOT DEBUG  //////////////
 
     if(status?.[fcCalibDone] === 1)

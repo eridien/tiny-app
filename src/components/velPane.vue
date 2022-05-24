@@ -160,12 +160,13 @@
           vel.value = (touch.pageY - global.HDR_HGT); 
 
         vel.value = Math.max(0, 
-                    Math.min(vel.value/paneHgt, 1));
+                    Math.min(vel.value / paneHgt, 1));
 
         drawSliders();
 
+        // emitted vel is 0 to 100%
         evtBus.emit('vel', 
-                dir.value * Math.round(vel.value * 1000));
+                dir.value * Math.round(vel.value * 100000));
       }, 
       {passive:false, capture:true}
     );
