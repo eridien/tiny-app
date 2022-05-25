@@ -2,7 +2,7 @@ import {createApp} from 'vue'
 import App         from './App.vue'
 import mitt        from 'mitt'
 
-const BOT_HOSTNAME_DEV = "192.168.1.155"; // hahn-fi
+const BOT_HOSTNAME_DEV = "192.168.1.231"; // hahn-fi
 // const BOT_HOSTNAME_DEV = "192.168.1.145"; // hahn-fi
 // const BOT_HOSTNAME_DEV = "192.168.86.55"; // pinkpalace
 

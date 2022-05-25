@@ -1,6 +1,6 @@
 const SHOW_SENDS      = false;
 const SHOW_RECVS      = false;
-const REPORT_INTERVAL =   50;
+const REPORT_INTERVAL =   200;
 
 // commands to bot
 const fcReport     = 'R';
@@ -133,7 +133,7 @@ const send = (code, val = null) => {
   else
     pendingCmds[code] = sendVal;
   if(val !== null) lastFcVal[code] = val;
-  if(code == fcReport    || 
+  if(code == fcReport    || code == fcStopCmd ||
      code == fcReportAll || code == fcCalibrate) 
       sendAllCmds();
 }

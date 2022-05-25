@@ -48,11 +48,10 @@
     }
 
     let clickStarted = false;
-    let angleStart;
+    let lastAngle;
     paneEle.addEventListener("touchstart", 
       (event) => {
         stopAllPropogation();
-        clickStarted = true;
 
         let touch = null;
         for(let chgdTouch of event.changedTouches) {
@@ -60,12 +59,9 @@
              chgdTouch.target == wheelEle) 
             touch = chgdTouch;
         }
-        if(touch != null)
-          angleStart = 
-               getAngle(touch.pageX, touch.pageY) 
-               - angle.value;
-        else
-          angleStart = 0;
+        if(touch == null) return
+        clickStarted = true;
+        lastAngle = getAngle(touch.pageX, touch.pageY);
       },
       {passive:false, capture:true}
     );
@@ -81,8 +77,19 @@
             touch = chgdTouch;
         }
         if(touch != null) {
-          angle.value = 
-            getAngle(touch.pageX, touch.pageY) - angleStart;
+          const thisAngle = getAngle(touch.pageX, touch.pageY);
+
+          let diff = thisAngle - lastAngle;
+          if (diff >=  180) diff -= 360;
+          if (diff <= -180) diff += 360;
+          angle.value += diff;
+          lastAngle = thisAngle;
+
+          console.log('touch', { 
+              thisAngle:thisAngle.toFixed(2), 
+              diff:diff.toFixed(2), 
+              angval: angle.value.toFixed(2) });
+            
           const yaw = angle.value * 
               Math.pow(SENS_FACTOR, global.steeringSens-5);
           evtBus.emit('yaw', yaw);
