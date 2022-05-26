@@ -12,10 +12,10 @@
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
   import { initWebsocket,  
-           setVel, setYaw, stop, reset, pwrOff, calibrate,
+           setVel, setYawRate, setYaw, stop, reset, pwrOff, calibrate,
            setYawPk, setYawIk, setMaxYawIk, 
            setName, resumeWs,
-           setBoostMs, setBoostPwm, setCompassMode }
+           setBoostMs, setBoostPwm }
           from "./websocket.js";
 
   const global = inject('global');
@@ -35,20 +35,19 @@
   
   // debug from bot
   global.fcStateCodes = {
-    fcBatV          : 'b',
-    fcRssi          : 'w',
     fcVelTgt        : 'v',
     fcYawTgt        : 't',
     fcYawRate       : 'y',
-    fcYawRateErr    : 'z',
-    fcYawRateErrInt : 'i',
+    fcHeading       : 'o',
+    fcYawErr        : 'z',
+    fcYawErrInt     : 'i',
+    fcBoosting      : 'k',
     fcLeftPwm       : 'l',
     fcRightPwm      : 'r',
 
   // motion constants echoed from bot
     fcBoostMsC      : 'j',
     fcBoostPwmC     : 'm',
-    fcCompassC      : 'O',
   }
 
   evtBus.on('setYawPk',       (awPk)=> {setYawPk(awPk);     });
@@ -56,7 +55,6 @@
   evtBus.on('setMaxYawIk',    (max) => {setMaxYawIk(max);   });
   evtBus.on('setBoostMs',     (bms) => {setBoostMs(bms);    });
   evtBus.on('setBoostPwm',    (btP) => {setBoostPwm(btP);   });
-  evtBus.on('compassMode',    (cm)  => {setCompassMode(cm); });
 
   evtBus.on("setWifiName", (name)  => {setName(name);    }); 
   evtBus.on("resumeWs",    ()      => {resumeWs();       });
@@ -67,9 +65,12 @@
     if(vel) stopped = false;
     setVel(vel);      
   });
-  evtBus.on('yaw', (yaw) => {
-    if(yaw) stopped = false;
-    setYaw(yaw); 
+  evtBus.on('yawRate', (yawRate) => {
+    if(yawRate) stopped = false;
+    setYaw(yawRate); 
+  });
+  evtBus.on('yaw', (heading) => {
+    setYaw(heading); 
   });
   evtBus.on('stop', () => {
     stop();

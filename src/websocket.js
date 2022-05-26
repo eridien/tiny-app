@@ -3,17 +3,17 @@ const SHOW_RECVS      = false;
 const REPORT_INTERVAL =   200;
 
 // commands to bot
-const fcReport     = 'R';
-const fcReportAll  = 'Q';
+const fcReport      = 'R';
+const fcReportAll   = 'Q';
 
-const fcVelCmd     = 'V';
-const fcYawCmd     = 'Y';
-const fcCompass    = 'O';
-const fcStopCmd    = 'S';
-const fcReset      = 'U';
-const fcPowerOff   = 'P';
-const fcCalibrate  = 'C';
-const fcNameS      = 'N';
+const fcVelCmd      = 'V';
+const fcYawRateCmd  = 'Y';
+const fcYawCmd      = 'X';
+const fcStopCmd     = 'S';
+const fcResetCmd    = 'U';
+const fcPowerOffCmd = 'P';
+const fcCalibrate   = 'C';
+const fcNameS       = 'N';
 
 // set motion constant commands
 const fcYawPkS       = 'F';
@@ -102,7 +102,7 @@ const sendAllCmds = async () => {
   const str = JSON.stringify(pendingCmds);
   try{
     await webSocket.send(str);
-    sentPwrOff = (pendingCmds?.[fcPowerOff] !== undefined);
+    sentPwrOff = (pendingCmds?.[fcPowerOffCmd] !== undefined);
     pendingCmds = null;
     if(SHOW_SENDS && str != '{"R":0}')
      console.log(`<-- msg sent: ${str}`);
@@ -146,10 +146,15 @@ export const setVel = vel => {  // 0 to 100%
                             Math.round(vel * 1000));
                send(fcVelCmd, vel);
              }
-export const setYaw = yaw => {
-               yaw = Math.round(yaw);
-              //  console.log('sending yaw to bot', yaw);
-               send(fcYawCmd, yaw);
+export const setYawRate = yawRate => {
+               yawRate = Math.round(yawRate);
+              //  console.log('sending yawRate to bot', yawRate);
+               send(fcYawRateCmd, yawRate);
+             }
+export const setYaw = heading => {
+               heading = Math.round(heading);
+              //  console.log('sending heading to bot', heading);
+               send(fcYawCmd, heading);
              }
 export const stop = () => {
                console.log('sending stop to bot');
@@ -157,11 +162,11 @@ export const stop = () => {
              };
 export const reset = () => {
                console.log('sending reset to bot');
-               send(fcReset);
+               send(fcResetCmd);
              };
 export const pwrOff = () => {
                console.log('sending pwroff to bot');
-               send(fcPowerOff);
+               send(fcPowerOffCmd);
              };
              
 export const setYawPk = yawPk => {
@@ -188,11 +193,6 @@ export const setBoostPwm = boostPwm => {
                console.log(
                   'sending boostPwm to bot', boostPwm);
                send(fcBoostPwmS, Math.round(boostPwm * 1000));
-             }
-export const setCompassMode = compass => {
-               console.log(
-                  'sending compass to bot', compass);
-               send(fcCompass, (compass ? 1 : 0));
              }
 export const setName = (name) => {
                console.log(`sending name "${name}" to bot`);

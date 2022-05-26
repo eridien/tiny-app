@@ -48,13 +48,13 @@
   }
   global.steeringSens = sens;
 
-  let compass = localStorage.getItem('compassMode');  
-  if(compass === null) {
-    compass = false;
+  let compassMode = localStorage.getItem('compassMode');  
+  if(compassMode === null) {
+    compassMode = false;
     localStorage.setItem('compassMode', 0);
-    evtBus.emit('compassMode', compass);
+    evtBus.emit('compassMode', compassMode);
   }
-  global.compassMode = compass;
+  global.compassMode = compassMode;
 
   const menuOpen      = ref(false);
   const messageOpen   = ref(false)
