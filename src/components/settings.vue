@@ -55,10 +55,18 @@
   const wifiName = ref(global.wifiName);
 
   const sensEvt = (event) => {
-    const val = event.target.value;
-    dispVal.value = val;
-    global.steeringSens = val;
-    localStorage.setItem('steeringSens', val);
+    const sens = event.target.value;
+    console.log({sens});
+    dispVal.value = sens;
+    global.steeringSens = sens;
+    localStorage.setItem('steeringSens', sens);
+  }
+
+  const compassEvt = (event) => {
+    const compass = event.target.checked;
+    console.log({compass});
+    global.compassMode = compass;
+    localStorage.setItem('compassMode', ''+ compass);
   }
 
   let nameEle;

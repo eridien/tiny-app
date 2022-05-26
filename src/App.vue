@@ -15,7 +15,7 @@
            setVel, setYaw, stop, reset, pwrOff, calibrate,
            setYawPk, setYawIk, setMaxYawIk, 
            setName, resumeWs,
-           setBoostMs, setBoostPwm }
+           setBoostMs, setBoostPwm, setCompassMode }
           from "./websocket.js";
 
   const global = inject('global');
@@ -51,11 +51,12 @@
     fcCompassC      : 'O',
   }
 
-  evtBus.on('setYawPk',       (awPk)=> {setYawPk(awPk);      });
-  evtBus.on('setYawIk',       (awIk)=> {setYawIk(awIk);      });
-  evtBus.on('setMaxYawIk',    (max) => {setMaxYawIk(max);    });
-  evtBus.on('setBoostMs',     (bms) => {setBoostMs(bms);     });
-  evtBus.on('setBoostPwm',    (btP) => {setBoostPwm(btP);    });
+  evtBus.on('setYawPk',       (awPk)=> {setYawPk(awPk);     });
+  evtBus.on('setYawIk',       (awIk)=> {setYawIk(awIk);     });
+  evtBus.on('setMaxYawIk',    (max) => {setMaxYawIk(max);   });
+  evtBus.on('setBoostMs',     (bms) => {setBoostMs(bms);    });
+  evtBus.on('setBoostPwm',    (btP) => {setBoostPwm(btP);   });
+  evtBus.on('compassMode',    (cm)  => {setCompassMode(cm); });
 
   evtBus.on("setWifiName", (name)  => {setName(name);    }); 
   evtBus.on("resumeWs",    ()      => {resumeWs();       });

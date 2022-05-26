@@ -41,12 +41,20 @@
   const global = inject('global');
   const evtBus = inject('evtBus');   
 
-  let val = localStorage.getItem('steeringSens');  
-  if(val === null) {
-    val = 5;
-    localStorage.setItem('steeringSens', val);
+  let sens = localStorage.getItem('steeringSens');  
+  if(sens === null) {
+    sens = 5;
+    localStorage.setItem('steeringSens', sens);
   }
-  global.steeringSens = val;
+  global.steeringSens = sens;
+
+  let compass = localStorage.getItem('compassMode');  
+  if(compass === null) {
+    compass = false;
+    localStorage.setItem('compassMode', 0);
+    evtBus.emit('compassMode', compass);
+  }
+  global.compassMode = compass;
 
   const menuOpen      = ref(false);
   const messageOpen   = ref(false)

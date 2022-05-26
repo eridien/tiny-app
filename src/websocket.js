@@ -189,7 +189,11 @@ export const setBoostPwm = boostPwm => {
                   'sending boostPwm to bot', boostPwm);
                send(fcBoostPwmS, Math.round(boostPwm * 1000));
              }
-
+export const setCompassMode = compass => {
+               console.log(
+                  'sending compass to bot', compass);
+               send(fcCompass, (compass ? 1 : 0));
+             }
 export const setName = (name) => {
                console.log(`sending name "${name}" to bot`);
                send(fcNameS, name);
