@@ -1,9 +1,10 @@
 <template lang='pug'>
-#settings(style="border-radius:12px; font-size:14px; \
+#settings(style="border-radius:12px; font-size:20px; \
                  background-color:white;             \
                  margin:20px; padding:20px;")
-  div(style="margin-bottom:20px;") Steering Sensitivity
-  div(style="position:relative; font-size:12px; display:flex; \
+  div(style="margin-bottom:20px;font-size:1em;") 
+    | Steering Sensitivity
+  div(style="position:relative; font-size:.8em; display:flex; \
              justifyContent:space-between;                    \
              alignItems:stretch;")
     span Min
@@ -13,23 +14,31 @@
         style="width:100%;" @input="sensEvt" 
         min="1" max="9" step="1" value="5")
 
-  hr(style="color:black; margin:26px;")
+  hr(style="color:black; margin:13px;")
 
-  div(style="margin:15px 0 15px 0") Wi-Fi Name
-  div(style="position:relative; font-size:12px; display:flex; \
+  div(style="display:flex;")
+    input(id="compass" type="checkbox" name="compassChk"
+          style="margin:.3em 6px 0 6px; order:1;" 
+          @input="compassEvt")
+    label(for="compassChk" style="order:2; font-size:.9em;") 
+      | Compass Steering Mode
+
+  hr(style="color:black; margin:13px;")
+
+  div(style="margin:20px 0 10px 0") Wi-Fi Name
+  div(style="position:relative; font-size:1em; display:flex; \
              justifyContent:left;                             \
              alignItems:stretch;")
-  div(style="position:relative; margin:5px 0 10px 0;")
-    div(style="width:25%;float:left") T-Bot-
-    input(id="wifiName" type="text" 
-          style="width:60%;height:25px; font-size:10px;       \
-                  float:left;" 
+    label(for="nameInp" 
+          style="font-size:1em; margin-top:0.1em;") T-Bot- 
+    input(id="wifiName" type="text" name="nameInp"
+          style="width:60%; height:25px; font-size:.7em;" 
          :value="global.curStatus[global.fcName]")
 
-  hr(style="color:black; margin-top:56px;")
+  hr(style="color:black; margin-top:20px;")
 
   div(@click="doneClick"
-      style="float:right; font-size:13px;           \
+      style="float:right; font-size:1em;           \
              background-color:#ddd;                 \
              border-radius:6px;                     \
              padding:5px; margin:5px 5px 0 0") Done

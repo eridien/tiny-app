@@ -2,7 +2,7 @@
 #menu(style="border-radius:12px; font-size:14px; \
              background-color:#c8c8c8;           \
              display:table;\
-             position:relative;")
+             position:relative;cursor:pointer;")
   #buttons
     .button(@click="stopEvt"     )  Stop
     .button(@click="resetEvt"    )  Reset

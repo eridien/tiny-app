@@ -26,7 +26,6 @@
 // status from bot
   const fcBatV      = 'b';
   const fcRssi      = 'w';
-  const AccelOfs    = 'a';
   const YawOfs      = 'd';
   const fcCalibDone = 'c';
   const fcError     = 'e';
@@ -34,7 +33,7 @@
   // wifi ssid suffix from bot
   global.fcName     = 'n';
   
-  // motion state debug from bot
+  // debug from bot
   global.fcStateCodes = {
     fcBatV          : 'b',
     fcRssi          : 'w',
@@ -43,12 +42,13 @@
     fcYawRate       : 'y',
     fcYawRateErr    : 'z',
     fcYawRateErrInt : 'i',
-    fcBoostSpeed    : 'o',
-
-    fcBoostMsC      : 'j',
-    fcBoostPwmC     : 'm',
     fcLeftPwm       : 'l',
     fcRightPwm      : 'r',
+
+  // motion constants echoed from bot
+    fcBoostMsC      : 'j',
+    fcBoostPwmC     : 'm',
+    fcCompassC      : 'O',
   }
 
   evtBus.on('setYawPk',       (awPk)=> {setYawPk(awPk);      });
@@ -102,8 +102,7 @@
     if(!calibrating) return;
     calibrating = false;
     console.log('calibration done', 
-      {AccelOfs: global.curStatus[AccelOfs], 
-       YawOfs:   global.curStatus[YawOfs]});
+      {YawOfs:   global.curStatus[YawOfs]});
     evtBus.emit('showMessage', {
       messageText:  'Calibrating finished.',
       buttonText:   'Close',

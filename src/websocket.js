@@ -5,15 +5,17 @@ const REPORT_INTERVAL =   200;
 // commands to bot
 const fcReport     = 'R';
 const fcReportAll  = 'Q';
+
 const fcVelCmd     = 'V';
 const fcYawCmd     = 'Y';
+const fcCompass    = 'O';
 const fcStopCmd    = 'S';
 const fcReset      = 'U';
 const fcPowerOff   = 'P';
 const fcCalibrate  = 'C';
 const fcNameS      = 'N';
 
-// set motion constants
+// set motion constant commands
 const fcYawPkS       = 'F';
 const fcYawIkS       = 'G';
 const fcMaxYawIkS    = 'H';
