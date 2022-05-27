@@ -18,9 +18,9 @@
 
   div(style="display:flex;")
     input(id="compass" type="checkbox" name="compassChk"
-          style="margin:.3em 6px 0 6px; order:1;" 
+          style="margin:.3em 6px 0 6px;" 
           @input="compassEvt")
-    label(for="compassChk" style="order:2; font-size:.9em;") 
+    label(for="compassChk" style="font-size:.9em;") 
       | Compass Steering Mode
 
   hr(style="color:black; margin:13px;")
@@ -59,14 +59,15 @@
     console.log({sens});
     dispVal.value = sens;
     global.steeringSens = sens;
-    localStorage.setItem('steeringSens', sens);
+    localStorage.setItem('steeringSens', ''+ sens);
   }
 
   const compassEvt = (event) => {
-    const compass = event.target.checked;
-    console.log({compass});
-    global.compassMode = compass;
-    localStorage.setItem('compassMode', ''+ compass);
+    const compassMode = event.target.checked;
+    console.log({compassMode});
+    global.compassMode = compassMode;
+    localStorage.setItem('compassMode', 
+        compassMode ? 'true' : 'false');
   }
 
   let nameEle;
@@ -75,6 +76,10 @@
   onMounted(()=> {
     const sensEle = document.getElementById('sens');
     sensEle.value = global.steeringSens;
+
+    const compassEle = document.getElementById('compass');
+    compassEle.checked = global.compassMode;
+
     dispVal.value = global.steeringSens;
     nameEle       = document.getElementById('wifiName');
     nameAtOpen    = nameEle.value;
@@ -88,9 +93,6 @@
       buttonText:   'Ok'}
     );
   });
-
-  // This doesn't work ???
-  // const reBadChars = new RegExp(/[{":\\,}?\$\[\]+]/,'g');
 
   const doneClick = () => {
     evtBus.emit('menuOpen', false);

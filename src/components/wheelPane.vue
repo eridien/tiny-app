@@ -79,6 +79,13 @@
         if(touch != null) {
           const thisAngle = getAngle(touch.pageX, touch.pageY);
 
+          if(global.compassMode) {
+            angle.value = thisAngle;
+            // console.log({thisAngle:thisAngle.toFixed(2)});
+            evtBus.emit('yaw', thisAngle);
+            return;
+          }
+
           let diff = thisAngle - lastAngle;
           if (diff >=  180) diff -= 360;
           if (diff <= -180) diff += 360;
@@ -92,7 +99,7 @@
             
           const yaw = angle.value * 
               Math.pow(SENS_FACTOR, global.steeringSens-5);
-          evtBus.emit('yaw', yaw);
+          evtBus.emit('yawRate', yaw);
         }
       },
       {passive:false, capture:true}
@@ -103,7 +110,7 @@
         stopAllPropogation();
         if(clickStarted) {
           // touch click
-          if(angle.value != 0) {
+          if(angle.value != 0 && !global.compassMode) {
             // first click just straightens wheel
             angle.value = 0;
             evtBus.emit('yaw', 0);

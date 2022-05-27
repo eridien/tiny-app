@@ -44,17 +44,19 @@
   let sens = localStorage.getItem('steeringSens');  
   if(sens === null) {
     sens = 5;
-    localStorage.setItem('steeringSens', sens);
+    localStorage.setItem('steeringSens', ''+ sens);
   }
   global.steeringSens = sens;
+  console.log({sens});
 
   let compassMode = localStorage.getItem('compassMode');  
   if(compassMode === null) {
     compassMode = false;
-    localStorage.setItem('compassMode', 0);
-    evtBus.emit('compassMode', compassMode);
+    localStorage.setItem('compassMode', 'false');
+    evtBus.emit('compassMode', false);
   }
   global.compassMode = compassMode;
+  console.log({compassMode});
 
   const menuOpen      = ref(false);
   const messageOpen   = ref(false)
