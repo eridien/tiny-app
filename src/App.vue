@@ -1,6 +1,6 @@
 <template lang='pug'>
 #app
-  Header(:style="{width:'100vw',                   \
+  Header(:style="{width:'100vw', fontSize:'14px',   \
                   height:`${global.HDR_HGT-15}px`, \
                   margin:'0 5vw 0 5vw'}")
   Controls(style="width:calc(100vw-20px);")
@@ -70,9 +70,6 @@
     stopped = false;
     setYaw(heading); 
   });
-  // evtBus.on('clrYaw', () => {
-  //   clrYaw(); 
-  // });
   evtBus.on('stop', () => {
     stop();
     stopped = true;
@@ -222,11 +219,11 @@
         dbgStr('z','err',    1, 4) +
         dbgStr('i','int',   10, 4) +
         dbgStr('l','lft')          +
-        dbgStr('r','rgt')          +
+        dbgStr('r','rgt')          
 
         // min.toString().padStart(4) +
         // max.toString().padStart(4) +
-        plotStr('o', '*', 20)
+        // plotStr('o', '*', 20)
       );
     };
 
@@ -282,8 +279,13 @@
 
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
+
     initWebsocket(global.hostname, websocketCB);
+
+    console.log('app onMounted clrYaw');
+
     clrYaw();
+
     // setTimeout(() => {
     //   if(!websocketOpen) showNoWebsocket();
     // }, 2000);

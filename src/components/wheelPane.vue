@@ -28,6 +28,7 @@
     }
     getCenterXY();
 
+    // get angle of xy,  -180 to +180
     const getAngle = (x,y) => {
       const relX =   x-centerX;
       const relY = -(y-centerY);
@@ -45,7 +46,7 @@
     }
 
     let clickStarted = false;
-    let lastAngle;
+
     paneEle.addEventListener("touchstart", 
       (event) => {
         stopAllPropogation();
@@ -58,10 +59,11 @@
         }
         if(touch == null) return
         clickStarted = true;
-        lastAngle = getAngle(touch.pageX, touch.pageY);
       },
       {passive:false, capture:true}
     );
+    
+    let lastAngle = 0;
 
     paneEle.addEventListener("touchmove", 
       (event) => {
@@ -75,9 +77,13 @@
         }
         if(touch != null) {
           const thisAngle = getAngle(touch.pageX, touch.pageY);
-          angle.value = thisAngle;
+          let diff  = thisAngle - lastAngle;
+          if(diff < -180) diff += 360;
+          if(diff > +180) diff -= 360;
+          angle.value += diff;
+          lastAngle = thisAngle;
           // console.log({thisAngle:thisAngle.toFixed(2)});
-          evtBus.emit('yaw', thisAngle);
+          evtBus.emit('yaw', angle.value);
         }
       },
       {passive:false, capture:true}

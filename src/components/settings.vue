@@ -3,20 +3,19 @@
                  background-color:white;             \
                  margin:20px; padding:20px;")
 
-  div(style="margin:20px 0 10px 0") Wi-Fi Name
-  div(style="position:relative; font-size:1em; display:flex; \
+  div(style="margin:20px 0 20px 0") Wi-Fi Name
+  div(style="position:relative; font-size:1em; display:flex;  \
              justifyContent:left;                             \
              alignItems:stretch;")
     label(for="nameInp" 
           style="font-size:1em; margin-top:0.1em;") T-Bot- 
     input(id="wifiName" type="text" name="nameInp"
-          style="width:60%; height:25px; font-size:.7em;" 
+          style="width:60%; height:25px; font-size:.9em;      \
+                 margin-bottom:20px; font-weight:500;"
          :value="global.curStatus[global.fcName]")
 
-  hr(style="color:black; margin-top:20px;")
-
   div(@click="doneClick"
-      style="float:right; font-size:1em;           \
+      style="float:right; font-size:1em;            \
              background-color:#ddd;                 \
              border-radius:6px;                     \
              padding:5px; margin:5px 5px 0 0") Done

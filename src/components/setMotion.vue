@@ -10,13 +10,13 @@
                margin-right:10px;") {{fcCmd.slice(2)}}
     input(:id="fcCmd" type="number" 
           @change="(e)=>chgVal(e, fcCmd)"
-          style="width:40%;height:25px; font-size:20px;  \
+          style="width:40%;height:25px; font-size:1em;  \
                   float:left;" 
          :value="global.curStatus[fcCode.toLowerCase()] / \
                  (fcCode == 'J' ? 1 : 1000)")
 
   div(@click="doneClick"
-      style="float:right; font-size:13px;   \
+      style="float:right; font-size:1em;   \
              background-color:#ddd;         \
              border-radius:6px;             \
              padding:5px; margin:20px 5px 0 0") Done

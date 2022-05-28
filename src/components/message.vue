@@ -1,6 +1,6 @@
 <template lang='pug'>
-#message(style="border-radius:12px; font-size:13px;  \
-                background-color:white;              \
+#message(style="border-radius:.6em; font: size 1em;   \
+                background-color:white;                 \
                 margin:10px; padding:20px;") 
   div                           {{messageText}}
   div(v-if="messageText2" style="height:15px;")
@@ -16,7 +16,7 @@
 
 <style scoped>
   .button {
-    font-size:11px;
+    font-size:1em;
     background-color:#ddd;
     border-radius:6px;
     padding:5px; 

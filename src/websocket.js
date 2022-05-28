@@ -152,7 +152,7 @@ export const setYaw = heading => {
                send(fcYawCmd, heading);
              }
 export const clrYaw = () => {
-              //  console.log('sending clrYaw to bot');
+               console.log('sending clrYaw to bot');
                send(fcClrYawCmd);
              }
 export const stop = () => {
