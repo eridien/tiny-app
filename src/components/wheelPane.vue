@@ -78,28 +78,9 @@
         }
         if(touch != null) {
           const thisAngle = getAngle(touch.pageX, touch.pageY);
-
-          if(global.compassMode) {
-            angle.value = thisAngle;
-            // console.log({thisAngle:thisAngle.toFixed(2)});
-            evtBus.emit('yaw', thisAngle);
-            return;
-          }
-
-          let diff = thisAngle - lastAngle;
-          if (diff >=  180) diff -= 360;
-          if (diff <= -180) diff += 360;
-          angle.value += diff;
-          lastAngle = thisAngle;
-
-          console.log('touch', { 
-              thisAngle:thisAngle.toFixed(2), 
-              diff:diff.toFixed(2), 
-              angval: angle.value.toFixed(2) });
-            
-          const yaw = angle.value * 
-              Math.pow(SENS_FACTOR, global.steeringSens-5);
-          evtBus.emit('yawRate', yaw);
+          angle.value = thisAngle;
+          // console.log({thisAngle:thisAngle.toFixed(2)});
+          evtBus.emit('yaw', thisAngle);
         }
       },
       {passive:false, capture:true}
@@ -110,14 +91,7 @@
         stopAllPropogation();
         if(clickStarted) {
           // touch click
-          if(angle.value != 0 && !global.compassMode) {
-            // first click just straightens wheel
-            angle.value = 0;
-            evtBus.emit('yaw', 0);
-          }
-          else 
-            // second click stops
-            evtBus.emit('stop');
+          evtBus.emit('stop');
           clickStarted = false;
         }
       },
@@ -125,7 +99,6 @@
     );
 
     evtBus.on('stop', () => {
-      if(!global.compassMode) angle.value  = 0;
       clickStarted = false;
     });
 

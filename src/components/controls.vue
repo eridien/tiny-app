@@ -49,15 +49,6 @@
   global.steeringSens = sens;
   console.log({sens});
 
-  let compassMode = localStorage.getItem('compassMode');  
-  if(compassMode === null) {
-    compassMode = false;
-    localStorage.setItem('compassMode', 'false');
-    evtBus.emit('compassMode', false);
-  }
-  global.compassMode = compassMode;
-  console.log({compassMode});
-
   const menuOpen      = ref(false);
   const messageOpen   = ref(false)
 

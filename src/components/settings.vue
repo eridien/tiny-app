@@ -16,15 +16,6 @@
 
   hr(style="color:black; margin:13px;")
 
-  div(style="display:flex;")
-    input(id="compass" type="checkbox" name="compassChk"
-          style="margin:.3em 6px 0 6px;" 
-          @input="compassEvt")
-    label(for="compassChk" style="font-size:.9em;") 
-      | Compass Steering Mode
-
-  hr(style="color:black; margin:13px;")
-
   div(style="margin:20px 0 10px 0") Wi-Fi Name
   div(style="position:relative; font-size:1em; display:flex; \
              justifyContent:left;                             \
@@ -62,23 +53,12 @@
     localStorage.setItem('steeringSens', ''+ sens);
   }
 
-  const compassEvt = (event) => {
-    const compassMode = event.target.checked;
-    console.log({compassMode});
-    global.compassMode = compassMode;
-    localStorage.setItem('compassMode', 
-        compassMode ? 'true' : 'false');
-  }
-
   let nameEle;
   let nameAtOpen;
 
   onMounted(()=> {
     const sensEle = document.getElementById('sens');
     sensEle.value = global.steeringSens;
-
-    const compassEle = document.getElementById('compass');
-    compassEle.checked = global.compassMode;
 
     dispVal.value = global.steeringSens;
     nameEle       = document.getElementById('wifiName');
