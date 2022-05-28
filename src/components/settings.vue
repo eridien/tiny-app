@@ -2,19 +2,6 @@
 #settings(style="border-radius:12px; font-size:20px; \
                  background-color:white;             \
                  margin:20px; padding:20px;")
-  div(style="margin-bottom:20px;font-size:1em;") 
-    | Steering Sensitivity
-  div(style="position:relative; font-size:.8em; display:flex; \
-             justifyContent:space-between;                    \
-             alignItems:stretch;")
-    span Min
-    div {{dispVal}}
-    span Max
-  input(id="sens" type="range" 
-        style="width:100%;" @input="sensEvt" 
-        min="1" max="9" step="1" value="5")
-
-  hr(style="color:black; margin:13px;")
 
   div(style="margin:20px 0 10px 0") Wi-Fi Name
   div(style="position:relative; font-size:1em; display:flex; \
@@ -45,24 +32,12 @@
 
   const wifiName = ref(global.wifiName);
 
-  const sensEvt = (event) => {
-    const sens = event.target.value;
-    console.log({sens});
-    dispVal.value = sens;
-    global.steeringSens = sens;
-    localStorage.setItem('steeringSens', ''+ sens);
-  }
-
   let nameEle;
   let nameAtOpen;
 
   onMounted(()=> {
-    const sensEle = document.getElementById('sens');
-    sensEle.value = global.steeringSens;
-
-    dispVal.value = global.steeringSens;
-    nameEle       = document.getElementById('wifiName');
-    nameAtOpen    = nameEle.value;
+    nameEle    = document.getElementById('wifiName');
+    nameAtOpen = nameEle.value;
   });
 
   evtBus.on('savedName', () => {

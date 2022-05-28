@@ -15,9 +15,6 @@
 
   const angle = ref(0);
 
-// max steering sensitivity is SENS_FACTOR**(5-steeringSens)
-  const SENS_FACTOR = 1.2;
-
   onMounted(() => { 
 
     const paneEle  = document.getElementById('wheelPane');

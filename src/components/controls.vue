@@ -41,14 +41,6 @@
   const global = inject('global');
   const evtBus = inject('evtBus');   
 
-  let sens = localStorage.getItem('steeringSens');  
-  if(sens === null) {
-    sens = 5;
-    localStorage.setItem('steeringSens', ''+ sens);
-  }
-  global.steeringSens = sens;
-  console.log({sens});
-
   const menuOpen      = ref(false);
   const messageOpen   = ref(false)
 
