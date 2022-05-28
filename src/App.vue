@@ -12,7 +12,8 @@
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
   import { initWebsocket,  
-           setVel, setYawRate, setYaw, stop, reset, pwrOff, calibrate,
+           setVel, setYaw, clrYaw,
+           stop, reset, pwrOff, calibrate,
            setYawPk, setYawIk, setMaxYawIk, 
            setName, resumeWs,
            setBoostMs, setBoostPwm }
@@ -65,13 +66,13 @@
     if(vel) stopped = false;
     setVel(vel);      
   });
-  evtBus.on('yawRate', (yawRate) => {
-    if(yawRate) stopped = false;
-    setYaw(yawRate); 
-  });
   evtBus.on('yaw', (heading) => {
+    stopped = false;
     setYaw(heading); 
   });
+  // evtBus.on('clrYaw', () => {
+  //   clrYaw(); 
+  // });
   evtBus.on('stop', () => {
     stop();
     stopped = true;
@@ -209,16 +210,17 @@
       }
 
       console.log(
-        now.getUTCSeconds()
-            .toString().padStart(2,'0') + ':' + 
-        now.getUTCMilliseconds()
-            .toString().padStart(3,'0') + ' ' + 
-        // global.curStatus.b.toString().padStart(4) + ', ' +
-        dbgStr('v','vel')          +
+        // now.getUTCSeconds()
+        //     .toString().padStart(2,'0') + ':' + 
+        // now.getUTCMilliseconds()
+        //     .toString().padStart(3,'0') + ' ' + 
+        global.curStatus.b.toString().padStart(4) + ', ' +
+        // dbgStr('v','vel')          +
         dbgStr('t','tgt',    1, 4) +
-        dbgStr('y','yaw', 1000, 4) +
-        // dbgStr('z','err',    1, 4) +
-        // dbgStr('i','int',   10, 4) +
+        dbgStr('y','ywr', 1000, 4) +
+        dbgStr('o','head')         +
+        dbgStr('z','err',    1, 4) +
+        dbgStr('i','int',   10, 4) +
         dbgStr('l','lft')          +
         dbgStr('r','rgt')          +
 
@@ -281,6 +283,7 @@
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);
     initWebsocket(global.hostname, websocketCB);
+    clrYaw();
     // setTimeout(() => {
     //   if(!websocketOpen) showNoWebsocket();
     // }, 2000);

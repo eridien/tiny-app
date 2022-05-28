@@ -7,8 +7,8 @@ const fcReport      = 'R';
 const fcReportAll   = 'Q';
 
 const fcVelCmd      = 'V';
-const fcYawRateCmd  = 'Y';
-const fcYawCmd      = 'X';
+const fcYawCmd      = 'Y';
+const fcClrYawCmd   = 'X';
 const fcStopCmd     = 'S';
 const fcResetCmd    = 'U';
 const fcPowerOffCmd = 'P';
@@ -146,15 +146,14 @@ export const setVel = vel => {  // 0 to 100%
                             Math.round(vel * 1000));
                send(fcVelCmd, vel);
              }
-export const setYawRate = yawRate => {
-               yawRate = Math.round(yawRate);
-              //  console.log('sending yawRate to bot', yawRate);
-               send(fcYawRateCmd, yawRate);
-             }
 export const setYaw = heading => {
                heading = Math.round(heading);
               //  console.log('sending heading to bot', heading);
                send(fcYawCmd, heading);
+             }
+export const clrYaw = () => {
+              //  console.log('sending clrYaw to bot');
+               send(fcClrYawCmd);
              }
 export const stop = () => {
                console.log('sending stop to bot');

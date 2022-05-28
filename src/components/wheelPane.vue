@@ -125,7 +125,7 @@
     );
 
     evtBus.on('stop', () => {
-      angle.value  = 0;
+      if(!global.compassMode) angle.value  = 0;
       clickStarted = false;
     });
 
