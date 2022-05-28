@@ -10,7 +10,6 @@
     .button(@click="settingsEvt" )  Settings 
     .button(@click="calibrateEvt")  Calibrate
     .button(@click="setMotionEvt")  Constants
-    .button(@click="showStatusEvt") Status 
     .button(@click="closeMenuEvt")  Close 
 
   #cover(v-show="settingsOpen || motionOpen || statusOpen"
@@ -30,9 +29,6 @@
             style="position:fixed; z-index:1001;  \
                    top:90px; right:70px;")
 
-  Status(v-show="statusOpen"
-         style="position:fixed; z-index:1001;  \
-                top:90px; right:70px;")
 </template>
 
 <style scoped>
@@ -48,7 +44,6 @@
   import {ref, inject} from 'vue'
   import Settings  from './settings.vue';
   import SetMotion from './setMotion.vue';
-  import Status    from './status.vue';
 
   const evtBus = inject('evtBus');   
 
