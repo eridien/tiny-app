@@ -115,7 +115,9 @@
     );
 
     evtBus.on('stop', () => {
-      clicking = false;
+      wheelAngle.value = 0;
+      heading          = 0;
+      clicking         = false;
     });
 
     window.addEventListener('resize', () => {

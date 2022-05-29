@@ -2,7 +2,7 @@
 #app
   Header(:style="{width:'90vw', fontSize:'14px',   \
                   height:`${global.HDR_HGT-15}px`, \
-                  margin:'0 0 0 5vw'}")
+                  marginLeft:'5vw'}")
   Controls(style="width:calc(100vw-20px);")
 
 </template>
@@ -72,6 +72,7 @@
     setYaw(heading); 
   });
   evtBus.on('stop', () => {
+    clrYaw();
     stop();
     stopped = true;
   });
@@ -284,8 +285,6 @@
                 `hostname: ${global.hostname} ---`);
 
     initWebsocket(global.hostname, websocketCB);
-
-    console.log('app onMounted clrYaw');
 
     clrYaw();
 
