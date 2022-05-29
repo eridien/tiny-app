@@ -1,8 +1,8 @@
 <template lang='pug'>
 #app
-  Header(:style="{width:'100vw', fontSize:'14px',   \
+  Header(:style="{width:'90vw', fontSize:'14px',   \
                   height:`${global.HDR_HGT-15}px`, \
-                  margin:'0 5vw 0 5vw'}")
+                  margin:'0 0 0 5vw'}")
   Controls(style="width:calc(100vw-20px);")
 
 </template>

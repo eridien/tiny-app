@@ -1,3 +1,6 @@
 rm -rf /mnt/c/Users/mark/apps/tiny/data/*
-rsync -av --exclude=*-big.png images/ /mnt/c/Users/mark/apps/tiny/data/images
+cp -a images                                    \
+      /mnt/c/Users/mark/apps/tiny/data
+cp -a /mnt/c/Users/mark/apps/tiny/unpacked_fs/* \
+      /mnt/c/Users/mark/apps/tiny/data
 powershell.exe -File release.ps1
