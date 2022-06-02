@@ -142,8 +142,8 @@ const send = (code, val = null) => {
 
 export const setVel = vel => {  // 0 to 100%
                vel = Math.round(vel);
-               console.log('sending vel to bot', 
-                            Math.round(vel * 1000));
+              //  console.log('sending vel to bot', 
+              //               Math.round(vel));
                send(fcVelCmd, vel);
              }
 export const setYaw = heading => {
