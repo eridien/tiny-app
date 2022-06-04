@@ -105,15 +105,19 @@
     let moved = false;
 
     const getTouch = (event) => {
-      for(let chgdTouch of event.changedTouches) {
-        if(chgdTouch.target == paneEle     ||
-           chgdTouch.target == fwdBarEle   ||
-           chgdTouch.target == fwdThumbEle || 
-           chgdTouch.target == revBarEle   ||
-           chgdTouch.target == revThumbEle) 
-          return chgdTouch;
+      for(let touch of event.changedTouches) {
+        if(touch.target == paneEle) 
+          return [touch, 0];
+
+        if(touch.target == fwdBarEle   ||
+           touch.target == fwdThumbEle)
+          return [touch, +1];
+
+        if(touch.target == revBarEle   ||
+           touch.target == revThumbEle) 
+          return [touch, -1];
       }
-      return null;
+      return [null, null];
     }
 
     let startY = 0;
@@ -121,7 +125,7 @@
     paneEle.addEventListener("touchstart", 
       (event) => {
         stopAllPropogation();
-        const touch = getTouch(event);
+        const [touch, d] = getTouch(event);
         if(touch == null) return;
         startY = touch.pageY;
         if(startY > paneHgt - THUMB_HGT || 
@@ -129,6 +133,35 @@
           dir.value = 0;
         moved = false;
       },
+      {passive:false, capture:true}
+    );
+
+    paneEle.addEventListener("touchmove", 
+      (event) => {
+        stopAllPropogation(event);
+        moved = true;
+
+        const [touch, d] = getTouch(event);
+        if(touch == null) return;
+        dir.value = d;
+
+        if(dir.value == 0) 
+          dir.value = ((touch.pageY - startY) > 0 ? -1 : +1);
+        
+        if(dir.value == 1)
+          vel.value = (paneHgt - (touch.pageY - THUMB_HGT)); 
+        else
+          vel.value = (touch.pageY - global.HDR_HGT); 
+
+        vel.value = Math.max(0, 
+                    Math.min(vel.value / paneHgt, 1));
+
+        drawSliders();
+
+        // emitted vel is 0 to 100%
+        evtBus.emit('vel', 
+                dir.value * Math.round(vel.value * 88000 + 12000));
+      }, 
       {passive:false, capture:true}
     );
 
@@ -142,35 +175,6 @@
       {passive:false, capture:true}
     );
       
-    paneEle.addEventListener("touchmove", 
-      (event) => {
-        stopAllPropogation(event);
-        moved = true;
-
-        const touch = getTouch(event);
-        if(touch == null) return;
-
-        if(dir.value == 0) {
-          dir.value = ((touch.pageY - startY) > 0 ? -1 : +1);
-          // console.log("dir.value == 0  =>  dir.value ==", dir.value);
-        }
-        if(dir.value == 1)
-          vel.value = (paneHgt - (touch.pageY - THUMB_HGT)); 
-        else
-          vel.value = (touch.pageY - global.HDR_HGT); 
-
-        vel.value = Math.max(0, 
-                    Math.min(vel.value / paneHgt, 1));
-
-        drawSliders();
-
-        // emitted vel is 0 to 100%
-        evtBus.emit('vel', 
-                dir.value * Math.round(vel.value * 100000));
-      }, 
-      {passive:false, capture:true}
-    );
-
     evtBus.on('stop', () => {
       vel.value = 0;
       dir.value = 0;

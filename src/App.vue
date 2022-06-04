@@ -2,8 +2,10 @@
 #app
   Header(:style="{width:'90vw', fontSize:'14px',   \
                   height:`${global.HDR_HGT-15}px`, \
-                  marginLeft:'5vw'}")
-  Controls(style="width:calc(100vw-20px);")
+                  marginLeft:'5vw',                \
+                  touchAction:'none'}")
+  Controls(style="width:calc(100vw-20px); \
+                  touch-action:none")
 
 </template>
 
@@ -218,10 +220,10 @@
         dbgStr('t','tgt',    1, 4) +
         // dbgStr('d','ofs',    1, 4) +
         // dbgStr('y','ywr', 1000, 4) +
-        dbgStr('a','deg',    1, 4) +
-        dbgStr('o','head')         +
-        dbgStr('z','err',    1, 4) +
-        dbgStr('i','int',   10, 4) +
+        dbgStr('a','deg',    1, 6) +
+        dbgStr('o','head',   1, 4) +
+        // dbgStr('z','err',    1, 4) +
+        dbgStr('i','int',    1, 4) +
         dbgStr('l','lft')          +
         dbgStr('r','rgt')          
 
@@ -249,37 +251,34 @@
 }
 
   const setHeight = (android) => {
-    const footerH = 0; // debug?
-      // document.getElementById('footer')
-               //.offsetHeight;
+    let wrapperH;
     if(android) {
-        const wrapperH = 
+        wrapperH = 
             window.outerHeight / 
-            window.devicePixelRatio - footerH - 1;
+            window.devicePixelRatio - 1;
         document.getElementById('app')
                 .style.height = wrapperH + 'px';
         window.scrollTo(0, 1);
     }
     else {
         window.scrollTo(0, 1);
-        //var headerH = document
-        //  .getElementById('header').offsetHeight;
-        const wrapperH = 
-              window.innerHeight - footerH - 1;
+        wrapperH = 
+              window.innerHeight - 1;
         document.getElementById('app')
                 .style.height = wrapperH + 'px';
     }
+    console.log({android, wrapperH});
   }
 
   onMounted(() => {
-    global.ua = navigator.userAgent;
-    const android = global.ua.includes('Android');
-    console.log({ua:global.ua,android});
+    // global.ua = navigator.userAgent;
+    // const android = global.ua.includes('Android');
+    // console.log({ua:global.ua,android});
 
-    setTimeout(() => {
-        window.scrollTo(0, 1);
-        setTimeout(() => setHeight(android), 100);
-    }, 100);
+    // setTimeout(() => {
+    //     window.scrollTo(0, 1);
+    //     setTimeout(() => setHeight(android), 100);
+    // }, 100);
 
     console.log(`---- App Mounted, ` +
                 `hostname: ${global.hostname} ---`);

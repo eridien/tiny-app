@@ -1,6 +1,13 @@
-rm -rf /mnt/c/Users/mark/apps/tiny/data/*
+# rm -rf /mnt/c/Users/mark/apps/tiny/data/*
+# cp -a images                                    \
+#       /mnt/c/Users/mark/apps/tiny/data
+# cp -a /mnt/c/Users/mark/apps/tiny/unpacked_fs/* \
+#       /mnt/c/Users/mark/apps/tiny/data
+
+rm -rf /mnt/c/Users/mlap/apps/tiny/data/*
 cp -a images                                    \
-      /mnt/c/Users/mark/apps/tiny/data
-cp -a /mnt/c/Users/mark/apps/tiny/unpacked_fs/* \
-      /mnt/c/Users/mark/apps/tiny/data
+      /mnt/c/Users/mlap/apps/tiny/data
+cp -a /mnt/c/Users/mlap/apps/tiny/unpacked_fs/* \
+      /mnt/c/Users/mlap/apps/tiny/data
+
 powershell.exe -File release.ps1
