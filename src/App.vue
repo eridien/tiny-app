@@ -287,8 +287,8 @@
 
     clrYaw();
 
-    // setTimeout(() => {
-    //   if(!websocketOpen) showNoWebsocket();
-    // }, 2000);
+    setTimeout(() => {
+      if(!websocketOpen) showNoWebsocket();
+    }, 2000);
   });
 </script>
