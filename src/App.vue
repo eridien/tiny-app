@@ -218,7 +218,7 @@
         global.curStatus.b.toString().padStart(4) + ', ' +
         // dbgStr('v','vel')          +
         dbgStr('t','tgt',    1, 4) +
-        // dbgStr('d','ofs',    1, 4) +
+        dbgStr('d','ofs',    1, 4) +
         // dbgStr('y','ywr', 1000, 4) +
         dbgStr('a','deg',    1, 6) +
         dbgStr('o','head',   1, 4) +
