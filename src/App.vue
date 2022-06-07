@@ -126,8 +126,7 @@
     evtBus.emit('showMessage',
             {messageText:  'Waiting for connection to a T-Bot. ',
              messageText2: 'Turn on the T-Bot and set ' +
-                           'your phone wi-fi to ' +
-                           `T-Bot-${global.curStatus.n}.`, 
+                           'your phone wi-fi to T-Bot name.', 
              id: 'noWsMsg'});  
   };
 
