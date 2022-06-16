@@ -2,7 +2,7 @@ images-orig
 node_modules
 .vscode/*
 !.vscode/extensions.json
-logs
+logs 
 *.log
 
 npm-debug.log*
