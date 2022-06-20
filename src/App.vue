@@ -25,34 +25,10 @@
 // status from bot
   const fcBatV      = 'b';
   const fcRssi      = 'w';
-  const YawOfs      = 'd';
   const fcCalibDone = 'c';
   const fcError     = 'e';
+  const YawOfs      = 'd'; // for console log only
 
-  // wifi ssid suffix from bot
-  global.fcName     = 'n';
-  
-  // debug from bot
-  global.fcStateCodes = {
-    fcVelTgt        : 'v',
-    fcYawTgt        : 't',
-    fcYawRate       : 'y',
-    fcDegTurn       : 'a',
-    fcHeading       : 'o',
-    fcYawErr        : 'z',
-    fcYawErrInt     : 'i',
-    fcBoosting      : 'k',
-    fcLeftPwm       : 'l',
-    fcRightPwm      : 'r',
-  }
-
-  evtBus.on('setYawPk',       (awPk)=> {setYawPk(awPk);     });
-  evtBus.on('setYawIk',       (awIk)=> {setYawIk(awIk);     });
-  evtBus.on('setMaxYawIk',    (max) => {setMaxYawIk(max);   });
-  evtBus.on('setBoostMs',     (bms) => {setBoostMs(bms);    });
-  evtBus.on('setBoostPwm',    (btP) => {setBoostPwm(btP);   });
-
-  evtBus.on("setWifiName", (name)  => {setName(name);    }); 
   evtBus.on("resumeWs",    ()      => {resumeWs();       });
 
   let stopped = true;
@@ -116,9 +92,7 @@
   const showNoWebsocket = () => {
     evtBus.emit('menuOpen', false);
     evtBus.emit('showMessage',
-            {messageText:  'Waiting for connection to a T-Bot. ',
-             messageText2: 'Turn on the T-Bot and set ' +
-                           'your phone wi-fi to T-Bot name.', 
+            {messageText:  'No connection to T-Bot. ',
              id: 'noWsMsg'});  
   };
 

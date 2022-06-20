@@ -27,8 +27,6 @@ let sendNow        = false;
 let waitingToRetry = false;
 let wsBlocked      = false;
 
-const stateNamesByCode = {};
-
 const wsRecv  = (event) => {
   const recvdStr = event.data;
   if(recvdStr[0] != "{") {
@@ -217,9 +215,6 @@ export const initWebsocket =
   async (hostnameIn, appCBIn) => {
     hostname = hostnameIn;
     appCB    = appCBIn;
-    for(let [name, fc] of 
-          Object.entries(fcStateCodes))
-      stateNamesByCode[fc] = name;
     connectToWs();
     send(fcReportAll);
     setInterval(send, REPORT_INTERVAL, fcReport);
