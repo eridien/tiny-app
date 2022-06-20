@@ -62,9 +62,6 @@ const hamburgerClick = ()=> {
 
 evtBus.on('menuOpen', (open) => {
     menuOpen.value = open;
-    if(!open) {
-      evtBus.emit('settingsOpen', false);
-    }
   }
 );
 

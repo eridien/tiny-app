@@ -10,17 +10,8 @@ const fcVelCmd      = 'V';
 const fcYawCmd      = 'Y';
 const fcClrYawCmd   = 'X';
 const fcStopCmd     = 'S';
-const fcResetCmd    = 'U';
 const fcPowerOffCmd = 'P';
 const fcCalibrate   = 'C';
-const fcNameS       = 'N';
-
-// set motion constant commands
-const fcYawPkS       = 'F';
-const fcYawIkS       = 'G';
-const fcMaxYawIkS    = 'H';
-const fcBoostMsS     = 'J';
-const fcBoostPwmS    = 'M';
 
 let hostname = '';
 
@@ -155,47 +146,9 @@ export const clrYaw = () => {
                console.log('sending clrYaw to bot');
                send(fcClrYawCmd);
              }
-export const stop = () => {
-               console.log('sending stop to bot');
-               send(fcStopCmd);
-             };
-export const reset = () => {
-               console.log('sending reset to bot');
-               send(fcResetCmd);
-             };
 export const pwrOff = () => {
                console.log('sending pwroff to bot');
                send(fcPowerOffCmd);
-             };
-             
-export const setYawPk = yawPk => {
-               console.log(
-                  'sending yawPk to bot', yawPk);
-               send(fcYawPkS, Math.round(yawPk * 1000));
-             }
-export const setYawIk = yawIk => {
-               console.log(
-                  'sending yawIk to bot', yawIk);
-               send(fcYawIkS, Math.round(yawIk * 1000));
-             }
-export const setMaxYawIk = maxYawIk => {
-               console.log(
-                  'sending maxYawIk to bot', maxYawIk);
-               send(fcMaxYawIkS, Math.round(maxYawIk * 1000));
-             }
-export const setBoostMs = boostMs => {
-               console.log(
-                  'sending boostMs to bot', boostMs);
-               send(fcBoostMsS, +boostMs);
-             }
-export const setBoostPwm = boostPwm => {
-               console.log(
-                  'sending boostPwm to bot', boostPwm);
-               send(fcBoostPwmS, Math.round(boostPwm * 1000));
-             }
-export const setName = (name) => {
-               console.log(`sending name "${name}" to bot`);
-               send(fcNameS, name);
              };
 export const calibrate = () => {
                console.log('sending calibrate to bot');
@@ -264,13 +217,6 @@ export const initWebsocket =
   async (hostnameIn, appCBIn) => {
     hostname = hostnameIn;
     appCB    = appCBIn;
-    const fcStateCodes = appCB({fcCmds:{
-      fcYawPk:       fcYawPkS, 
-      fcYawIk:       fcYawIkS, 
-      fcMaxYawIk:    fcMaxYawIkS, 
-      fcBoostMs:     fcBoostMsS, 
-      fcBoostPwm:    fcBoostPwmS, 
-    }});
     for(let [name, fc] of 
           Object.entries(fcStateCodes))
       stateNamesByCode[fc] = name;

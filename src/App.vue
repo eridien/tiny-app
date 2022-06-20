@@ -13,12 +13,8 @@
   import {onMounted, inject, ref} from 'vue'
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
-  import { initWebsocket,  
-           setVel, setYaw, clrYaw,
-           stop, reset, pwrOff, calibrate,
-           setYawPk, setYawIk, setMaxYawIk, 
-           setName, resumeWs,
-           setBoostMs, setBoostPwm }
+  import { initWebsocket, setVel, setYaw, clrYaw,
+           pwrOff, calibrate, resumeWs }
           from "./websocket.js";
 
   const global = inject('global');
@@ -48,10 +44,6 @@
     fcBoosting      : 'k',
     fcLeftPwm       : 'l',
     fcRightPwm      : 'r',
-
-  // motion constants echoed from bot
-    fcBoostMsC      : 'j',
-    fcBoostPwmC     : 'm',
   }
 
   evtBus.on('setYawPk',       (awPk)=> {setYawPk(awPk);     });
