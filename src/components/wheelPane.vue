@@ -110,6 +110,11 @@
           evtBus.emit('stop');
           clicking = false;
         }
+        else {
+          wheelAngle.value = 0;
+          heading          = 0;
+          evtBus.emit('clrYaw');
+        }
       },
       {passive:false, capture:true}
     );

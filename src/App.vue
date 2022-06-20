@@ -41,6 +41,9 @@
     stopped = false;
     setYaw(heading); 
   });
+  evtBus.on('clrYaw', () => {
+    clrYaw();
+  });
   evtBus.on('stop', () => {
     clrYaw();
     stop();
@@ -139,66 +142,6 @@
       }
     }
     if(stateChg) evtBus.emit('stateChg');
-
-
-    /////////////////  PLOT DEBUG  /////////////////
-
-    const dbgStr = (fc, name, div = 1, wid = 3) => {
-      const str = Math.round(+global.curStatus[fc] / div)
-                 .toString().padStart(wid);
-      return `${name}:${str}, `;
-    }
-
-    const plotStr = (fc, char, div) => {
-      const zeroLen  =  15;
-      const zeroChar = '|';
-      const totalLen = Math.round(
-            zeroLen + global.curStatus[fc] / div);
-      let str;
-      if(totalLen > zeroLen) 
-        str = zeroChar.padStart(zeroLen) +
-                  char.padStart(totalLen-zeroLen)
-      else if(totalLen == zeroLen) 
-        str = char.padStart(zeroLen);
-      else // (totalLen < zeroLen) 
-        str = char.padStart(totalLen) +
-          zeroChar.padStart(zeroLen-totalLen);
-      return str;
-    }
-
-    const now = new Date();
-    if(!stopped) {
-      // console.log(global.curStatus);
-      if(minMaxDelay-- < 0) {
-        const err = +global.curStatus.z;
-        max = Math.max(max, err);
-        min = Math.min(min, err);
-      }
-
-      console.log(
-        // now.getUTCSeconds()
-        //     .toString().padStart(2,'0') + ':' + 
-        // now.getUTCMilliseconds()
-        //     .toString().padStart(3,'0') + ' ' + 
-        global.curStatus.b.toString().padStart(4) + ', ' +
-        // dbgStr('v','vel')          +
-        dbgStr('t','tgt',    1, 4) +
-        dbgStr('d','ofs',    1, 4) +
-        // dbgStr('y','ywr', 1000, 4) +
-        dbgStr('a','deg',    1, 6) +
-        dbgStr('o','head',   1, 4) +
-        // dbgStr('z','err',    1, 4) +
-        dbgStr('i','int',    1, 4) +
-        dbgStr('l','lft')          +
-        dbgStr('r','rgt')          
-
-        // min.toString().padStart(4) +
-        // max.toString().padStart(4) +
-        // plotStr('o', '*', 20)
-      );
-    };
-
-    //////////////  END PLOT DEBUG  //////////////
 
     if(status?.[fcCalibDone] === 1)
           calibrationDone();
