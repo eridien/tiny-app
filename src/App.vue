@@ -14,7 +14,7 @@
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
   import { initWebsocket, setVel, setYaw, clrYaw,
-           pwrOff, calibrate, resumeWs }
+           stop, pwrOff, calibrate, resumeWs }
           from "./websocket.js";
 
   const global = inject('global');

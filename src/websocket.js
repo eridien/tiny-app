@@ -148,6 +148,10 @@ export const pwrOff = () => {
                console.log('sending pwroff to bot');
                send(fcPowerOffCmd);
              };
+export const stop = () => {
+               console.log('sending stop to bot');
+               send(fcStopCmd);
+             };
 export const calibrate = () => {
                console.log('sending calibrate to bot');
                send(fcCalibrate);
