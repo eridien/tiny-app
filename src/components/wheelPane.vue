@@ -97,10 +97,12 @@
         //                     heading:heading.toFixed(2),
         //                     });
         lastTouchAngle = touchAngle;
-        // evtBus.emit('yaw', heading);
-
-        evtBus.emit('yaw', heading/2);
-
+        let   sens = global.steeringSens;  //    1 to 9
+        const ofs  = ((sens-1) * 5/8) + 1; //    1 to 6
+        const fact = sens / 3;             // .333 to 2
+        const yaw  = heading * fact;       //  120 to 720 (360 hdng)
+        // from 1/3 to 2x turning speed
+        evtBus.emit('yaw', yaw);
       },
       {passive:false, capture:true}
     );

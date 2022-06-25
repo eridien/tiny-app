@@ -5,8 +5,22 @@
              position:relative;cursor:pointer;")
   #buttons
     .button(@click="pwrOffEvt"   )  Power Off
+    .button(@click="settingsEvt" )  Settings 
     .button(@click="calibrateEvt")  Calibrate
     .button(@click="closeMenuEvt")  Close 
+
+  #cover(v-show="settingsOpen"
+         style="position:absolute;               \
+                left:0; top:0;                   \
+                border-radius:12px;              \
+                width:100%; height:100%;         \
+                opacity:0.3;                     \
+                background-color:black;          \
+                display: table-cell;")
+
+  Settings(v-show="settingsOpen"
+           style="position:fixed; z-index:1001;  \
+                  top:90px; right:70px;")
 
 </template>
 
@@ -21,8 +35,15 @@
 
 <script setup>
   import {ref, inject} from 'vue'
+  import Settings      from './settings.vue';
 
   const evtBus = inject('evtBus');   
+
+  const settingsOpen = ref(false);
+
+  evtBus.on('menuOpen', (open) => {
+    if(!open) settingsOpen.value = false;
+  });
 
   const closeMenu = 
     () => evtBus.emit('menuOpen', false);
@@ -30,6 +51,9 @@
   const pwrOffEvt = () => {
     evtBus.emit('pwrOff');
     closeMenu();
+  }
+  const settingsEvt = ()=> {
+    settingsOpen.value = true;
   }
   const calibrateEvt = ()=> {
     console.log('emitting calibration message');
