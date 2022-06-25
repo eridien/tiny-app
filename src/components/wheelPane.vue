@@ -97,7 +97,10 @@
         //                     heading:heading.toFixed(2),
         //                     });
         lastTouchAngle = touchAngle;
-        evtBus.emit('yaw', heading);
+        // evtBus.emit('yaw', heading);
+
+        evtBus.emit('yaw', heading/2);
+
       },
       {passive:false, capture:true}
     );
