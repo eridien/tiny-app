@@ -5,7 +5,7 @@
              position:relative;cursor:pointer;")
   #buttons
     .button(@click="pwrOffEvt"   )  Power Off
-    .button(@click="settingsEvt" )  Settings 
+    .button(@click="settingsEvt" )  Turning 
     .button(@click="calibrateEvt")  Calibrate
     .button(@click="closeMenuEvt")  Close 
 

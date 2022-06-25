@@ -3,7 +3,7 @@
                  background-color:white;             \
                  margin:20px; padding:20px;")
   div(style="margin-bottom:20px;font-size:1em;") 
-    | Steering Sensitivity
+    | Turning Sensitivity
   div(style="position:relative; font-size:.8em; display:flex; \
              justifyContent:space-between;                    \
              alignItems:stretch;")
@@ -41,8 +41,8 @@
 
   onMounted(()=> {
     const sensEle = document.getElementById('sens');
-    global.steeringSens = parseInt(
-          localStorage.getItem('global.steeringSens') || 5);
+    global.steeringSens = 
+        parseInt( localStorage.getItem('global.steeringSens') || 5 );
     sensEle.value = global.steeringSens;
     dispVal.value = global.steeringSens;
   });
