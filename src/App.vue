@@ -21,9 +21,10 @@
   const evtBus = inject('evtBus'); 
 
   global.HDR_HGT = 65;
+  global.vel     =  0;
   global.steeringSens = 
     parseInt(localStorage.getItem('global.steeringSens') || 5);
-
+  
 // status from bot
   const fcBatV      = 'b';
   const fcRssi      = 'w';

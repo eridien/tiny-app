@@ -97,13 +97,22 @@
         //                     heading:heading.toFixed(2),
         //                     });
         lastTouchAngle = touchAngle;
-        let   sens = global.steeringSens;  //     1 to 9
-        const ofs  = ((sens-1) * 3/8) + 1; //     1 to 4
-        const fact = ofs / 3;              // 0.333 to 1.333
-        const yaw  = heading * fact;
-        console.log({heading: heading.toFixed(3), 
-                     sens: sens.toFixed(3),  ofs: ofs.toFixed(3), 
-                     fact: fact.toFixed(3),  yaw: yaw.toFixed(3)});
+
+        // adjust turn rate based on sensitivity
+        let   sens     = global.steeringSens;  //     1 to 9
+        const sensOfs  = ((sens-1) * 6/8) + 1; //     1 to 7
+        const factSens = sensOfs / 6;              // 0.166 to 1.166
+
+        // cut turn rate based on current speed
+        let factVel = 1;
+        if(global.vel >= 0.3)                           // 0.3 to 1
+          factVel = 1/((global.vel-0.3) * 1.0/0.7 + 1); //   1 to 0.5
+
+        // combined factor is 0.083 to 1.166
+        const yaw  = heading * factSens * factVel;
+        // console.log({heading: heading.toFixed(3), 
+        //              sens: sens.toFixed(3),  ofs: ofs.toFixed(3), 
+        //              fact: fact.toFixed(3),  yaw: yaw.toFixed(3)});
         evtBus.emit('yaw', yaw);
       },
       {passive:false, capture:true}

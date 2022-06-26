@@ -43,19 +43,24 @@
 
   evtBus.on('menuOpen', (open) => {
     if(!open) settingsOpen.value = false;
+    evtBus.emit('stop');
   });
 
-  const closeMenu = 
-    () => evtBus.emit('menuOpen', false);
+  const closeMenu = () => {
+    evtBus.emit('menuOpen', false);
+    evtBus.emit('stop');
+  }
 
   const pwrOffEvt = () => {
-    evtBus.emit('pwrOff');
     closeMenu();
+    evtBus.emit('pwrOff');
   }
   const settingsEvt = ()=> {
     settingsOpen.value = true;
+    evtBus.emit('stop');
   }
   const calibrateEvt = ()=> {
+    evtBus.emit('stop');
     console.log('emitting calibration message');
     evtBus.emit('showMessage', {
       messageText:  'Keep T-Bot still on a level ' +

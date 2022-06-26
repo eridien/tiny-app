@@ -147,20 +147,20 @@
 
         if(dir.value == 0) 
           dir.value = ((touch.pageY - startY) > 0 ? -1 : +1);
-        
         if(dir.value == 1)
           vel.value = (paneHgt - (touch.pageY - THUMB_HGT)); 
         else
           vel.value = (touch.pageY - global.HDR_HGT); 
 
+        // vel.value is limited to 0..1
         vel.value = Math.max(0, 
                     Math.min(vel.value / paneHgt, 1));
-
+        global.vel = vel.value;
         drawSliders();
 
-        // emitted vel is 0 to 100%
-        evtBus.emit('vel', 
-                dir.value * Math.round(vel.value * 88000 + 12000));
+        // emitted vel is 0 to 100% (0 to 100000)
+        const emVal = dir.value * Math.round(vel.value * 88000 + 12000);
+        evtBus.emit('vel', emVal);
       }, 
       {passive:false, capture:true}
     );

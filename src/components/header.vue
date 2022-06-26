@@ -5,7 +5,7 @@
                fontWeight:bold; backgroundColor:    \
                  (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
   img(src="/images/icon.png" 
-      style="width:64px;height:36px;marginTop:5px;")
+      style="width:64px; height:36px; marginTop:5px;")
   img(:src="`/images/wifi-${rssiId}.png`"  
       style="width:40px; height:55px;         \
              marginTop:-6px")
@@ -14,11 +14,11 @@
       
   img(:src="`/images/hamburger.png`" 
       @click="hamburgerClick"
-      style="width:35px; height:35px;         \
+      style="width:35px; height:35px;          \
              margin-top:8px; margin-right:48px;")
 
   Menu(v-if="menuOpen"
-       style="position:fixed; z-index:1000;  \
+       style="position:fixed; z-index:1000;    \
              top:70px; right:60px;")
 </template>
 
