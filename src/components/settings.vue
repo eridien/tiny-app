@@ -41,8 +41,6 @@
 
   onMounted(()=> {
     const sensEle = document.getElementById('sens');
-    global.steeringSens = 
-        parseInt( localStorage.getItem('global.steeringSens') || 5 );
     sensEle.value = global.steeringSens;
     dispVal.value = global.steeringSens;
   });

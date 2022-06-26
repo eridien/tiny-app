@@ -87,7 +87,7 @@
         const touchAngle = getAngle(touch.pageX, touch.pageY);
         let diff = touchAngle - lastTouchAngle;
         if(diff < -180) diff += 360;
-        if(diff > +180) diff -= 360;
+        if(diff > +180) diff -= 360;  // -180 to +180
         wheelAngle.value += diff;
         heading          += diff;
         // console.log('move', {lastTouch:lastTouchAngle.toFixed(2), 
@@ -99,9 +99,11 @@
         lastTouchAngle = touchAngle;
         let   sens = global.steeringSens;  //     1 to 9
         const ofs  = ((sens-1) * 3/8) + 1; //     1 to 4
-        const fact = sens / 3;             // 0.333 to 1.333
-        const yaw  = heading * fact;       //   120 to 720 (480 hdng)
-        // from 1/3 to 2x turning speed
+        const fact = ofs / 3;              // 0.333 to 1.333
+        const yaw  = heading * fact;
+        console.log({heading: heading.toFixed(3), 
+                     sens: sens.toFixed(3),  ofs: ofs.toFixed(3), 
+                     fact: fact.toFixed(3),  yaw: yaw.toFixed(3)});
         evtBus.emit('yaw', yaw);
       },
       {passive:false, capture:true}
