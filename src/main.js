@@ -2,11 +2,13 @@ import {createApp} from 'vue'
 import App         from './App.vue'
 import mitt        from 'mitt'
 
+const BOT_HOSTNAME_DEV = "192.168.1.194";    // Tb  red
+
+// -- old --
 // const BOT_HOSTNAME_DEV = "192.168.1.231"; // Tb
-const BOT_HOSTNAME_DEV = "192.168.1.236"; // Bowie
+// const BOT_HOSTNAME_DEV = "192.168.1.236"; // Bowie
 // const BOT_HOSTNAME_DEV = "192.168.1.237"; // Wyatt
 // const BOT_HOSTNAME_DEV = "192.168.1.238"; // Cam
-
 // const BOT_HOSTNAME_DEV = "192.168.86.55"; // Tb (Pink Palace)
 
 const global = {};
