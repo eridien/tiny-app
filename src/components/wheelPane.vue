@@ -1,9 +1,9 @@
 <template lang='pug'>
-#wheelPane(style="display:flex;                      \
-                  justify-content:center;            \
+#wheelPane(style="display:flex;                        \
+                  justify-content:center;              \
                   align-items:center;")
   img(id="wheel" src="/images/steering-wheel.png"
-        :style="{transform:`rotate(${wheelAngle}deg)`,  \
+        :style="{transform:`rotate(${wheelAngle}deg)`, \
                  width:'65vmin', height:'65vmin'}" )
 </template>
 
@@ -35,6 +35,8 @@
       let angle = 90 - Math.atan2(relY, relX)*180/Math.PI;
            if(angle >  180) angle -= 360;
       else if(angle < -180) angle += 360;
+      // console.log({relX:relX.toFixed(0), 
+      //              relY:relY.toFixed(0), angle:angle.toFixed(0)});
       return angle;
     }
 

@@ -124,8 +124,8 @@ const send = (code, val = null) => {
   else
     pendingCmds[code] = sendVal;
   if(val !== null) lastFcVal[code] = val;
-  if(code == fcReport    || code == fcStopCmd ||
-     code == fcReportAll || code == fcCalibrate) 
+  if(code == fcReport    || code == fcReportAll ||
+     code == fcCalibrate || code == fcStopCmd   || code == fcPowerOffCmd) 
       sendAllCmds();
 }
 

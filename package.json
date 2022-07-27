@@ -15,5 +15,6 @@
     "@vitejs/plugin-vue": "^2.3.0",
     "vite": "^2.9.12",
     "vue-cli-plugin-pug": "~2.0.0"
-  }
+  },
+  "type": "module"
 }

@@ -2,7 +2,8 @@ import {createApp} from 'vue'
 import App         from './App.vue'
 import mitt        from 'mitt'
 
-const BOT_HOSTNAME_DEV = "192.168.1.194";    // Tb  red
+const BOT_HOSTNAME_DEV = "192.168.1.198";  6-4  // Tb  red
+// const BOT_HOSTNAME_DEV = "192.168.1.199";  6-5  // Tb  red
 
 // -- old --
 // const BOT_HOSTNAME_DEV = "192.168.1.231"; // Tb
