@@ -2,8 +2,17 @@ import {createApp} from 'vue'
 import App         from './App.vue'
 import mitt        from 'mitt'
 
-const BOT_HOSTNAME_DEV = "192.168.1.198";  6-4  // Tb  red
-// const BOT_HOSTNAME_DEV = "192.168.1.199";  6-5  // Tb  red
+// const BOT_HOSTNAME_DEV = "192.168.1.198" // 6-4 t-bot    red C8:C9:A3:73:35:DB
+// const BOT_HOSTNAME_DEV = "192.168.1.218" // 7-3 Cameron  green 
+// const BOT_HOSTNAME_DEV = "192.168.1.219" // 7-4 Wyatt    silver 
+// const BOT_HOSTNAME_DEV = "192.168.1.220" // 7-5 Bowie    blue 
+
+192.168.1.199 6-5 Tb  red -- bad?
+192.168.1.198 6-4 t-bot test red C8:C9:A3:73:35:DB
+192.168.1.218 7-3 Cammeron green 
+192.168.1.219 7-4 Wyatt    silver 
+192.168.1.220 7-5 Bowie    blue 
+
 
 // -- old --
 // const BOT_HOSTNAME_DEV = "192.168.1.231"; // Tb
