@@ -4,8 +4,10 @@
                alignItems:stretch;                  \
                fontWeight:bold; backgroundColor:    \
                  (batvId < 20 || rssiId < 2 ? 'pink': 'white')") 
-  img(src="/images/icon.png" 
+  //- img(src="/images/icon.png" 
       style="width:64px; height:36px; marginTop:5px;")
+  div(@click="timeClick" style="fontSize:32px;  \
+         width:64px; height:36px; marginTop:2px;") {{timeStr}}
   img(:src="`/images/wifi-${rssiId}.png`"  
       style="width:40px; height:55px;         \
              marginTop:-6px")
@@ -27,6 +29,36 @@ import {ref, inject} from 'vue';
 import  Menu from './menu.vue'
 
 const evtBus = inject('evtBus');   
+
+let   time         = 0;
+const timeStr      = ref('0.0');
+let   timeInterval = null;
+
+const startInterval = () => {
+  if(!timeInterval) {
+    timeInterval = setInterval(() => {
+      time += 0.1;
+      timeStr.value = time.toFixed(1);
+    }, 100);
+  }
+}
+
+const stopInterval = () => {
+  if(timeInterval) {
+    clearInterval(timeInterval);
+    timeInterval = null; 
+  }
+}
+
+const timeClick = () => {
+  time          = 0;
+  timeStr.value = '0.0';
+  stopInterval();
+}
+
+evtBus.on('vel',  startInterval);
+evtBus.on('yaw',  startInterval);
+evtBus.on('stop', stopInterval);
 
 const rssiId = ref(2);
 evtBus.on('rssi', (rssi) => {
@@ -55,7 +87,7 @@ evtBus.on('batv', (batv) => {
 
 let menuOpen = ref(false);
 
-const hamburgerClick = ()=> {
+const hamburgerClick = () => {
   menuOpen.value = !menuOpen.value;
   evtBus.emit('menuOpen', menuOpen.value);
 }
