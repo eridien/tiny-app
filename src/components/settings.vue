@@ -16,6 +16,13 @@
 
   hr(style="color:black; margin:13px;")
 
+  input#turnModeDiv(type="checkbox" v-model="turnMode" 
+                    style="marginLeft:18px;" @input="turnEvt")
+  label(for="turnModeDiv" style="fontSize:0.9em; \
+            position:relative; top:-2px;")  SlideTo Turn
+
+  hr(style="color:black; margin:13px;")
+
   div(@click="doneClick"
       style="float:right; font-size:1em;            \
              background-color:#ddd;                 \
@@ -29,7 +36,8 @@
   const global = inject('global');
   const evtBus = inject('evtBus');   
 
-  const dispVal = ref(5);
+  const dispVal  = ref(5);
+  const turnMode = ref(true);
 
   const sensEvt = (event) => {
     const sens = parseInt(event.target.value);
@@ -39,10 +47,18 @@
     localStorage.setItem('global.steeringSens', ''+ sens);
   }
 
+  const turnEvt = () => {
+    const mode = !turnMode.value; // why negate ??
+    console.log('turnMode:', mode);
+    global.turnMode = mode
+    localStorage.setItem('global.turnMode', (mode ? 'true' : 'false'));
+  }
+
   onMounted(()=> {
-    const sensEle = document.getElementById('sens');
-    sensEle.value = global.steeringSens;
-    dispVal.value = global.steeringSens;
+    const sensEle  = document.getElementById('sens');
+    sensEle.value  = global.steeringSens;
+    dispVal.value  = global.steeringSens;
+    turnMode.value = global.turnMode;
   });
 
   const doneClick = () => {

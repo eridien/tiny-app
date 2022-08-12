@@ -13,7 +13,7 @@
   import {onMounted, inject, ref} from 'vue'
   import  Header     from './components/header.vue'
   import  Controls   from './components/controls.vue'
-  import { initWebsocket, setVel, setYaw, clrYaw,
+  import { initWebsocket, setVel, setTurnRate, setYaw, clrYaw,
            stop, pwrOff, calibrate, resumeWs }
           from "./websocket.js";
 
@@ -24,7 +24,10 @@
   global.vel     =  0;
   global.steeringSens = 
     parseInt(localStorage.getItem('global.steeringSens') || 5);
-  
+  global.turnMode = 
+    !(localStorage.getItem('global.turnMode') === 'false');
+  console.log('global.turnMode', global.turnMode);
+
 // status from bot
   const fcBatV      = 'b';
   const fcRssi      = 'w';
@@ -39,6 +42,10 @@
   evtBus.on('vel', (vel) => {
     if(vel) stopped = false;
     setVel(vel);      
+  });
+  evtBus.on('turnRate', (turnRate) => {
+    if(turnRate) stopped = false;
+    setTurnRate(turnRate);      
   });
   evtBus.on('yaw', (heading) => {
     stopped = false;
@@ -157,9 +164,9 @@
   };
 
   const android = () => {
-  // windows: "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Mobile Safari/537.36"
-  return navigator.userAgent.includes('Android');
-}
+    // windows: "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Mobile Safari/537.36"
+    return navigator.userAgent.includes('Android');
+  }
 
   const setHeight = (android) => {
     let wrapperH;
@@ -198,8 +205,8 @@
 
     clrYaw();
 
-    setTimeout(() => {
-      if(!websocketOpen) showNoWebsocket();
-    }, 2000);
+    // setTimeout(() => {
+    //   if(!websocketOpen) showNoWebsocket();
+    // }, 2000);
   });
 </script>

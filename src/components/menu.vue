@@ -1,7 +1,7 @@
 <template lang='pug'>
 #menu(style="border-radius:12px; font-size:1.1em; \
-             background-color:#c8c8c8;           \
-             display:table;\
+             background-color:#c8c8c8;            \
+             display:table;                       \
              position:relative;cursor:pointer;")
   #buttons
     .button(@click="pwrOffEvt"   )  Power Off
