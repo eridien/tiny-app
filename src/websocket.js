@@ -143,7 +143,7 @@ export const setTurnRate = turnRate => {
              }
 export const setYaw = heading => {
                heading = Math.round(heading);
-              //  console.log('sending heading to bot', heading);
+               console.log('sending heading to bot', heading);
                send(fcYawCmd, heading);
              }
 export const clrYaw = () => {

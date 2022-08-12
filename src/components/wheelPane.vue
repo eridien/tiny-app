@@ -42,8 +42,8 @@
       else {  // using turn rate
         angle = (relX / window.outerWidth) * 180;
       }
-      console.log({relX:relX.toFixed(0), 
-                   relY:relY.toFixed(0), angle:angle.toFixed(0)});
+      // console.log({relX:relX.toFixed(0), 
+      //              relY:relY.toFixed(0), angle:angle.toFixed(0)});
       return angle;
     }
 
@@ -95,6 +95,11 @@
         if(touch === null) return;
         const touchAngle = getAngle(touch.pageX, touch.pageY);
 
+        // adjust turn rate or yaw based on sensitivity
+        let   sens     = global.steeringSens;  //     1 to 9
+        const sensOfs  = ((sens-1) * 6/8) + 1; //     1 to 7
+        const factSens = sensOfs / 6;              // 0.166 to 1.166
+
         if(!global.turnMode) { // using absolute yaw
           let diff = touchAngle - lastTouchAngle;
           if(diff < -180) diff += 360;
@@ -108,33 +113,27 @@
           //                     heading:heading.toFixed(2),
           //                     });
           lastTouchAngle = touchAngle;
+          let factVel = 1;
+
+          // cut turn rate based on current speed
+          // if(global.vel >= 0.3)                           // 0.3 to 1
+          //   factVel = 1/((global.vel-0.3) * 1.0/0.7 + 1); //   1 to 0.5
+
+          // combined factor is 0.083 to 1.166
+          const yaw  = heading * factSens * factVel;
+          // console.log({heading: heading.toFixed(3), 
+          //              sens: sens.toFixed(3),  ofs: ofs.toFixed(3), 
+          //              fact: fact.toFixed(3),  yaw: yaw.toFixed(3)});
+          evtBus.emit('yaw', yaw);
         }
         else {  // using turn rate
           wheelAngle.value = touchAngle;
           // turnRate is in degress/sec
-          let turnRate = touchAngle/180*3000;
+          let turnRate = touchAngle/180*3000*factSens;
           if(turnRate > +1000) turnRate = +1000;
           if(turnRate < -1000) turnRate = -1000;
           evtBus.emit('turnRate', turnRate);
         }
-
-        // adjust turn rate based on sensitivity
-        let   sens     = global.steeringSens;  //     1 to 9
-        const sensOfs  = ((sens-1) * 6/8) + 1; //     1 to 7
-        const factSens = sensOfs / 6;              // 0.166 to 1.166
-
-        let factVel = 1;
-
-        // cut turn rate based on current speed
-        // if(global.vel >= 0.3)                           // 0.3 to 1
-        //   factVel = 1/((global.vel-0.3) * 1.0/0.7 + 1); //   1 to 0.5
-
-        // combined factor is 0.083 to 1.166
-        const yaw  = heading * factSens * factVel;
-        // console.log({heading: heading.toFixed(3), 
-        //              sens: sens.toFixed(3),  ofs: ofs.toFixed(3), 
-        //              fact: fact.toFixed(3),  yaw: yaw.toFixed(3)});
-        evtBus.emit('yaw', yaw);
       },
       {passive:false, capture:true}
     );
