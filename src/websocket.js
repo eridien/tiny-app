@@ -7,6 +7,7 @@ const fcReport      = 'R';
 const fcReportAll   = 'Q';
 
 const fcVelCmd      = 'V';
+const fcTurnCmd     = 'Z';
 const fcYawCmd      = 'Y';
 const fcClrYawCmd   = 'X';
 const fcStopCmd     = 'S';
@@ -134,6 +135,11 @@ export const setVel = vel => {  // 0 to 100%
               //  console.log('sending vel to bot', 
               //               Math.round(vel));
                send(fcVelCmd, vel);
+             }
+export const setTurnRate = turnRate => {
+               turnRate = Math.round(turnRate);
+               console.log('sending turnRate to bot', turnRate);
+               send(fcTurnCmd, turnRate);
              }
 export const setYaw = heading => {
                heading = Math.round(heading);
