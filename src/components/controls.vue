@@ -43,6 +43,7 @@
 
   const menuOpen      = ref(false);
   const messageOpen   = ref(false)
+  global.messageOpen  = false;
 
   let msgId = '';
 
@@ -77,14 +78,16 @@
     callbackText.value  = params.callbackText;
     msgId               = params.id;
     messageOpen.value   = true;
+    global.messageOpen  = true;
     evtBus.emit('menuOpen', false);
   });
 
   evtBus.on('closeMessage', (id) => {
     if(!id || id == msgId) {
       console.log('closing message', id);
-      busy.value        = false; 
-      messageOpen.value = false;
+      busy.value          = false; 
+      messageOpen.value   = false;
+      global.messageOpen  = false;
       msgId = '';
     }
   });

@@ -48,6 +48,7 @@
 
   const closeMenu = () => {
     evtBus.emit('menuOpen', false);
+    menuOpen.value = false;
     evtBus.emit('stop');
   }
 

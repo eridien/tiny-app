@@ -29,6 +29,7 @@ import {ref, inject} from 'vue';
 import  Menu from './menu.vue'
 
 const evtBus = inject('evtBus');   
+const global = inject('global');
 
 let   time         = 0;
 const timeStr      = ref('0.0');
@@ -88,6 +89,7 @@ evtBus.on('batv', (batv) => {
 let menuOpen = ref(false);
 
 const hamburgerClick = () => {
+  if(global.messageOpen) return;
   menuOpen.value = !menuOpen.value;
   evtBus.emit('menuOpen', menuOpen.value);
 }

@@ -207,6 +207,6 @@
 
     setTimeout(() => {
       if(!websocketOpen) showNoWebsocket();
-    }, 2000);
+    }, 1000);
   });
 </script>
