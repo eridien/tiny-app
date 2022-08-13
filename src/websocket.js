@@ -3,6 +3,9 @@ const SHOW_RECVS      = false;
 const REPORT_INTERVAL =   200;
 
 // commands to bot
+
+const fcSetting     = 'A';
+
 const fcReport      = 'R';
 const fcReportAll   = 'Q';
 
@@ -132,34 +135,34 @@ const send = (code, val = null) => {
 
 export const setVel = vel => {  // 0 to 100%
                vel = Math.round(vel);
-              //  console.log('sending vel to bot', 
-              //               Math.round(vel));
+               console.log('-> vel', 
+                            Math.round(vel));
                send(fcVelCmd, vel);
              }
 export const setTurnRate = turnRate => {
                turnRate = Math.round(turnRate);
-               console.log('sending turnRate to bot', turnRate);
+               console.log('-> turnRate', turnRate);
                send(fcTurnCmd, turnRate);
              }
 export const setYaw = heading => {
                heading = Math.round(heading);
-               console.log('sending heading to bot', heading);
+               console.log('-> heading', heading);
                send(fcYawCmd, heading);
              }
 export const clrYaw = () => {
-               console.log('sending clrYaw to bot');
+               console.log('-> clrYaw');
                send(fcClrYawCmd);
              }
 export const pwrOff = () => {
-               console.log('sending pwroff to bot');
+               console.log('-> pwroff');
                send(fcPowerOffCmd);
              };
 export const stop = () => {
-               console.log('sending stop to bot');
+               console.log('-> stop');
                send(fcStopCmd);
              };
 export const calibrate = () => {
-               console.log('sending calibrate to bot');
+               console.log('-> calibrate');
                send(fcCalibrate);
              };
              
@@ -178,7 +181,11 @@ const connectToWs = async () => {
     console.log('webSocket connected:', event);
     websocketOpen = true;
     appCB?.({websocketOpen});
+
+    send(fcSetting, 1.0 * 100000);  // temporary
+
     send(fcReportAll);
+
   });
 
   webSocket.addEventListener('error', (event) => {
