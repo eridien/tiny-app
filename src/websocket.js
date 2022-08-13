@@ -141,12 +141,12 @@ export const setVel = vel => {  // 0 to 100%
              }
 export const setTurnRate = turnRate => {
                turnRate = Math.round(turnRate);
-              //  console.log('<- turnRate', turnRate);
+               console.log('<- turnRate', turnRate);
                send(fcTurnCmd, turnRate);
              }
 export const setYaw = heading => {
                heading = Math.round(heading);
-              //  console.log('<- heading', heading);
+               console.log('<- heading', heading);
                send(fcYawCmd, heading);
              }
 export const clrYaw = () => {

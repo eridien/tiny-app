@@ -25,7 +25,7 @@
   global.steeringSens = 
     parseInt(localStorage.getItem('global.steeringSens') || 5);
   global.turnMode = 
-    !(localStorage.getItem('global.turnMode') === 'false');
+    (localStorage.getItem('global.turnMode') === 'true');
   console.log('global.turnMode', global.turnMode);
 
 // status from bot
