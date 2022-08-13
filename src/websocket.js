@@ -181,9 +181,7 @@ const connectToWs = async () => {
     console.log('webSocket connected:', event);
     websocketOpen = true;
     appCB?.({websocketOpen});
-
-    send(fcSetting, 1.0 * 100000);  // temporary
-
+    // send(fcSetting, 0.3 * 100000);  // temporary
     send(fcReportAll);
 
   });
