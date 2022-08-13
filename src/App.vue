@@ -35,7 +35,7 @@
   const fcError     = 'e';
   const YawOfs      = 'd'; // for console log only
 
-  evtBus.on("resumeWs",    ()      => {resumeWs();       });
+  evtBus.on("resumeWs", () => resumeWs());
 
   let stopped = true;
 

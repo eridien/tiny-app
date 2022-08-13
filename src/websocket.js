@@ -36,7 +36,7 @@ const wsRecv  = (event) => {
   if(recvdStr[0] != "{") {
     if(recvdStr[1] != "}") {
       // we have a plain-text, non-json, message
-      console.log(`--> MSG: ${recvdStr}`);
+      console.log(`-> MSG: ${recvdStr}`);
       if(recvdStr == 'newer connection') {
         appCB?.({newerConn:true});
         waitingToRetry = false;
@@ -76,7 +76,7 @@ const wsRecv  = (event) => {
           str += `${name}:${val}, `;
         }
         str = str.slice(0,-2) + '}';
-        console.log("--> recvd", str);
+        console.log("-> recvd", str);
       }
       appCB?.(chgdVals);
     }
@@ -129,40 +129,40 @@ const send = (code, val = null) => {
     pendingCmds[code] = sendVal;
   if(val !== null) lastFcVal[code] = val;
   if(code == fcReport    || code == fcReportAll ||
-     code == fcCalibrate || code == fcStopCmd   || code == fcPowerOffCmd) 
+     code == fcCalibrate || code == fcStopCmd   || 
+     code == fcPowerOffCmd) 
       sendAllCmds();
 }
 
 export const setVel = vel => {  // 0 to 100%
                vel = Math.round(vel);
-               console.log('-> vel', 
-                            Math.round(vel));
+              //  console.log('<- vel', Math.round(vel));
                send(fcVelCmd, vel);
              }
 export const setTurnRate = turnRate => {
                turnRate = Math.round(turnRate);
-               console.log('-> turnRate', turnRate);
+              //  console.log('<- turnRate', turnRate);
                send(fcTurnCmd, turnRate);
              }
 export const setYaw = heading => {
                heading = Math.round(heading);
-               console.log('-> heading', heading);
+              //  console.log('<- heading', heading);
                send(fcYawCmd, heading);
              }
 export const clrYaw = () => {
-               console.log('-> clrYaw');
+              //  console.log('<- clrYaw');
                send(fcClrYawCmd);
              }
 export const pwrOff = () => {
-               console.log('-> pwroff');
+               console.log('<- pwroff');
                send(fcPowerOffCmd);
              };
 export const stop = () => {
-               console.log('-> stop');
+               console.log('<- stop');
                send(fcStopCmd);
              };
 export const calibrate = () => {
-               console.log('-> calibrate');
+               console.log('<- calibrate');
                send(fcCalibrate);
              };
              
@@ -183,7 +183,6 @@ const connectToWs = async () => {
     appCB?.({websocketOpen});
     // send(fcSetting, 0.3 * 100000);  // temporary
     send(fcReportAll);
-
   });
 
   webSocket.addEventListener('error', (event) => {
