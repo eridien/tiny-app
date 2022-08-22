@@ -2,9 +2,9 @@ import {createApp} from 'vue'
 import App         from './App.vue'
 import mitt        from 'mitt'
 
-// const BOT_HOSTNAME_DEV = "192.168.1.199" // 6-5  => C8:C9:A3:73:35:FB
+const BOT_HOSTNAME_DEV = "192.168.1.199" // 6-5  => C8:C9:A3:73:35:FB
 // const BOT_HOSTNAME_DEV = "192.168.1.218" // 7-3 Cameron green  AC:0B:FB:E2:6D:9D
-const BOT_HOSTNAME_DEV = "192.168.1.219" // 7-4 Wyatt   silver AC:0B:FB:E2:6E:21
+// const BOT_HOSTNAME_DEV = "192.168.1.219" // 7-4 Wyatt   silver AC:0B:FB:E2:6E:21
 // const BOT_HOSTNAME_DEV = "192.168.1.220" // 7-5 Bowie   blue   AC:0B:FB:E0:68:0F
 
 // -- non t-bot --

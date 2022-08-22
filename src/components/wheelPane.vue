@@ -22,11 +22,17 @@
 
     let centerX;
     let centerY;
+    let wheelRadiusSq;
     const getCenterXY = ()=> {
       centerX = window.outerWidth * 0.625;
       centerY = window.outerHeight - paneEle.offsetHeight/2;
+      const wheelDiameter = 
+        Math.min(window.outerWidth, window.outerHeight) * .65;
+      wheelRadiusSq = Math.pow(wheelDiameter/2 * 0.5, 2);
     }
     getCenterXY();
+
+    let inCenter       = false;
 
     // get angle of xy,  -180 to +180
     const getAngle = (x,y) => {
@@ -36,7 +42,7 @@
 
       if(!global.turnMode) { // using absolute yaw
         angle = 90 - Math.atan2(relY, relX)*180/Math.PI;
-            if(angle >  180) angle -= 360;
+             if(angle >  180) angle -= 360;
         else if(angle < -180) angle += 360;
       }
       else {  // using turn rate
@@ -44,6 +50,9 @@
       }
       // console.log({relX:relX.toFixed(0), 
       //              relY:relY.toFixed(0), angle:angle.toFixed(0)});
+
+      inCenter = (relX*relX + relY*relY) < wheelRadiusSq;
+
       return angle;
     }
 
@@ -70,7 +79,9 @@
             touch = chgdTouch;
         }
         if(touch === null) return
+        
         lastTouchAngle = getAngle(touch.pageX, touch.pageY);
+
         if(firstTouch) {
           firstTouch = false;
           wheelAngle.value = lastTouchAngle;
@@ -93,8 +104,18 @@
             touch = chgdTouch;
         }
         if(touch === null) return;
-        const touchAngle = getAngle(touch.pageX, touch.pageY);
 
+        const wasInCenter = inCenter;
+        const touchAngle  = getAngle(touch.pageX, touch.pageY);
+
+        if(!global.turnMode && inCenter) {
+          console.log('in center');
+          lastTouchAngle = touchAngle;
+          return;
+        }
+        // else if(wasInCenter) evtBus.emit('yaw');
+
+        
         // adjust turn rate or yaw based on sensitivity
         let   sens     = global.steeringSens;  //     1 to 9
         const sensOfs  = ((sens-1) * 6/8) + 1; //     1 to 7

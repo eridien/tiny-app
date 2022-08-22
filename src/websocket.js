@@ -150,7 +150,7 @@ export const setYaw = heading => {
                send(fcYawCmd, heading);
              }
 export const clrYaw = () => {
-              //  console.log('<- clrYaw');
+               console.log('<- clrYaw');
                send(fcClrYawCmd);
              }
 export const pwrOff = () => {
